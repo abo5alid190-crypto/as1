@@ -1,0 +1,1293 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>عروضي العقارية</title><link rel="icon" type="image/png" sizes="48x48" href="icons/favicon.png"><link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png"><meta name="theme-color" content="#f4f5f7"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="عروضي العقارية"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /><script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" crossorigin="anonymous"></script><style>
+.pricing-box{margin:12px 0;padding:14px;border:1px solid #e2e7ef;border-radius:16px;background:#f8fafc}.pricing-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.pricing-head span{font-size:12px;color:#778399}.pricing-section{display:grid;gap:9px}.pricing-section label{font-size:13px;font-weight:800}.pricing-section input,.pricing-inline select,.pricing-inline input{width:100%;min-height:44px;padding:10px 12px;border:1px solid #d8dee8;border-radius:11px;background:#fff;font-size:16px}.pricing-inline{display:grid;grid-template-columns:1fr 1.35fr;gap:8px}
+
+/* طلبات: المدن والأحياء في سطر مختصر مع المزيد/أقل */
+.request-inline-values{display:flex;align-items:center;gap:5px;flex-wrap:wrap;color:#6d7a8c;font-size:12px;font-weight:850;line-height:1.7;margin:3px 0;text-align:right;justify-content:flex-start}.request-inline-label{flex:0 0 auto;font-size:12px}.request-values-short,.request-values-full{display:inline}.request-more-inline{border:0;background:transparent;color:#315fa7;font:inherit;font-size:11px;font-weight:950;padding:0 2px;cursor:pointer}.request-values-full{white-space:normal}.request-values-short.hidden,.request-values-full.hidden{display:none!important}
+
+/* طلبات: المدن والأحياء مختصرة في سطر واحد، والمزيد يفتح الباقي تحتها */
+.request-compact-line{display:flex!important;align-items:center!important;gap:4px!important;flex-wrap:wrap!important;color:#6d7a8c!important;font-size:11px!important;font-weight:850!important;line-height:1.65!important;margin:3px 0!important;direction:rtl!important;text-align:right!important}
+.request-compact-short{display:inline!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:calc(100% - 58px)!important}
+.request-more{border:0!important;background:transparent!important;color:#8a6630!important;font:inherit!important;font-size:11px!important;font-weight:950!important;padding:0 2px!important;margin:0!important;cursor:pointer!important;white-space:nowrap!important}
+.request-compact-full{display:inline!important;white-space:normal!important;flex-basis:100%!important;color:#6d7a8c!important}
+.request-compact-full[hidden],.request-compact-short[hidden]{display:none!important}
+.request-city-selected{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-height:22px!important;line-height:1.5!important;font-size:11px!important;text-align:right!important}
+</style>
+<style>.request-panel{margin-top:14px}.request-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.request-form{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.request-form label{font-weight:800}.request-form input,.request-form textarea{width:100%;min-height:46px;padding:11px 12px;border:1px solid #d8dee8;border-radius:12px;background:#fff;font:inherit}.request-form textarea{min-height:110px;resize:vertical;grid-column:1/-1}.request-actions{display:flex;gap:8px;flex-wrap:wrap}.request-actions button{border:0;border-radius:12px;padding:11px 15px;font:inherit;font-weight:900;cursor:pointer}.request-primary{background:#10233e;color:#fff}.request-secondary{background:#f3f5f8;color:#18263b;border:1px solid #dce2e9!important}.request-list{display:grid;gap:10px;margin-top:12px}.request-item{background:#f8fafc;border:1px solid #e1e6ed;border-radius:15px;padding:13px}.request-item .request-meta{color:#6d7a8c;font-size:13px;font-weight:800;margin-bottom:6px}.request-item .request-text{white-space:pre-wrap;line-height:1.8;font-weight:750}.request-empty{text-align:center;color:#6d7a8c;padding:18px;border:1px dashed #d5dce5;border-radius:14px}.request-badge{display:inline-block;background:#eef3ff;color:#244a9a;border:1px solid #cbd8ff;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:900}@media(max-width:650px){.request-form{grid-template-columns:1fr}.request-form textarea{grid-column:auto}}</style>
+<style>.price-summary{margin-top:10px;padding:10px 12px;border:1px solid #e7dfcf;border-radius:12px;background:#fffaf0;color:#6b522b;font-weight:800;font-size:14px;line-height:1.8}</style><style>
+.partner-link-btn{font-size:12px!important;padding:6px 10px!important;min-height:34px!important;height:34px!important;border-radius:10px!important;white-space:nowrap!important;font-weight:850!important}
+.client-map-btn{display:inline-flex!important}
+.request-quick-btn{white-space:nowrap!important}
+.request-quick-btn.active{background:#10233e!important;color:#fff!important;border-color:#10233e!important}
+.request-card-actions{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;margin-top:10px}.request-card-actions a,.request-card-actions button{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:40px;padding:8px 12px;border-radius:10px;font:inherit;font-weight:900;cursor:pointer;white-space:nowrap}.request-phone{margin-top:0;background:#eef8f1;border:1px solid #c7e7d0;color:#16723b;text-decoration:none}.request-edit{border:1px solid #d9c69a;background:#fffaf0;color:#6b522b}.request-delete{margin-top:0;border:1px solid #e5c8c8!important;background:#fff4f4;color:#a33;border-radius:10px;padding:8px 11px;font:inherit;font-weight:800;cursor:pointer}@media(max-width:420px){.request-card-actions a,.request-card-actions button{flex:1;padding:8px 7px;font-size:13px}}
+.request-form select[multiple]{min-height:170px}.request-two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}.request-two-col select,.request-form select:not(.hidden){width:100%;min-height:46px;padding:11px 12px;border:1px solid #d8dee8;border-radius:12px;background:#fff;font:inherit}.request-city-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 8px;color:#7a8596;font-size:12px;font-weight:800}.request-all-cities-btn{border:1px solid #d8c08b;background:#fff8e9;color:#6b522b;border-radius:10px;padding:8px 11px;font:inherit;font-weight:900;cursor:pointer}.request-city-option.selected{background:#eef3ff!important;border-color:#8eace8!important}.request-city-option .request-city-check{font-size:17px;color:#244a9a}.request-view-filters{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:8px;margin-top:10px}.request-view-filters label{font-weight:800}.request-view-filters select{width:100%;min-height:44px;padding:9px 11px;border:1px solid #d8dee8;border-radius:11px;background:#fff;font:inherit}@media(max-width:650px){.request-two-col,.request-view-filters{grid-template-columns:1fr}}.request-city-search{margin-bottom:8px!important}.request-city-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:230px;overflow:auto;padding:6px;border:1px solid #d8dee8;border-radius:14px;background:#f8fafc}.request-city-option{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #dfe5ee;background:#fff;color:#18263b;border-radius:11px;padding:10px 11px;font:inherit;font-weight:800;cursor:pointer;text-align:right}.request-city-option.selected{background:#eef3ff;border-color:#9db7ef;color:#173f83}.request-city-check{font-weight:950}.request-city-selected{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.request-city-chip{border:1px solid #d8c08b;background:#fff8e9;color:#6b522b;border-radius:999px;padding:5px 9px;font:inherit;font-size:12px;font-weight:900;cursor:pointer}.request-city-empty{grid-column:1/-1;text-align:center;color:#7a8596;padding:16px}.hidden{display:none!important}@media(max-width:520px){.request-city-options{grid-template-columns:1fr}}
+</style>
+<style>
+/* تحسين عرض مدن الطلبات: لا نعرض قائمة المدن كاملة إلا أثناء البحث */
+.request-city-options{display:none!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:230px;overflow:auto;padding:6px;border:1px solid #d8dee8;border-radius:14px;background:#f8fafc}
+.request-city-options.has-results{display:grid!important}
+.request-city-search{margin-bottom:8px!important}
+.request-city-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 8px;color:#7a8596;font-size:12px;font-weight:800}
+.request-city-selected{display:block!important;margin-top:6px;min-height:20px;max-height:44px;overflow:hidden;color:#6d7a8c;font-size:11px;font-weight:800;line-height:1.8;white-space:normal}
+.request-city-chip{display:inline!important;border:0!important;background:transparent!important;color:#5f6d80!important;border-radius:0!important;padding:0!important;margin:0!important;font-size:11px!important;font-weight:800!important;cursor:pointer}
+.request-city-chip::after{content:' ×';color:#9aa5b4}
+.request-city-chip:not(:last-child)::before{content:', ';color:#9aa5b4}
+.request-city-all-summary{display:inline-block!important;color:#244a9a!important;font-size:11px!important;font-weight:950!important}.request-city-compact{display:block!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;color:#7a8596!important;font-size:10px!important;font-weight:800!important;line-height:1.5!important}
+.request-item{min-height:0}
+.request-item .request-text{max-height:92px;overflow-y:auto;overflow-x:hidden;text-align:center;white-space:pre-wrap;line-height:1.75;padding:4px 8px;scrollbar-width:thin;word-break:break-word}
+.request-item .request-meta,.request-item .request-request-type{text-align:center}
+.request-card-actions{justify-content:center}
+@media(max-width:520px){.request-city-options{grid-template-columns:1fr}.request-city-selected{max-height:42px}}
+/* طلبات: نفس إحساس صندوق نص العرض، ثابت ومرتب مع تمرير داخلي */
+.request-item .request-text{max-height:150px!important;min-height:70px!important;overflow-y:auto!important;overflow-x:hidden!important;text-align:center!important;white-space:pre-wrap!important;line-height:1.8!important;padding:12px 14px!important;margin-top:8px!important;border:1px solid #e1e6ee!important;border-radius:14px!important;background:#f8fafc!important;font-weight:750!important;word-break:break-word!important;scrollbar-width:thin}
+.request-item .request-text-label{display:block;font-size:12px;color:#778399;font-weight:900;margin-bottom:5px}
+.request-card-actions{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important}
+.request-card-actions a,.request-card-actions button{width:100%!important;min-width:0!important;min-height:40px!important;padding:7px 5px!important;font-size:12px!important}
+.request-share{border:1px solid #d8e0ea!important;background:#fff!important;color:#536176!important;text-decoration:none}
+@media(max-width:420px){.request-card-actions{grid-template-columns:repeat(4,minmax(0,1fr))!important}.request-card-actions a,.request-card-actions button{font-size:11px!important;padding:7px 3px!important;gap:2px!important}}
+
+.request-city-selected{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-height:22px!important;line-height:1.5!important;font-size:11px!important;text-align:right!important}.request-city-compact{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;display:block!important}.request-city-all-summary{white-space:nowrap!important}
+</style>
+<style>
+.phone-number,.license-number{direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+</style>
+<style id="v55-map-image-fix">
+.map-popup-photo-row{display:flex!important;gap:8px!important;align-items:center!important;margin:6px 0!important}
+.map-popup-mini-photo{width:76px!important;height:58px!important;object-fit:cover!important;border-radius:8px!important;flex:0 0 76px!important;background:#eef1f5!important;cursor:pointer!important}
+.map-group-row-main{display:flex!important;gap:7px!important;align-items:center!important;min-width:0!important}
+.map-group-thumb{width:48px!important;height:40px!important;object-fit:cover!important;border-radius:6px!important;flex:0 0 48px!important;background:#eef1f5!important}
+.map-open-offer{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important}
+.partner-link-btn{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important}
+</style>
+<style id="v56-image-fix">
+.offer-photos img{cursor:zoom-in!important;touch-action:manipulation!important}.image-lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px}.image-lightbox.hidden{display:none!important}.image-lightbox img{max-width:96vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:10px}.image-lightbox-close{position:fixed;top:16px;right:16px;width:44px;height:44px;border:0;border-radius:50%;background:#fff;color:#10243b;font-size:28px;font-weight:900;z-index:2}
+.map-popup-mini-photo,.map-group-thumb{cursor:zoom-in!important}
+</style>
+<style id="v61-main-map-markers">.leaflet-marker-pane{z-index:650!important}.leaflet-popup-pane{z-index:700!important}.map .leaflet-popup-content-wrapper{max-width:300px!important}.map .leaflet-popup-content{max-width:280px!important;min-width:0!important}</style><style id="v62-personal-final">
+/* Compact map cards: one offer = one compact card; same pin = one popup containing both. */
+.map .leaflet-popup-content-wrapper{max-width:270px!important;border-radius:14px!important;box-shadow:0 10px 30px rgba(16,36,59,.20)!important}
+.map .leaflet-popup-content{width:246px!important;max-width:246px!important;margin:7px!important}
+.map-popup{width:246px!important;max-width:246px!important;max-height:235px!important;overflow:auto!important;padding:0!important;direction:rtl!important}
+.map-popup-head{display:flex!important;gap:5px!important;align-items:flex-start!important;margin:0 0 5px!important}
+.map-popup h3{font-size:12px!important;line-height:1.4!important;margin:0!important;font-weight:950!important;color:#10243b!important}
+.map-popup-photo-row{gap:6px!important;margin:4px 0!important}.map-popup-mini-photo{width:62px!important;height:48px!important;flex:0 0 62px!important;border-radius:7px!important}.map-popup-meta{font-size:9px!important;line-height:1.35!important}.map-location-link{font-size:9px!important;margin-top:4px!important}.map-open-offer{font-size:9px!important;padding:7px 8px!important;margin-top:4px!important;border-radius:8px!important}
+.map-group-popup{width:246px!important;max-width:246px!important}.map-group-count{text-align:center;font-size:10px;font-weight:950;color:#10243b;margin:0 0 4px!important}.map-group-card{border:1px solid #e1e6ed;border-radius:10px;background:#fff;padding:5px;margin-bottom:5px;overflow:hidden}.map-group-card:last-child{margin-bottom:0}.map-group-photo{display:block;width:100%;height:62px;object-fit:cover;border-radius:7px;margin-bottom:4px}.map-group-title-text{font-size:10px;line-height:1.4;font-weight:950;color:#10243b}.map-group-meta{font-size:8.5px;line-height:1.35;color:#687587;margin-top:2px}.map-group-actions{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px}.map-group-actions a,.map-group-actions button{min-height:27px;border-radius:7px;padding:3px;font:inherit;font-size:8.5px;font-weight:950;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer}.map-group-actions a{background:#f3f6fa;color:#275f8e;border:1px solid #dce4ed}.map-group-actions button{background:#10243b;color:#fff;border:0}
+.leaflet-marker-pane{z-index:650!important}.leaflet-popup-pane{z-index:700!important}
+@media(max-width:700px){.map .leaflet-popup-content-wrapper{max-width:250px!important}.map .leaflet-popup-content{width:226px!important;max-width:226px!important}.map-popup,.map-group-popup{width:226px!important;max-width:226px!important;max-height:215px!important}.map-group-photo{height:56px!important}}
+</style></head><body>
+<header class="site-header"><div class="brand-wrap"><div class="brand-mark"><img src="icons/icon-180.png" alt="عروضي"></div><div><b>عروضي</b><small>لوحة إدارة عروضك العقارية</small></div></div><div class="header-actions"><span id="userEmail" class="muted"></span><button id="logoutBtn" class="header-ghost secondary hidden" onclick="logout()">خروج</button><button id="addBtn" class="header-add primary hidden" onclick="openAddModal()"><span>＋</span> إضافة عرض</button></div></header>
+<section id="auth" class="card auth-card"><div class="auth-brand"><div class="auth-mark">⌂</div><div><span class="auth-kicker">عروضي العقارية</span><h2>أهلاً بك 👋</h2></div></div><p>مكان واحد لترتيب عروض الملاك، البحث فيها، ومشاركة العرض بسرعة من الجوال أو الكمبيوتر.</p><div class="auth-grid"><label>البريد الإلكتروني<input id="authEmail" type="email" autocomplete="email" placeholder="name@example.com"></label><label>كلمة المرور<input id="authPassword" type="password" autocomplete="current-password" placeholder="••••••••"></label></div><label class="remember-row"><input id="rememberMe" type="checkbox" checked> تذكرني على هذا الجهاز</label><div class="offer-actions"><button class="primary" onclick="login()">دخول</button><button class="secondary" onclick="signup()">إنشاء حساب</button><button class="secondary" onclick="resetPassword()">نسيت كلمة المرور؟</button></div><div id="authMsg"></div></section>
+<main id="appMain" class="hidden">
+<div id="addModal" class="add-modal hidden" aria-hidden="true">
+<div class="add-modal-backdrop" onclick="closeAddModal()"></div>
+<div class="add-modal-card">
+<div class="add-modal-head"><div><span class="modal-kicker">إدارة العروض</span><h1 id="addModalTitle">إضافة عرض جديد</h1><p>أدخل بيانات العرض والصور، وسنحدد موقع Google Maps تلقائيًا إذا كان الرابط موجودًا.</p></div><button type="button" class="modal-close" onclick="closeAddModal()" aria-label="إغلاق">×</button></div>
+<section class="card hero" id="add"><h1>➕ إضافة عرض</h1><p>اختر نوع العرض ومصدره، ثم الصق نص العرض وأضف رقم المالك والصور. الذكاء الاصطناعي يستخدم فقط لاستخراج موقع Google Maps ووضعه على الخريطة.</p>
+<div class="choice-grid">
+<div class="choice-block"><b>نوع العرض</b><div class="select-wrap"><select id="addDeal" class="native-select" onchange="syncOfferType()"><option value="">اختر نوع العرض</option><option value="بيع">للبيع</option><option value="إيجار">للإيجار</option></select></div></div>
+<div class="choice-block"><b>نوع العقار</b><div class="select-wrap"><select id="addPropertyType" class="native-select" onchange="syncOfferType()"><option value="">اختر نوع العقار</option><option>شقة</option><option>بيت</option><option>فيلا</option><option>دور</option><option>عمارة</option><option>أرض</option><option>أرض تجارية</option><option>مزرعة</option><option>استراحة</option><option>مكتب</option><option>محل</option><option>مستودع</option><option>غرفة</option><option>محطة وقود</option></select></div></div>
+<div class="choice-block"><b>المساحة</b><div class="select-wrap"><input id="addArea" class="native-select" type="text" inputmode="decimal" placeholder="مثال: 500 م²"></div></div>
+<div class="choice-block"><b>مصدر العرض</b><div class="select-wrap"><select id="addSource" class="native-select" onchange="selectedSource=this.value;updateSelectedSummary()"><option value="">اختر المصدر</option><option value="مع المالك">مع المالك</option><option value="مع المباشر">مع المباشر</option></select></div></div>
+</div>
+<div id="pricingBox" class="pricing-box hidden">
+  <div class="pricing-head"><b id="pricingTitle">بيانات السعر</b><span>اختيارات اختيارية</span></div>
+  <div id="salePricing" class="pricing-section hidden">
+    <label>قيمة البيع <span style="font-weight:600;color:#8a94a6">(اختياري)</span></label><input id="salePrice" inputmode="text" placeholder="اكتب السعر أو أي نص">
+  </div>
+  <div id="rentPricing" class="pricing-section hidden">
+    <label>قيمة الإيجار السنوي <span style="font-weight:600;color:#8a94a6">(اختياري)</span></label><input id="rentAnnual" inputmode="text" placeholder="اكتب السعر أو أي نص">
+  </div>
+</div>
+<label>نص العرض<textarea id="raw" placeholder="الصق نص عرض الواتساب هنا..."></textarea></label><label>رقم المالك (خاص — لا يظهر عند المشاركة)<input id="addPhone" type="tel" inputmode="tel" placeholder="05xxxxxxxx"></label>
+<div class="location-edit-grid">
+  <label>المدينة <input id="addCity" list="saudiCitiesList" type="text" inputmode="text" autocomplete="off" placeholder="سيتم تحديدها تلقائيًا ويمكنك تعديلها"></label>
+  <label>الحي <input id="addDistrict" list="districtsList" type="text" inputmode="text" autocomplete="off" placeholder="سيتم تحديده تلقائيًا ويمكنك تعديله"></label>
+</div>
+<datalist id="saudiCitiesList"></datalist><datalist id="districtsList"></datalist>
+<input id="addMapUrl" type="hidden"><input id="addLat" type="hidden"><input id="addLng" type="hidden"><input id="addLocation" type="hidden">
+<div id="detectedLocation" class="detected-location hidden"></div>
+<label>صور العرض</label><input id="photos" type="file" accept="image/*" multiple onchange="previewPhotos()"><div id="photoPreview" class="photo-preview"></div><div class="selected-summary" id="selectedSummary">اختر نوع العرض ومصدره ثم اضغط حفظ العرض.</div><button id="analyzeBtn" onclick="analyze()">📍 تحديد الموقع وحفظ العرض</button><div id="msg"></div></section>
+</div></div>
+<section class="card hidden" id="editor"></section>
+<section class="dashboard-compact" id="dashboardCompact">
+  <div class="compact-title"><div><span class="compact-kicker">لوحة إدارة عروضك العقارية</span><h1>عروضي العقارية</h1></div>
+  <button class="compact-add" onclick="openAddModal()"><span>＋</span> إضافة عرض</button></div>
+  <div class="compact-stats">
+    <div class="compact-stat" id="allSummaryBtn"><span class="compact-icon">▦</span><strong id="statTotal">0</strong><small>إجمالي العروض</small></div>
+    <div class="compact-stat"><span class="compact-icon">⌖</span><strong id="statMapped">0</strong><small>على الخريطة</small></div>
+    <div class="compact-stat"><span class="compact-icon">♥</span><strong id="statFav">0</strong><small>المفضلة</small></div>
+  </div>
+</section>
+
+<section class="quick-filters" id="quickFilters">
+<div class="quick-types" id="quickTypesRow">
+<button class="quick-type active" id="allFilterBtn" onclick="quickAll(this)">الكل <span id="allCount" class="filter-count">0</span></button><button class="quick-type favorite-filter" id="favoritesFilterBtn" onclick="toggleFavoritesFilter(this)">♥ المفضلة <span id="favoritesCount" class="filter-count">0</span></button>
+<button class="quick-type" data-value="شقة للبيع" onclick="quickType(this,'شقة للبيع')">شقة للبيع</button><button class="quick-type" data-value="بيت للبيع" onclick="quickType(this,'بيت للبيع')">بيت للبيع</button><button class="quick-type" data-value="فيلا للبيع" onclick="quickType(this,'فيلا للبيع')">فيلا للبيع</button><button class="quick-type" data-value="دور للبيع" onclick="quickType(this,'دور للبيع')">دور للبيع</button><button class="quick-type" data-value="عمارة للبيع" onclick="quickType(this,'عمارة للبيع')">عمارة للبيع</button><button class="quick-type" data-value="أرض للبيع" onclick="quickType(this,'أرض للبيع')">أرض للبيع</button><button class="quick-type" data-value="أرض تجارية للبيع" onclick="quickType(this,'أرض تجارية للبيع')">أرض تجارية للبيع</button><button class="quick-type" data-value="مزرعة للبيع" onclick="quickType(this,'مزرعة للبيع')">مزرعة للبيع</button><button class="quick-type" data-value="استراحة للبيع" onclick="quickType(this,'استراحة للبيع')">استراحة للبيع</button><button class="quick-type" data-value="مكتب للبيع" onclick="quickType(this,'مكتب للبيع')">مكتب للبيع</button><button class="quick-type" data-value="محل للبيع" onclick="quickType(this,'محل للبيع')">محل للبيع</button><button class="quick-type" data-value="مستودع للبيع" onclick="quickType(this,'مستودع للبيع')">مستودع للبيع</button><button class="quick-type" data-value="غرفة للبيع" onclick="quickType(this,'غرفة للبيع')">غرفة للبيع</button><button class="quick-type" data-value="شقة للإيجار" onclick="quickType(this,'شقة للإيجار')">شقة للإيجار</button><button class="quick-type" data-value="بيت للإيجار" onclick="quickType(this,'بيت للإيجار')">بيت للإيجار</button><button class="quick-type" data-value="فيلا للإيجار" onclick="quickType(this,'فيلا للإيجار')">فيلا للإيجار</button><button class="quick-type" data-value="دور للإيجار" onclick="quickType(this,'دور للإيجار')">دور للإيجار</button><button class="quick-type" data-value="عمارة للإيجار" onclick="quickType(this,'عمارة للإيجار')">عمارة للإيجار</button><button class="quick-type" data-value="أرض للإيجار" onclick="quickType(this,'أرض للإيجار')">أرض للإيجار</button><button class="quick-type" data-value="مزرعة للإيجار" onclick="quickType(this,'مزرعة للإيجار')">مزرعة للإيجار</button><button class="quick-type" data-value="استراحة للإيجار" onclick="quickType(this,'استراحة للإيجار')">استراحة للإيجار</button><button class="quick-type" data-value="مكتب للإيجار" onclick="quickType(this,'مكتب للإيجار')">مكتب للإيجار</button><button class="quick-type" data-value="محل للإيجار" onclick="quickType(this,'محل للإيجار')">محل للإيجار</button><button class="quick-type" data-value="مستودع للإيجار" onclick="quickType(this,'مستودع للإيجار')">مستودع للإيجار</button><button class="quick-type" data-value="غرفة للإيجار" onclick="quickType(this,'غرفة للإيجار')">غرفة للإيجار</button>
+</div>
+<div class="quick-actions" id="quickActionsRow">
+<div class="city-filter-wrap"><button class="quick-city" id="cityPickerBtn" type="button" onclick="toggleCityMenu()">المدينة ▾</button><div id="cityMenu" class="filter-menu hidden"></div></div>
+<div id="districtWrap" class="city-filter-wrap"><button id="districtPickerBtn" class="quick-city" type="button" onclick="toggleDistrictMenu()">الحي ▾</button><div id="districtMenu" class="filter-menu hidden"></div></div>
+<button class="quick-action" onclick="toggleAdvancedFilters()">⚑ التصفية</button>
+<button class="quick-action request-quick-btn" id="requestQuickBtn" type="button" onclick="showRequestsView()">الطلبات <span id="quickRequestCount" class="filter-count">0</span></button>
+
+</div>
+<div class="all-cities-row hidden" id="allCitiesRow"></div>
+<div class="advanced-filters hidden" id="advancedFilters">
+<div class="advanced-head"><div><b>التصفية والبحث</b><span>حدّد النتائج التي تريدها بسرعة</span></div><button type="button" class="advanced-close" onclick="closeAdvancedFilters()">× إغلاق</button></div>
+<input id="fSearch" placeholder="بحث في العروض..." oninput="applyFilters()">
+<select id="fDeal" onchange="applyFilters()"><option value="">كل أنواع العرض</option><option value="بيع">بيع</option><option value="إيجار">إيجار</option></select>
+<select id="fSource" onchange="applyFilters()"><option value="">كل المصادر</option><option value="مع المالك">مع المالك</option><option value="مع المباشر">مع المباشر</option></select>
+<input id="fMin" inputmode="numeric" placeholder="أقل سعر" oninput="applyFilters()"><input id="fMax" inputmode="numeric" placeholder="أعلى سعر" oninput="applyFilters()">
+</div>
+</section>
+<section class="card request-panel hidden" id="requestsPanel"><div class="section-kicker">قائمة خاصة</div><div class="request-head"><h2>الطلبات <span id="requestCount" class="badge">0</span></h2><button class="compact-add request-add-inline" type="button" onclick="openRequestModal()"><span>＋</span> إضافة طلب</button></div><div class="request-view-filters"><label>مدينة الطلب<select id="requestViewCity" onchange="selectRequestViewCity(this.value)"></select></label><label>نوع الطلب<select id="requestViewDeal" onchange="renderRequests()"><option value="">كل أنواع الطلب</option><option value="شراء">شراء</option><option value="استئجار">استئجار</option></select></label><label>نوع العقار<select id="requestViewProperty" onchange="renderRequests()"><option value="">كل العقارات</option><option>شقة</option><option>بيت</option><option>فيلا</option><option>دور</option><option>عمارة</option><option>أرض</option><option>أرض تجارية</option><option>مزرعة</option><option>استراحة</option><option>مكتب</option><option>محل</option><option>مستودع</option><option>غرفة</option><option>محطة وقود</option></select></label></div><div id="requestFilterSummary" class="request-filter-summary">جميع الطلبات</div><div id="requestsList" class="request-list"></div></section>
+<div id="requestModal" class="add-modal hidden" aria-hidden="true"><div class="add-modal-backdrop" onclick="closeRequestModal()"></div><div class="add-modal-card"><div class="add-modal-head"><div><span class="modal-kicker">إدارة الطلبات</span><h1 id="requestModalTitle">إضافة طلب جديد</h1><p>الطلب خاص بك ولا يظهر في الخريطة أو رابط العقاريين إلا كطلب مرتبط بالمدينة، بدون رقم العميل.</p></div><button type="button" class="modal-close" onclick="closeRequestModal()" aria-label="إغلاق">×</button></div><section class="card hero request-modal-inner"><h1>إضافة طلب</h1><div class="request-form"><label>المدينة <span style="font-weight:600;color:#8a94a6">(جميع مدن المملكة)</span><input id="requestCitySearch" class="request-city-search" type="search" autocomplete="off" placeholder="🔎 ابحث عن مدينة…" oninput="filterRequestCityOptions()"><div class="request-city-top"><button type="button" class="request-all-cities-btn" onclick="toggleAllRequestCities()">✓ كل المدن</button><span>اختر مدينة أو أكثر</span></div><div id="requestCityOptions" class="request-city-options" role="listbox" aria-label="مدن المملكة"></div><div id="requestCitySelected" class="request-city-selected"></div><small style="display:block;margin-top:6px;color:#8a94a6">اكتب الحرف، وتظهر النتائج فورًا. علامة ✓ تعني أن المدينة محددة.</small><select id="requestCity" multiple size="7" class="hidden"></select></label><div class="request-two-col"><label>نوع الطلب<select id="requestDeal"><option value="">اختر نوع الطلب</option><option value="شراء">شراء</option><option value="استئجار">استئجار</option></select></label><label>المصدر<select id="requestSource"><option value="">اختر المصدر</option><option value="مباشر">مباشر</option><option value="غير مباشر">غير مباشر</option></select></label></div><label>نوع العقار<select id="requestPropertyType"><option value="">اختر نوع العقار</option><option>شقة</option><option>بيت</option><option>فيلا</option><option>دور</option><option>عمارة</option><option>أرض</option><option>أرض تجارية</option><option>مزرعة</option><option>استراحة</option><option>مكتب</option><option>محل</option><option>مستودع</option><option>غرفة</option><option>محطة وقود</option></select></label><label>الحي <span style="font-weight:600;color:#8a94a6">(اختياري — اكتب الحي بنفسك)</span><input id="requestDistrict" type="text" autocomplete="off" placeholder="مثال: النرجس، الياسمين، الملقا"></label><label>نص الطلب<textarea id="requestText" placeholder="مثال: مطلوب عمائر تجارية في جدة والرياض"></textarea></label><label>رقم جوال صاحب الطلب<input id="requestPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="05xxxxxxxx"></label></div><div class="request-actions"><button class="request-primary" type="button" onclick="saveRequest()">حفظ الطلب</button><button class="request-secondary" type="button" onclick="closeRequestModal()">إلغاء</button></div></section></div></div><section class="card map-card"><div class="section-kicker">استكشف على الخريطة</div><div class="toolbar"><h2>الخريطة</h2><div class="map-toolbar-actions"><span class="count" id="mapCount">0 على الخريطة</span><button type="button" class="client-map-btn" onclick="shareClientMap()">📲 إرسال للعميل</button></div></div><div id="map" class="map"></div></section>
+<section class="card offers-card" id="offersSection"><div class="section-kicker">مكتبة عروضك</div><div class="toolbar"><h2>العروض المحفوظة <span id="count" class="badge">0</span></h2></div><p class="offers-intro">أضف العرض مرة واحدة، واحفظ الموقع والصور والبيانات لتصل له في أي وقت وتشاركه بسرعة.</p><div id="offers" class="offers"></div></section>
+</main>
+<nav id="bottomNav" class="bottom-nav hidden" aria-label="التنقل الرئيسي">
+  <button type="button" class="nav-item" id="navSearch" onclick="goSearch()"><span class="nav-icon">⌕</span><span>بحث</span></button>
+  <button type="button" class="nav-item active" id="navOffers" onclick="goOffers()"><span class="nav-icon">▦</span><span>العروض</span></button>
+  <button type="button" class="nav-item" id="navFavorites" onclick="goFavorites()"><span class="nav-icon">♡</span><span>المفضلة</span></button>
+  <button type="button" class="nav-item add" id="navAdd" onclick="goAdd()"><span class="nav-icon">＋</span><span>إضافة عرض</span></button>
+</nav><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script>
+const SUPABASE_URL="https://lpdhvtoayrlffrvthlsp.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_vZNa5FvZrHT2ZvJq_e7quA_88ihYsYb";
+let supabaseClient=null;
+try{if(window.supabase&&typeof window.supabase.createClient==="function"){supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY)}}catch(e){console.error(e)}
+window.__cloudReady=!!supabaseClient;
+const $=id=>document.getElementById(id);let offers=[];let favorites=new Set(JSON.parse(localStorage.getItem('uroodi_favorites')||'[]'));let favoritesOnly=false;let favoritesSyncBusy=false;let map,markers=[],pendingImages=[],editingId=null,currentUser=null;const localOffers=JSON.parse(localStorage.getItem('uroodi_offers')||'[]');
+function setAuthMsg(t,err=false){$('authMsg').textContent=t;$('authMsg').className=err?'err':'ok'}
+function setAppVisible(v){$('appMain').classList.toggle('hidden',!v);$('addBtn').classList.toggle('hidden',!v);$('logoutBtn').classList.toggle('hidden',!v);$('auth').classList.toggle('hidden',v);$('bottomNav')?.classList.add('hidden');if(v){$('editor').classList.add('hidden');setTimeout(()=>{if(!map)initMap();if(map){map.invalidateSize(true);if(markers.length===1)map.setView(markers[0].getLatLng(),15);else if(offers.length)updateMap(filtered())}},120)}}
+async function login(){try{const email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||!password)return setAuthMsg('أدخل البريد الإلكتروني وكلمة المرور.',true);if(!supabaseClient)return setAuthMsg('خدمة تسجيل الدخول لم تُحمّل. اضغط تحديث الصفحة ثم جرّب مرة أخرى.',true);if($('rememberMe').checked)localStorage.setItem('uroodi_login_email',email);else localStorage.removeItem('uroodi_login_email');setAuthMsg('جاري تسجيل الدخول...');const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)return setAuthMsg(error.message||'تعذر تسجيل الدخول.',true);await onSignedIn(data.user)}catch(e){console.error(e);setAuthMsg(e.message||'تعذر تشغيل تسجيل الدخول.',true)}}
+async function signup(){try{const email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||!password)return setAuthMsg('أدخل البريد الإلكتروني وكلمة المرور.',true);if(!supabaseClient)return setAuthMsg('خدمة تسجيل الدخول لم تُحمّل. حدّث الصفحة ثم جرّب.',true);if(password.length<6)return setAuthMsg('كلمة المرور يجب أن تكون 6 أحرف على الأقل.',true);setAuthMsg('جاري إنشاء الحساب...');const {data,error}=await supabaseClient.auth.signUp({email,password});if(error)return setAuthMsg(error.message||'تعذر إنشاء الحساب.',true);if(data.session){await onSignedIn(data.user)}else setAuthMsg('تم إنشاء الحساب. افتح بريدك الإلكتروني واضغط رابط التأكيد، ثم سجّل الدخول.')}catch(e){setAuthMsg(e.message||'تعذر إنشاء الحساب.',true)}} 
+async function resetPassword(){try{const email=$('authEmail').value.trim();if(!email)return setAuthMsg('اكتب بريدك الإلكتروني أولًا.',true);if(!supabaseClient)return setAuthMsg('خدمة تسجيل الدخول لم تُحمّل. حدّث الصفحة ثم جرّب.',true);const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:location.origin});setAuthMsg(error?error.message:'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.',!!error)}catch(e){setAuthMsg(e.message||'تعذر إرسال الرابط.',true)}}
+async function logout(){if(!supabaseClient)return;await supabaseClient.auth.signOut();currentUser=null;offers=[];setAppVisible(false);$('userEmail').textContent='';render()}
+async function onSignedIn(user){currentUser=user;const hasCloudFavorites=Array.isArray(user?.user_metadata?.uroodi_favorites);favorites=new Set(hasCloudFavorites?user.user_metadata.uroodi_favorites:JSON.parse(localStorage.getItem('uroodi_favorites')||'[]'));localStorage.setItem('uroodi_favorites',JSON.stringify([...favorites]));updateFavoritesUI();if(!hasCloudFavorites&&favorites.size)syncFavoritesToCloud();$('userEmail').textContent=user.email||'';setAppVisible(true);ensureAccountContactPhone().catch(e=>console.warn('contact phone',e));await loadOffers();render();setTimeout(()=>preloadShareFiles(),120);setTimeout(()=>repairMapLocations(),1000);if(localOffers.length&&!sessionStorage.getItem('uroodi_migrated')){setTimeout(async()=>{try{const already=offers.length;await migrateLocalOffers();sessionStorage.setItem('uroodi_migrated','1');await loadOffers();render();setTimeout(()=>preloadShareFiles(),120);if(already===0&&offers.length)showToast('تم نقل عروضك القديمة إلى حسابك السحابي ✓','success')}catch(e){console.error('migration',e)}},1500)}}
+let requests=[];let editingRequestId=null;
+function selectedRequestCities(){const el=$('requestCity');return el?[...el.selectedOptions].map(o=>canonicalCity(o.value)).filter(Boolean):[]}
+function getAllSaudiRequestCities(){return [...new Set(saudiCities.map(canonicalCity).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ar'))}
+function getRequestCitiesFromOffers(){return getAllSaudiRequestCities()}
+function allRequestCitiesSelected(){const el=$('requestCity');const all=getAllSaudiRequestCities();return !!el&&all.length>0&&all.every(c=>[...el.options].some(o=>canonicalCity(o.value)===c&&o.selected))}
+function toggleAllRequestCities(){const el=$('requestCity');if(!el)return;const all=getRequestCitiesFromOffers();const selectAll=!allRequestCitiesSelected();[...el.options].forEach(o=>o.selected=selectAll);renderRequestCities()}
+function getRequestViewCities(){const cities=new Set();requests.forEach(r=>String(r.city||'').split(/[،,\n]+/).map(canonicalCity).filter(Boolean).forEach(c=>cities.add(c)));return [...cities].sort((a,b)=>a.localeCompare(b,'ar'))}
+function renderRequestCities(){const select=$('requestCity'),box=$('requestCityOptions'),selectedBox=$('requestCitySelected');if(!select||!box)return;const allCities=getRequestCitiesFromOffers();const selected=new Set([...select.options].filter(o=>o.selected).map(o=>canonicalCity(o.value)));const q=normalizeArabicKey($('requestCitySearch')?.value||'');select.innerHTML=allCities.map(c=>`<option value="${escapeHtml(c)}"${selected.has(c)?' selected':''}>${escapeHtml(c)}</option>`).join('');const cities=q?allCities.filter(c=>normalizeArabicKey(c).includes(q)):[];box.classList.toggle('has-results',!!q);box.innerHTML=q?(cities.length?cities.map(c=>{const isSel=selected.has(c);const safe=String(c).replace(/\\/g,'\\\\').replace(/'/g,"\\'");return `<button type="button" class="request-city-option${isSel?' selected':''}" onclick="toggleRequestCity('${safe}')"><span>${escapeHtml(c)}</span><span class="request-city-check">${isSel?'✓':'○'}</span></button>`}).join(''):'<div class="request-city-empty">لا توجد مدينة مطابقة للبحث.</div>'):'';if(selectedBox){if(allRequestCitiesSelected()){selectedBox.innerHTML='<span class="request-city-all-summary">✓ كل المدن</span>'}else if(selected.size){const names=[...selected];const compact=names.length<=5?names.join('، '):names.slice(0,4).join('، ')+'، …';selectedBox.innerHTML=`<span class="request-city-compact">${escapeHtml(compact)}</span>`}else{selectedBox.innerHTML='<span class="request-city-none">لم يتم تحديد مدينة</span>'}}const allBtn=$('requestCitySearch')?.parentElement?.querySelector('.request-all-cities-btn');if(allBtn)allBtn.textContent=allRequestCitiesSelected()?'✓ كل المدن':'✓ كل المدن'}
+function toggleRequestCity(city){const select=$('requestCity');if(!select)return;const wanted=canonicalCity(city);[...select.options].forEach(o=>{if(canonicalCity(o.value)===wanted)o.selected=!o.selected});renderRequestCities()}
+function filterRequestCityOptions(){renderRequestCities()}
+function populateRequestViewCities(){const el=$('requestViewCity');if(!el)return;const current=el.value||'';const cities=getRequestViewCities();el.innerHTML=(cities.length?'<option value="">كل المدن</option>':'<option value="">لا توجد طلبات</option>')+cities.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');if(cities.includes(current))el.value=current;else el.value=''}
+function selectRequestViewCity(city){const el=$('requestViewCity');if(el)el.value=city||'';renderRequests()}
+function requestCitiesMatch(r,city){const raw=String(city||'').trim();if(!raw||raw==='كل المدن'||raw==='جميع المدن')return true;const wanted=canonicalCity(raw);if(!wanted||wanted==='كل المدن'||wanted==='جميع المدن')return true;return String(r.city||'').split(/[،,\n]+/).map(c=>canonicalCity(c)).filter(Boolean).includes(wanted)}
+function compactRequestValues(value,icon,id,kind){
+  const raw=String(value||'').trim(); if(!raw)return '';
+  const parts=raw.split(/[،,\n]+/).map(c=>String(c).trim()).filter(Boolean);
+  const isAll=parts.length>=20 || parts.some(c=>canonicalCity(c)==='كل المدن');
+  if(isAll)return `<div class="request-compact-line"><span>${icon} كل المدن</span></div>`;
+  const limit=4, shown=parts.slice(0,limit), more=parts.length>limit;
+  const key='req_'+kind+'_'+id;
+  const full=parts.map(x=>escapeHtml(x)).join('، ');
+  const short=shown.map(x=>escapeHtml(x)).join('، ');
+  return `<div class="request-compact-line" data-request-compact="${key}"><span>${icon}</span><span class="request-compact-short">${short}</span>${more?`<button type="button" class="request-more" onclick="toggleRequestCompact('${key}')">المزيد</button><span class="request-compact-full" hidden>${full}</span>`:''}</div>`;
+}
+function toggleRequestCompact(key){
+  const row=document.querySelector(`[data-request-compact="${key}"]`);if(!row)return;
+  const short=row.querySelector('.request-compact-short'),full=row.querySelector('.request-compact-full'),btn=row.querySelector('.request-more');
+  if(!full||!btn)return;
+  const open=!full.hidden;
+  full.hidden=open; short.hidden=!open; btn.textContent=open?'المزيد':'أقل';
+}
+function toggleRequestMode(on){requestMode=!!on;const panel=$('requestsPanel'),mapCard=document.querySelector('.map-card'),offersCard=document.querySelector('#offersSection');if(requestMode){panel?.classList.remove('hidden');mapCard?.classList.add('hidden');offersCard?.classList.add('hidden');$('advancedFilters')?.classList.add('hidden');$('requestQuickBtn')?.classList.add('active');$('allFilterBtn')?.classList.remove('active');populateRequestViewCities()}else{panel?.classList.add('hidden');mapCard?.classList.remove('hidden');offersCard?.classList.remove('hidden');$('requestQuickBtn')?.classList.remove('active');$('allFilterBtn')?.classList.add('active');if(map)setTimeout(()=>map.invalidateSize(true),50)}}
+function showRequestsView(){toggleRequestMode(true);renderRequests();$('requestsPanel')?.scrollIntoView({behavior:'smooth',block:'start'})}
+function closeRequestsPanel(){toggleRequestMode(false)}
+function openRequestModal(){if(!currentUser)return alert('سجّل الدخول أولًا.');editingRequestId=null;if($('requestModalTitle'))$('requestModalTitle').textContent='إضافة طلب جديد';if($('requestText'))$('requestText').value='';if($('requestDistrict'))$('requestDistrict').value='';if($('requestPhone'))$('requestPhone').value='';if($('requestDeal'))$('requestDeal').value='';if($('requestSource'))$('requestSource').value='';if($('requestPropertyType'))$('requestPropertyType').value='';if($('requestCitySearch'))$('requestCitySearch').value='';if($('requestCity'))[...$('requestCity').options].forEach(o=>o.selected=false);renderRequestCities();$('requestModal')?.classList.remove('hidden');$('requestModal')?.setAttribute('aria-hidden','false');document.body.classList.add('modal-open')}
+function openEditRequestModal(id){if(!currentUser)return alert('سجّل الدخول أولًا.');const r=requests.find(x=>String(x.id)===String(id));if(!r)return alert('تعذر العثور على الطلب.');editingRequestId=String(id);if($('requestModalTitle'))$('requestModalTitle').textContent='تعديل الطلب';if($('requestDeal'))$('requestDeal').value=String(r.deal||'');if($('requestSource'))$('requestSource').value=String(r.source||'');if($('requestPropertyType'))$('requestPropertyType').value=String(r.property_type==='__REQUEST__'?'':r.property_type||'');if($('requestText'))$('requestText').value=String(r.notes||'').replace(/^\[\[REQUEST\]\]\s*/i,'');if($('requestDistrict'))$('requestDistrict').value=String(r.district||'');if($('requestPhone'))$('requestPhone').value=String(r.phone||'');if($('requestCitySearch'))$('requestCitySearch').value='';renderRequestCities();const wanted=String(r.city||'').split(/[،,\n]+/).map(canonicalCity).filter(Boolean);if($('requestCity'))[...$('requestCity').options].forEach(o=>o.selected=wanted.includes(canonicalCity(o.value)));renderRequestCities();$('requestModal')?.classList.remove('hidden');$('requestModal')?.setAttribute('aria-hidden','false');document.body.classList.add('modal-open')}
+function closeRequestModal(){editingRequestId=null;$('requestModal')?.classList.add('hidden');$('requestModal')?.setAttribute('aria-hidden','true');document.body.classList.remove('modal-open')}
+function normalizePhone(v){return String(v||'').trim().replace(/[^0-9+]/g,'')}
+function whatsappUrl(p){let n=normalizePhone(p).replace(/\D/g,'');if(n.startsWith('05'))n='966'+n.slice(1);if(n.startsWith('966'))return 'https://wa.me/'+n;return n?'https://wa.me/'+n:''}
+function requestShareCity(r){
+  const filtered=String($('requestViewCity')?.value||'').trim();
+  if(filtered)return filtered;
+  const cities=String(r?.city||'').split(/[،,\n]+/).map(c=>c.trim()).filter(Boolean);
+  if(cities.length===1)return cities[0];
+  return 'كل المدن';
+}
+function requestShareTitle(r){
+  const deal=r?.deal==='شراء'?'طلب شراء':r?.deal==='استئجار'?'طلب استئجار':'طلب';
+  const prop=String(r?.property_type||'').trim();
+  const city=requestShareCity(r);
+  return [deal,prop,city].filter(Boolean).join(' ');
+}
+function requestShareText(r){
+  const lines=[];
+  const title=requestShareTitle(r)||'طلب عقاري';
+  const body=String(r?.notes||'').replace(/^\[\[REQUEST\]\]\s*/i,'').trim();
+  const district=String(r?.district||'').trim();
+  lines.push(`*${title}*`);
+  if(district){lines.push('');lines.push(`📍 الأحياء المطلوبة: ${district}`)}
+  if(body){lines.push('');lines.push(body)}
+  const contact=shareContactLine();
+  if(contact){lines.push('');lines.push(contact)}
+  return lines.join('\n').trim();
+}
+async function shareRequest(id){
+  const r=requests.find(x=>String(x.id)===String(id));
+  if(!r)return;
+  if(!getClientContactPhone()){const saved=await ensureAccountContactPhone();if(!saved)return;}
+  const text=requestShareText(r);
+  try{
+    if(navigator.share){await navigator.share({title:requestShareTitle(r)||'طلب عقاري',text});return;}
+  }catch(e){if(e?.name==='AbortError')return;console.warn('native request share',e)}
+  try{await navigator.clipboard.writeText(text);alert('تم نسخ الطلب للمشاركة.')}catch(_){prompt('انسخ نص الطلب:',text)}
+}
+function formatRequestCitiesDisplay(value){const raw=String(value||'').trim();if(!raw)return 'غير محدد';const cities=raw.split(/[،,\n]+/).map(c=>c.trim()).filter(Boolean);if(cities.length>=20)return 'كل المدن';if(cities.length<=4)return cities.join('، ');return cities.slice(0,4).join('، ')+'، والمزيد';}
+function renderRequests(){
+  const list=$('requestsList'),count=$('requestCount'),quickCount=$('quickRequestCount');
+  if(count)count.textContent=String(requests.length);
+  if(quickCount)quickCount.textContent=String(requests.length);
+  if(!list)return;
+  const city=String($('requestViewCity')?.value||'').trim(),deal=String($('requestViewDeal')?.value||'').trim(),property=String($('requestViewProperty')?.value||'').trim();
+  const arr=requests.filter(r=>requestCitiesMatch(r,city)&&(!deal||String(r.deal||'')===deal)&&(!property||String(r.property_type||'')===property));
+  const sum=$('requestFilterSummary');if(sum)sum.textContent=city?`طلبات ${city}`:'جميع الطلبات';
+  list.innerHTML=arr.length?arr.map(r=>{
+    const wa=whatsappUrl(r.phone||'');
+    const dealLabel=r.deal==='شراء'?'طلب شراء':r.deal==='استئجار'?'طلب استئجار':'طلب';
+    const safeId=String(r.id).replace(/'/g,"\\'");
+    const body=String(r.notes||'').replace(/^\[\[REQUEST\]\]\s*/i,'');
+    return `<article class="request-item">
+      ${compactRequestValues(r.city,'📍',safeId,'city')}
+      ${r.district?compactRequestValues(r.district,'🏘️',safeId,'district'):''}
+      <div class="request-request-type">${escapeHtml(dealLabel)}${r.property_type&&r.property_type!=='__REQUEST__'?` · ${escapeHtml(r.property_type)}`:''}${r.source?` · ${escapeHtml(r.source)}`:''}</div>
+      <div class="raw-offer request-raw"><b>نص الطلب</b><div>${escapeHtml(body).replace(/\n/g,'<br>')}</div></div>
+      <div class="request-card-actions">
+        ${wa?`<a class="request-phone" href="${wa}" target="_blank" rel="noopener">🟢 واتساب</a>`:'<span class="request-empty-action"></span>'}
+        <button class="request-edit" type="button" onclick="openEditRequestModal('${safeId}')">✏️ تعديل</button>
+        <button class="request-delete" type="button" onclick="deleteRequest('${safeId}')">🗑️ حذف</button>
+        <button class="request-share" type="button" onclick="shareRequest('${safeId}')">📤 مشاركة</button>
+      </div>
+    </article>`
+  }).join(''):'<div class="request-empty">لا توجد طلبات مطابقة.</div>';
+}
+async function saveRequest(){if(!currentUser)return alert('سجّل الدخول أولًا.');const cities=selectedRequestCities(),deal=String($('requestDeal')?.value||'').trim(),source=String($('requestSource')?.value||'').trim(),propertyType=String($('requestPropertyType')?.value||'').trim(),district=String($('requestDistrict')?.value||'').trim(),text=String($('requestText')?.value||'').trim(),phone=String($('requestPhone')?.value||'').trim();if(!cities.length)return alert('اختر مدينة واحدة على الأقل.');if(!deal)return alert('اختر نوع الطلب: شراء أو استئجار.');if(!source)return alert('اختر المصدر: مباشر أو غير مباشر.');if(!propertyType)return alert('اختر نوع العقار.');if(!text)return alert('اكتب الطلب أولًا.');const now=new Date().toISOString();if(editingRequestId){const payload={city:cities.join('، '),district,deal,source,property_type:propertyType,phone,notes:'[[REQUEST]] '+text,status:'طلب',updated_at:now};const {error}=await supabaseClient.from('offers').update(payload).eq('id',editingRequestId).eq('user_id',currentUser.id);if(error){console.error(error);return alert('تعذر تعديل الطلب: '+(error.message||'خطأ غير معروف'));}closeRequestModal();await loadOffers();render();showRequestsView();showToast('تم تعديل الطلب بنجاح ✓','success');return}const id=crypto.randomUUID();const payload={id,user_id:currentUser.id,deal,source,property_type:propertyType,city:cities.join('، '),district,price:'',area:'',rooms:'',baths:'',owner:'',phone,location:'',map_url:'',latitude:null,longitude:null,status:'طلب',features:[],notes:'[[REQUEST]] '+text,created_at:now,updated_at:now,images:[]};const {error}=await supabaseClient.from('offers').insert(payload);if(error){console.error(error);return alert('تعذر حفظ الطلب: '+(error.message||'خطأ غير معروف'));}closeRequestModal();await loadOffers();render();showRequestsView();showToast('تم حفظ الطلب في القائمة الخاصة ✓','success')}
+async function deleteRequest(id){if(!currentUser)return;if(!confirm('حذف هذا الطلب من القائمة الخاصة؟'))return;const {error}=await supabaseClient.from('offers').delete().eq('id',id).eq('user_id',currentUser.id);if(error)return alert('تعذر حذف الطلب: '+(error.message||'خطأ'));await loadOffers();render();showRequestsView()}
+async function loadOffers(){
+if(!supabaseClient){setAuthMsg('خدمة البيانات غير جاهزة. حدّث الصفحة ثم جرّب مرة أخرى.',true);return false}
+const cacheKey=currentUser?.id?'uroodi_offers_cache_'+String(currentUser.id):'';
+let cached=null;
+try{if(cacheKey){const raw=localStorage.getItem(cacheKey);if(raw){const c=JSON.parse(raw);if(Array.isArray(c?.rows))cached=c.rows;}}}catch(_){}
+const applyRows=rows=>{
+requests=rows.filter(o=>o.property_type==='__REQUEST__'||o.status==='طلب'||String(o.notes||'').startsWith('[[REQUEST]]'));
+offers=rows.filter(o=>!(o.property_type==='__REQUEST__'||o.status==='طلب'||String(o.notes||'').startsWith('[[REQUEST]]')));
+};
+let data=null,error=null;
+try{({data,error}=await supabaseClient.from('offers').select('*').order('created_at',{ascending:false}));}catch(e){error=e}
+if(error){
+  if(Array.isArray(cached)&&cached.length){applyRows(cached.map(o=>({...o,type:o.property_type||'',mapUrl:o.map_url||'',images:Array.isArray(o.images)?o.images:[],_signed:[]})));setAuthMsg('تعذر تحديث البيانات الآن — تم عرض آخر نسخة محفوظة.',false);return renderAndPrepareOffers();}
+  setAuthMsg(error.message||'تعذر تحميل البيانات.',true);return false;
+}
+const rows=(data||[]).map(o=>({...o,type:o.property_type||'',mapUrl:o.map_url||'',images:Array.isArray(o.images)?o.images:[],_signed:[]}));
+// A transient empty Supabase response must not erase a known-good local copy.
+if(rows.length===0 && Array.isArray(cached)&&cached.length){
+  applyRows(cached.map(o=>({...o,type:o.property_type||'',mapUrl:o.map_url||'',images:Array.isArray(o.images)?o.images:[],_signed:[]})));
+  setTimeout(async()=>{try{const retry=await supabaseClient.from('offers').select('*').order('created_at',{ascending:false});if(!retry.error && Array.isArray(retry.data) && retry.data.length){const rr=retry.data.map(o=>({...o,type:o.property_type||'',mapUrl:o.map_url||'',images:Array.isArray(o.images)?o.images:[],_signed:[]}));applyRows(rr);try{localStorage.setItem(cacheKey,JSON.stringify({rows:rr,savedAt:Date.now()}))}catch(_){};renderAndPrepareOffers()}}catch(_){ }},1200);
+  return renderAndPrepareOffers();
+}
+applyRows(rows);
+try{if(cacheKey)localStorage.setItem(cacheKey,JSON.stringify({rows,savedAt:Date.now()}))}catch(_){}
+return renderAndPrepareOffers();
+}
+async function renderAndPrepareOffers(){
+  // Render from the global arrays already populated by loadOffers().
+  // Prepare the first image URL before the first paint so offer photos do not appear late.
+  await Promise.all(offers.map(async o=>{
+    if(!Array.isArray(o.images)||!o.images[0]||o._signed?.[0])return;
+    try{
+      const path=String(o.images[0]);
+      if(/^https?:\/\//i.test(path)){o._signed=[path];return;}
+      const r=await supabaseClient.storage.from('offer-images').createSignedUrl(path,3600);
+      const u=r?.data?.signedUrl;
+      if(u)o._signed=[u];
+    }catch(_){}
+  }));
+  renderRequests();
+  populateRequestViewCities();
+  const validIds=new Set(offers.map(o=>String(o.id)));
+  const cleaned=[...favorites].filter(id=>validIds.has(String(id)));
+  if(cleaned.length!==favorites.size){favorites=new Set(cleaned);saveFavorites();if(currentUser)syncFavoritesToCloud().catch(()=>{});updateFavoritesUI();}
+  render();
+  // Sign the remaining thumbnails in the background without downloading every image blob.
+  void Promise.all(offers.map(async o=>{
+    const existingFirst=o._signed?.[0]||null;
+    const rest=(Array.isArray(o.images)?o.images:[]).slice(existingFirst?1:0,8);
+    const restSigned=(await Promise.all(rest.map(async path=>{
+      try{if(/^https?:\/\//i.test(String(path)))return String(path);const r=await supabaseClient.storage.from('offer-images').createSignedUrl(path,3600);return r.error?null:r.data?.signedUrl||null}catch{return null}
+    }))).filter(Boolean);
+    o._signed=(existingFirst?[existingFirst,...restSigned]:restSigned);
+  })).then(()=>{
+    // Do not rebuild the entire offers list here. Re-rendering replaces every <img>
+    // element and makes Safari/iPhone download the already-loaded photos again.
+    // Update only the image src values that became available.
+    offers.forEach(o=>{
+      const card=document.querySelector('#offer-'+CSS.escape(String(o.id)));
+      if(!card)return;
+      card.querySelectorAll('.offer-photos img').forEach((img,i)=>{
+        const src=o._signed?.[i];
+        if(src && img.getAttribute('src')!==src) img.src=src;
+      });
+    });
+  }).catch(e=>console.warn('background image signing',e));
+  // Warm the share file cache after the page is painted. Each offer keeps one
+  // in-flight promise/file so a tap can never start a second image download.
+  setTimeout(()=>{void preloadShareFiles();},250);
+  return true;
+}
+async function repairMapLocations(){if(!currentUser)return;const targets=offers.filter(o=>Number.isFinite(Number(o.latitude))&&Number.isFinite(Number(o.longitude))&&(!canonicalCity(o.city)||!String(o.district||'').trim())).slice(0,6);if(!targets.length)return;let changed=false;await Promise.all(targets.map(async o=>{try{const text='@'+Number(o.latitude)+','+Number(o.longitude);const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});if(!r.ok)return;const d=await r.json();const city=canonicalCity(d.city||o.city||'');const district=String(d.district||o.district||'').trim();const location=String(d.location||o.location||'').trim();if(!city&&!district)return;const patch={city,district,location,updated_at:new Date().toISOString()};const {error}=await supabaseClient.from('offers').update(patch).eq('id',o.id).eq('user_id',currentUser.id);if(!error){Object.assign(o,patch);changed=true}}catch(e){console.warn('repair map location',e)}}));if(changed){renderCityMenu();render();}}
+async function uploadImages(offerId,images){const paths=[];for(let i=0;i<Math.min(8,images.length);i++){const src=images[i];const blob=await (await fetch(src)).blob();const path=`${currentUser.id}/${offerId}/${Date.now()}-${i}.jpg`;const {error}=await supabaseClient.storage.from('offer-images').upload(path,blob,{contentType:'image/jpeg',upsert:false});if(error)throw error;paths.push(path)}return paths}
+async function migrateLocalOffers(){if(!currentUser||!localOffers.length)return;for(const lo of localOffers){const id=lo.id||crypto.randomUUID();const payload={id,user_id:currentUser.id,deal:lo.deal||'',source:lo.source||'',property_type:lo.type||'',city:lo.city||'',district:lo.district||'',price:lo.price||'',area:lo.area||'',rooms:lo.rooms||'',baths:lo.baths||'',owner:lo.owner||'',phone:lo.phone||'',location:lo.location||'',map_url:lo.mapUrl||'',latitude:lo.latitude?Number(lo.latitude):null,longitude:lo.longitude?Number(lo.longitude):null,status:lo.status||'متاح',features:lo.features||[],notes:lo.notes||'',created_at:lo.createdAt||new Date().toISOString(),updated_at:new Date().toISOString(),images:[]};const {error}=await supabaseClient.from('offers').upsert(payload);if(error)continue;if(lo.images?.length){try{const paths=await uploadImages(id,lo.images);await supabaseClient.from('offers').update({images:paths,updated_at:new Date().toISOString()}).eq('id',id).eq('user_id',currentUser.id)}catch(e){console.error(e)}}}}
+function setMsg(t,err=false){$('msg').textContent=t;$('msg').className=err?'err':'ok'}
+function imageToJpeg(file,maxSide=1600,quality=.82){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=()=>reject(new Error('تعذر قراءة إحدى الصور.'));reader.onload=()=>{const img=new Image();img.onerror=()=>reject(new Error('تعذر قراءة إحدى الصور. جرّب JPG أو PNG.'));img.onload=()=>{const scale=Math.min(1,maxSide/Math.max(img.naturalWidth,img.naturalHeight)),w=Math.max(1,Math.round(img.naturalWidth*scale)),h=Math.max(1,Math.round(img.naturalHeight*scale)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',quality))};img.src=reader.result};reader.readAsDataURL(file)})}
+function renderPhotoStrip(targetId,images){const el=$(targetId);if(!el)return;el.innerHTML=(images||[]).map((src,i)=>`<div class="photo-thumb"><img src="${src}" loading="eager" fetchpriority="high" decoding="async" crossorigin="anonymous" alt="صورة العرض ${i+1}"><span>${i+1}</span></div>`).join('')}
+async function previewPhotos(){try{pendingImages=[];for(const f of [...$('photos').files].slice(0,8)){pendingImages.push(await imageToJpeg(f,1000,.68))}renderPhotoStrip('photoPreview',pendingImages)}catch(e){setMsg(e.message||'تعذر تجهيز الصور.',true)}}
+let selectedDeal="",selectedSource="";
+function syncOfferType(){
+  const deal=$("addDeal")?.value||"", type=$("addPropertyType")?.value||"";
+  selectedDeal=deal&&type ? `${type} ${deal==='إيجار'?'للإيجار':'للبيع'}` : '';
+  selectedSource=$("addSource")?.value||selectedSource||'';
+  const box=$("pricingBox"), sale=$("salePricing"), rent=$("rentPricing");
+  if(box){box.classList.toggle('hidden',!deal); sale?.classList.toggle('hidden',deal!=='بيع'); rent?.classList.toggle('hidden',deal!=='إيجار');}
+  updateSelectedSummary();
+}
+function updateSelectedSummary(){const el=$("selectedSummary");if(!el)return;el.textContent=(selectedDeal?`نوع العرض: ${selectedDeal}`:'اختر نوع العرض ونوع العقار')+'  ·  '+(selectedSource?`المصدر: ${selectedSource}`:'اختر المصدر')}
+async function analyze(){
+  const text=$("raw").value.trim(),phone=$("addPhone").value.trim();
+  syncOfferType();
+  if(!$("addDeal").value)return setMsg('اختر نوع العرض: بيع أو إيجار.',true);
+  if(!$("addPropertyType").value)return setMsg('اختر نوع العقار.',true);
+  if(!selectedSource)return setMsg('اختر مصدر العرض: مباشر أو غير مباشر.',true);
+  if(!text)return setMsg('ألصق نص العرض أولاً.',true);
+  $("analyzeBtn").disabled=true;setMsg('جاري تحديد الموقع والمدينة والحي...');
+  try{
+    const images=[];for(const f of [...$("photos").files].slice(0,8))images.push(await imageToJpeg(f,1600,.82));
+    pendingImages=images.slice();renderPhotoStrip('photoPreview',pendingImages);
+    const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
+    const rawResponse=await r.text();
+    let d={};try{d=rawResponse?JSON.parse(rawResponse):{}}catch(_){throw new Error(`تعذر قراءة رد الخادم (${r.status}).`)}
+    if(!r.ok)throw new Error(d.error||`تعذر تحديد الموقع (${r.status})`);
+    // Keep the modal open. The detected city/district are editable before saving.
+    $('addCity').value=canonicalCity(d.city||'');
+    $('addDistrict').value=String(d.district||'').trim();
+    $('addMapUrl').value=d.mapUrl||'';
+    $('addLat').value=d.latitude||'';
+    $('addLng').value=d.longitude||'';
+    $('addLocation').value=d.location||'';
+    renderAddCityOptions();renderAddDistrictOptions($('addCity').value);
+    const shown=[d.city,d.district].filter(Boolean).join(' — ');
+    const loc=$('detectedLocation');
+    if(loc){loc.classList.remove('hidden');loc.textContent=shown?`📍 الموقع المحدد تلقائيًا: ${shown} — يمكنك تعديل المدينة أو الحي قبل الحفظ.`:'📍 لم يتم التعرف على المدينة أو الحي. اكتبها يدويًا ثم احفظ العرض.';}
+    $('analyzeBtn').textContent=editingId?'💾 حفظ تعديلات العرض':'💾 حفظ العرض';
+    $('analyzeBtn').onclick=saveAnalyzedOffer;
+    setMsg(shown?`تم تحديد الموقع: ${shown}. راجع المدينة والحي ثم اضغط حفظ العرض.`:'تم تحديد الموقع. اكتب المدينة والحي إذا لزم ثم اضغط حفظ العرض.');
+  }catch(e){console.error(e);setMsg(e.message||'حدث خطأ غير متوقع.',true)}finally{$("analyzeBtn").disabled=false}
+}
+
+function renderAddCityOptions(){
+  const dl=$('saudiCitiesList');if(!dl)return;
+  const vals=[...new Set((typeof saudiCities!=='undefined'?saudiCities:[]).map(canonicalCity).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ar'));
+  dl.innerHTML=vals.map(v=>`<option value="${escapeHtml(v)}"></option>`).join('');
+}
+function renderAddDistrictOptions(city){
+  const dl=$('districtsList');if(!dl)return;
+  const vals=[...new Set(districtValuesForCity(city))];
+  dl.innerHTML=vals.map(v=>`<option value="${escapeHtml(v)}"></option>`).join('');
+}
+function resetAnalyzeState(){
+  $('analyzeBtn').textContent=editingId?'💾 حفظ تعديلات العرض':'📍 تحديد الموقع';
+  $('analyzeBtn').onclick=analyze;
+  $('addCity').value='';$('addDistrict').value='';$('addMapUrl').value='';$('addLat').value='';$('addLng').value='';$('addLocation').value='';
+  $('detectedLocation')?.classList.add('hidden');
+  renderAddCityOptions();renderAddDistrictOptions('');
+}
+async function saveAnalyzedOffer(){
+  const city=String($('addCity').value||'').trim(), district=String($('addDistrict').value||'').trim();
+  if(!city)return setMsg('اكتب المدينة أو اخترها من قائمة المدن قبل الحفظ.',true);
+  await saveSimpleOffer({
+    text:$('raw').value.trim(),phone:$('addPhone').value.trim(),
+    mapUrl:$('addMapUrl').value.trim(),latitude:$('addLat').value.trim(),longitude:$('addLng').value.trim(),
+    city,district,location:$('addLocation').value.trim(),area:$('addArea').value.trim()
+  });
+}
+
+function pricingFromForm(){
+  const deal=$("addDeal")?.value||'';
+  if(deal==='إيجار') return {deal:'إيجار',annual:String($("rentAnnual")?.value||'').trim()};
+  if(deal==='بيع') return {deal:'بيع',sale:String($("salePrice")?.value||'').trim()};
+  return {deal};
+}
+function pricingMarker(pr){return `\n\n[[PRICING:${JSON.stringify(pr)}]]`;}
+function parsePricing(o){
+  const raw=String(o?.notes||''); const m=raw.match(/\[\[PRICING:(.*?)\]\]/s); if(m){try{return JSON.parse(m[1])}catch(_){}}
+  return o?.pricing&&typeof o.pricing==='object'?o.pricing:null;
+}
+function cleanOfferNotes(o){return String(o?.notes||'').replace(/\s*\[\[PRICING:.*?\]\]/gs,'').replace(/\s*\[\[BROKER_UPDATED\]\]/gi,'').trim()}
+function pricingShareLines(o){
+  const p=parsePricing(o); if(!p)return []; const lines=[];
+  if(p.deal==='إيجار'){if(p.annual)lines.push(`💰 قيمة الإيجار: ${displayPrice(p.annual)}`);}
+  else if(p.deal==='بيع'){if(p.sale)lines.push(`💰 قيمة البيع: ${displayPrice(p.sale)}`);}
+  return lines;
+}
+
+async function saveSimpleOffer({text,phone,mapUrl,latitude,longitude,city='',district='',location='',area=''}){
+  if(!currentUser) throw new Error('سجّل الدخول أولاً.');
+  const isEdit=!!editingId;
+  const id=editingId||crypto.randomUUID();
+  const isRent=$('addDeal').value==='إيجار', propertyType=$('addPropertyType').value;
+  const existing=offers.find(x=>x.id===id);
+  const payload={
+    id,user_id:currentUser.id,deal:isRent?'إيجار':'بيع',source:selectedSource,property_type:propertyType,
+    city:canonicalCity(city||existing?.city||''),district:district||existing?.district||'',price:(pricingFromForm().deal==='إيجار'?pricingFromForm().annual:(pricingFromForm().sale||existing?.price||'')),area:area||existing?.area||'',
+    rooms:existing?.rooms||'',baths:existing?.baths||'',owner:existing?.owner||'',phone,location:location||existing?.location||'',
+    map_url:mapUrl||existing?.mapUrl||existing?.map_url||'',
+    latitude:latitude!==''&&latitude!=null?Number(latitude):(existing?.latitude??null),
+    longitude:longitude!==''&&longitude!=null?Number(longitude):(existing?.longitude??null),
+    status:existing?.status||'متاح',features:existing?.features||[],notes:text+pricingMarker(pricingFromForm())+(isEdit?' [[BROKER_UPDATED]]':' [[BROKER_NEW]]'),updated_at:new Date().toISOString()
+  };
+  if(!isEdit) payload.created_at=new Date().toISOString();
+  const {error}=await supabaseClient.from('offers').upsert(payload); if(error) throw error;
+  if(pendingImages.length){
+    if(existing?.images?.length){try{await supabaseClient.storage.from('offer-images').remove(existing.images)}catch(e){console.warn('old image cleanup',e)}}
+    const paths=await uploadImages(id,pendingImages);
+    const {error:e2}=await supabaseClient.from('offers').update({images:paths,updated_at:new Date().toISOString()}).eq('id',id).eq('user_id',currentUser.id);
+    if(e2) throw e2;
+  }
+  await loadOffers(); render(); pendingImages=[]; renderPhotoStrip('photoPreview',[]); $('photos').value=''; $('raw').value=''; $('addPhone').value=''; $('addDeal').value=''; $('addPropertyType').value=''; $('addArea').value=''; $('addSource').value=''; $('salePrice').value=''; $('rentAnnual').value=''; $('addCity').value=''; $('addDistrict').value=''; $('addMapUrl').value=''; $('addLat').value=''; $('addLng').value=''; $('addLocation').value=''; $('detectedLocation')?.classList.add('hidden'); selectedDeal=''; selectedSource=''; editingId=null; $('analyzeBtn').textContent='📍 تحديد الموقع'; $('analyzeBtn').onclick=analyze; updateSelectedSummary(); renderAddCityOptions(); renderAddDistrictOptions('');
+  closeAddModal();
+  showToast(isEdit?'تم حفظ تعديلات العرض بنجاح ✓':'تم حفظ العرض بنجاح ✓','success');
+  setMsg(isEdit?'تم حفظ تعديلات العرض بنجاح ✓':'تم حفظ العرض بنجاح ✓');
+}
+
+function extractCoords(url){if(!url)return null;const s=decodeURIComponent(String(url));let m=s.match(/@\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)/);if(m)return[+m[1],+m[2]];m=s.match(/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/);if(m)return[+m[1],+m[2]];m=s.match(/[?&](?:q|query|ll|center|destination|daddr)=(-?\d+(?:\.\d+)?)[, ]+(-?\d+(?:\.\d+)?)/);if(m)return[+m[1],+m[2]];m=s.match(/(-?\d{1,3}\.\d{4,})\s*,\s*(-?\d{1,3}\.\d{4,})/);return m?[+m[1],+m[2]]:null}
+async function saveOffer(){if(!currentUser)return alert('سجّل الدخول أولًا.');const id=editingId||crypto.randomUUID();const o={id,user_id:currentUser.id,deal:$('deal').value,source:$('source').value,property_type:$('type').value.trim(),city:$('city').value.trim(),district:$('district').value.trim(),price:$('price').value.trim(),area:$('area').value.trim(),rooms:$('rooms').value.trim(),baths:$('baths').value.trim(),owner:$('owner').value.trim(),phone:$('phone').value.trim(),location:$('location').value.trim(),map_url:$('mapUrl').value.trim(),latitude:$('latitude').value.trim()?Number($('latitude').value):null,longitude:$('longitude').value.trim()?Number($('longitude').value):null,status:$('status').value,features:$('features').value.split('\n').map(x=>x.trim()).filter(Boolean),notes:$('notes').value.trim()+(editingId?' [[BROKER_UPDATED]]':' [[BROKER_NEW]]'),updated_at:new Date().toISOString()};if((o.latitude===null||o.longitude===null)&&o.map_url){const c=extractCoords(o.map_url);if(c){o.latitude=c[0];o.longitude=c[1]}else{try{const rr=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:o.map_url})});if(rr.ok){const dd=await rr.json();if(dd.latitude&&dd.longitude){o.latitude=Number(dd.latitude);o.longitude=Number(dd.longitude);if(!o.city&&dd.city)o.city=dd.city;if(!o.district&&dd.district)o.district=dd.district;if(!o.location&&dd.location)o.location=dd.location}}}catch(e){console.warn('map coordinate repair',e)}}}try{let existing=offers.find(x=>x.id===id);if(!existing)o.created_at=new Date().toISOString();const {error}=await supabaseClient.from('offers').upsert(o);if(error)throw error;if(pendingImages.length){if(existing?.images?.length){await supabaseClient.storage.from('offer-images').remove(existing.images)}const paths=await uploadImages(id,pendingImages);const {error:e2}=await supabaseClient.from('offers').update({images:paths,updated_at:new Date().toISOString()}).eq('id',id).eq('user_id',currentUser.id);if(e2)throw e2}await loadOffers();render();pendingImages=[];editingId=null;renderPhotoStrip('photoPreview',[]);renderPhotoStrip('editorPhotos',[]);$('photos').value='';$('editor').classList.add('hidden');alert('تم حفظ العرض والصور في حسابك السحابي.')}catch(e){console.error(e);alert('تعذر حفظ العرض: '+(e.message||'خطأ غير معروف'))}}
+async function ensureAccountContactPhone(force=false){
+  if(!currentUser||!supabaseClient)return '';
+  const existing=String(currentUser?.user_metadata?.uroodi_contact_phone||'').trim();
+  if(existing&&!force)return existing;
+  const email=String(currentUser?.email||'').trim().toLowerCase();
+  // للحساب المرتبط ببطاقة التواصل: خزّن الرقم تلقائياً مرة واحدة.
+  if(email==='abo5alid190@gmail.com'&&!existing){
+    try{
+      const {data,error}=await supabaseClient.auth.updateUser({data:{uroodi_contact_phone:'0539004450'}});
+      if(!error){if(data?.user)currentUser=data.user;return '0539004450';}
+    }catch(e){console.warn('save branded contact',e)}
+    return '0539004450';
+  }
+  let phone=window.prompt('رقم التواصل للعملاء (يُحفظ مرة واحدة لهذا الحساب فقط)\nمثال: 05xxxxxxxx');
+  if(phone===null)return '';
+  phone=String(phone).trim().replace(/[^0-9+]/g,'');
+  if(phone.startsWith('+966')) phone='0'+phone.slice(4);
+  if(phone.startsWith('966')) phone='0'+phone.slice(3);
+  if(!/^05\d{8}$/.test(phone)){
+    alert('رقم الجوال غير صحيح. أدخل رقمًا يبدأ بـ 05 ويتكون من 10 أرقام.');
+    return '';
+  }
+  try{
+    const {data,error}=await supabaseClient.auth.updateUser({data:{uroodi_contact_phone:phone}});
+    if(error)throw error;
+    if(data?.user)currentUser=data.user;
+    return phone;
+  }catch(e){console.error(e);alert('تعذر حفظ رقم الجوال. حاول مرة أخرى.');return ''}
+}
+
+function getClientContactPhone(){
+  const saved=String(currentUser?.user_metadata?.uroodi_contact_phone||'').trim();
+  if(/^05\d{8}$/.test(saved))return saved;
+  // الحساب صاحب بطاقة التواصل: لا يعتمد على تأخر تحديث user_metadata في جلسة iOS.
+  const email=String(currentUser?.email||'').trim().toLowerCase();
+  if(email==='abo5alid190@gmail.com') return '0539004450';
+  return '';
+}
+function shareContactLine(){
+  const phone=getClientContactPhone();
+  return phone?`📞 للتواصل: ${phone}`:'';
+}
+function normalizeShareSource(v){
+  const s=String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(!s)return '';
+  if(s==='مباشر'||s.includes('مباشر مع المالك')||s.includes('مع المالك')||s==='direct') return 'مع المالك';
+  if(s==='غير مباشر'||s.includes('مع المباشر')||s.includes('غير مباشر')||s==='indirect'||s.includes('وسيط')) return 'مع المباشر';
+  return s;
+}
+function shareSourceLabel(o){
+  const source=normalizeShareSource(o?.source);
+  if(source==='مع المالك') return '👤 مع المالك';
+  if(source==='مع المباشر') return '🤝 مع المباشر';
+  return '';
+}
+
+function wa(p){p=(p||'').replace(/\D/g,'');if(p.startsWith('05'))p='966'+p.slice(1);if(!p)return;const webUrl='https://wa.me/'+p;window.location.href=webUrl}
+function offerShareText(o){
+  const lines=[];
+  const titleText=buildOfferTitle(o);
+  if(titleText) lines.push(`🏠 ${titleText}`);
+  const body=cleanOfferNotes(o);
+  if(body){ lines.push(''); lines.push(body); lines.push(''); }
+  const areaValue=String(o?.area||'').trim() || ((cleanOfferNotes(o).match(/(?:المساحة|مساحة|المساحه)\s*[:：]?\s*([0-9٠-٩][0-9٠-٩,٬.٫]*(?:\s*(?:م²|م2|متر(?:\s*مربع)?))?)/i)||[])[1] || '');
+  if(areaValue) lines.push(`📐 المساحة: ${areaValue}`);
+  const prices=pricingShareLines(o);
+  if(prices.length) lines.push(...prices);
+  const source=normalizeShareSource(o?.source);
+  if(source==='مع المالك') lines.push('👤 الصفة: مع المالك');
+  else if(source==='مع المباشر') lines.push('👤 الصفة: مع المباشر');
+  else if(source) lines.push(`👤 الصفة: ${source}`);
+  lines.push(`🪪 الرخصة العقارية: \u20661100119323\u2069`);
+  lines.push(`📞 للتواصل: \u20660539004450\u2069`);
+  lines.push('🔗 لمشاهدة جميع عروضي عبر الرابط');
+  lines.push('[ www.aqaryeen.com/partners.html ]');
+  return lines.join('\n').trim();
+}
+async function getShareFile(o){
+  if(!o)return null;
+  if(o._shareFile)return o._shareFile;
+  if(o._shareFilePromise)return o._shareFilePromise;
+  o._shareFilePromise=(async()=>{
+    try{
+      // First use the image that is already rendered on screen. This avoids a
+      // second network download when the photo has already been loaded.
+      const ready=shareImageFileFromCard(o);
+      if(ready){o._shareFile=ready;return ready;}
+      const path=String(o?.images?.[0]||'').trim();
+      let blob=null;
+    if(path && !/^https?:\/\//i.test(path) && supabaseClient){
+      const r=await supabaseClient.storage.from('offer-images').download(path);
+      if(!r.error)blob=r.data;
+    }
+    if(!blob && path && /^https?:\/\//i.test(path)){
+      try{const r=await fetch('/api/public-image?url='+encodeURIComponent(path),{cache:'no-store'});if(r.ok)blob=await r.blob();}catch(_){}
+    }
+    if(!blob && o?._signed?.[0]){
+      try{const r=await fetch(o._signed[0],{cache:'no-store'});if(r.ok)blob=await r.blob();}catch(_){}
+      if(!blob){try{const r=await fetch('/api/public-image?url='+encodeURIComponent(o._signed[0]),{cache:'no-store'});if(r.ok)blob=await r.blob();}catch(_){} }
+    }
+      if(blob && blob.type.startsWith('image/')){
+        o._shareFile=new File([blob],'صورة-العرض.jpg',{type:blob.type||'image/jpeg'});
+        return o._shareFile;
+      }
+    }catch(e){console.warn('share image file',e)}
+    return shareImageFileFromCard(o);
+  })();
+  try{return await o._shareFilePromise}
+  finally{delete o._shareFilePromise}
+}
+function shareImageFileFromCard(o){
+  try{
+    if(o?._shareFile)return o._shareFile;
+    const el=document.querySelector('#offer-'+CSS.escape(String(o.id))+' .offer-photos img');
+    if(!el||!el.complete||!el.naturalWidth)return null;
+    const max=1600,scale=Math.min(1,max/Math.max(el.naturalWidth,el.naturalHeight));
+    const w=Math.max(1,Math.round(el.naturalWidth*scale)),h=Math.max(1,Math.round(el.naturalHeight*scale));
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    const ctx=c.getContext('2d');ctx.drawImage(el,0,0,w,h);
+    const data=c.toDataURL('image/jpeg',.86),bin=atob(data.split(',')[1]),bytes=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+    return new File([bytes],'صورة-العرض.jpg',{type:'image/jpeg'});
+  }catch(e){return null}
+}
+async function preloadShareFiles(){
+  try{
+    await Promise.all(offers.map(o=>o?.images?.length&&!o._shareFile?getShareFile(o):null));
+  }catch(e){console.warn('preload share files',e)}
+}
+async function shareOffer(id){
+  const o=offers.find(x=>String(x.id)===String(id));
+  if(!o)return false;
+  const title=buildOfferTitle(o),text=offerShareText(o);
+  // pointerdown starts the same cached promise before click. If it has not
+  // finished yet, wait for that single promise instead of starting another
+  // download; on iPhone the normal tap path still keeps the share call close
+  // to the original user gesture.
+  let file=o._shareFile||shareImageFileFromCard(o)||null;
+  if(!file && o._shareFilePromise){try{file=await o._shareFilePromise}catch(_){} }
+  if(!file && o.images?.length){try{file=await getShareFile(o)}catch(_){} }
+  try{
+    if(typeof navigator.share==='function'){
+      const payload={title:title||'مشاركة العرض',text:text||''};
+      if(file&&(!navigator.canShare||navigator.canShare({files:[file]})))payload.files=[file];
+      await navigator.share(payload);
+      return true;
+    }
+  }catch(e){if(e?.name==='AbortError')return true;console.warn('share offer',e)}
+  try{
+    if(navigator.clipboard?.writeText){navigator.clipboard.writeText(text||'').then(()=>alert('تم نسخ نص العرض للمشاركة.')).catch(()=>alert(text||''));return true;}
+  }catch(_){ }
+  alert(text||'لا يوجد نص للمشاركة.');return false;
+}
+
+function num(v){const n=parseFloat(String(v||'').replace(/[^0-9.]/g,''));return Number.isFinite(n)?n:null}
+let quickTypeFilter='';let quickCityFilter='';let quickDistrictFilter='';
+const saudiCities=['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','الطائف','تبوك','بريدة','خميس مشيط','أبها','حائل','نجران','جازان','ينبع','الجبيل','الأحساء','الهفوف','المبرز','القطيف','الخبر','حفر الباطن','الخرج','الدرعية','الدوادمي','المجمعة','الزلفي','شقراء','وادي الدواسر','القويعية','رماح','ثادق','حريملاء','عفيف','ساجر','الرس','عنيزة','البكيرية','المذنب','البدائع','رياض الخبراء','الأسياح','عقلة الصقور','الشنان','بقعاء','الغزالة','رفحاء','عرعر','طريف','سكاكا','القريات','دومة الجندل','طبرجل','العلا','خيبر','الحناكية','المهد','بدر','الليث','القنفذة','رابغ','خليص','الجموم','بحرة','الخرمة','رنية','تربة','ميسان','المويه','بيشة','النماص','محايل عسير','سراة عبيدة','رجال ألمع','أحد رفيدة','ظهران الجنوب','بلقرن','تنومة','بارق','المجاردة','البرك','العارضة','صبيا','أبو عريش','صامطة','بيش','الدرب','الريث','فرسان','العارضية','الظهران','رأس تنورة','بقيق','صفوى','سيهات','عنك','النعيرية','قرية العليا','الخفجي','الشنان','الأسياح','المذنب','دومة الجندل','الحائط','تيماء','الوجه','ضباء','حقل','أملج','البدع','الحرث','الدائر','العيدابي','فيفاء'];
+function initMap(){const el=$('map');if(!el||!window.L)return;if(map){setTimeout(()=>map.invalidateSize(true),50);return}try{
+  map=L.map(el,{zoomControl:true,scrollWheelZoom:true,tap:true,preferCanvas:true});
+  map.setView([24.7,45.0],5.3);
+  const osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,minZoom:3,attribution:'© OpenStreetMap contributors'});
+  let tileErrors=0,fallbackUsed=false;
+  const useFallback=()=>{if(fallbackUsed||!map)return;fallbackUsed=true;try{map.removeLayer(osm)}catch{};L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,minZoom:3,attribution:'© Esri'}).addTo(map)};
+  osm.on('tileerror',()=>{tileErrors++;if(tileErrors>=3)setTimeout(useFallback,150)});
+  osm.addTo(map);
+  map.whenReady(()=>setTimeout(()=>{map.invalidateSize(true);if(offers.length)updateMap(filtered())},100));
+  setTimeout(()=>{map.invalidateSize(true);if(offers.length)updateMap(filtered())},500);
+  window.addEventListener('resize',()=>{if(map)map.invalidateSize(true)});
+}catch(e){console.error('Map init error',e);el.innerHTML='<div style="padding:24px;text-align:center;color:#667085;font-weight:800">تعذر تحميل الخريطة. اضغط تحديث الصفحة وحاول مرة أخرى.</div>'}}
+const dealTypes=['شقة','بيت','فيلا','دور','عمارة','أرض','أرض تجارية','مزرعة','استراحة','مكتب','محل','مستودع','غرفة'];
+function buildTypeMenu(targetId){const el=$(targetId);if(!el)return;el.innerHTML='<button type="button" class="menu-item" onclick="showTypeLevels(\''+targetId+'\',\'root\')">نوع العرض</button><button type="button" class="menu-item" onclick="showTypeLevels(\''+targetId+'\',\'sale\')">للبيع</button><button type="button" class="menu-item" onclick="showTypeLevels(\''+targetId+'\',\'rent\')">للإيجار</button>'}
+function showTypeLevels(targetId,level){const el=$(targetId);if(!el)return;if(level==='root'){buildTypeMenu(targetId);return}const suffix=level==='rent'?'للإيجار':'للبيع';el.innerHTML='<button type="button" class="menu-item menu-back" onclick="showTypeLevels(\''+targetId+'\',\'root\')">‹ رجوع</button>'+dealTypes.map(t=>'<button type="button" class="menu-item" onclick="chooseType(\''+targetId+'\',\''+escapeHtml(t+' '+suffix)+'\')">'+escapeHtml(t+' '+suffix)+'</button>').join('')}
+function chooseType(targetId,value){if(targetId==='dealMenu'){selectedDeal=value;$('dealPickerBtn').textContent=value+' ▾';$('dealMenu').classList.add('hidden');updateSelectedSummary()}else{quickTypeFilter=value;$('quickTypeBtn').textContent=value+' ▾';$('quickTypeMenu').classList.add('hidden');$('allFilterBtn')?.classList.remove('active');render()}}
+function toggleDealMenu(){buildTypeMenu('dealMenu');$('sourceMenu')?.classList.add('hidden');$('dealMenu')?.classList.toggle('hidden')}
+function toggleSourceMenu(){$('dealMenu')?.classList.add('hidden');$('sourceMenu').innerHTML='<button type="button" class="menu-item" onclick="chooseSource(\'مباشر\')">🟢 مباشر</button><button type="button" class="menu-item" onclick="chooseSource(\'غير مباشر\')">🔵 غير مباشر</button>';$('sourceMenu')?.classList.toggle('hidden')}
+function chooseSource(v){selectedSource=v;$('sourcePickerBtn').textContent=v+' ▾';$('sourceMenu').classList.add('hidden');updateSelectedSummary()}
+function toggleQuickTypeMenu(){buildTypeMenu('quickTypeMenu');$('quickSourceMenu')?.classList.add('hidden');$('cityMenu')?.classList.add('hidden');$('districtMenu')?.classList.add('hidden');$('quickTypeMenu')?.classList.toggle('hidden')}
+function toggleQuickSourceMenu(){$('quickTypeMenu')?.classList.add('hidden');$('quickSourceMenu').innerHTML='<button type="button" class="menu-item" onclick="chooseQuickSource(\'\')">كل المصادر</button><button type="button" class="menu-item" onclick="chooseQuickSource(\'مباشر\')">🟢 مباشر</button><button type="button" class="menu-item" onclick="chooseQuickSource(\'غير مباشر\')">🔵 غير مباشر</button>';$('quickSourceMenu')?.classList.toggle('hidden')}
+function chooseQuickSource(v){$('quickSourceBtn').textContent=(v||'مصدر العرض')+' ▾';$('quickSourceMenu').classList.add('hidden');$('fSource').value=v;render()}
+const cityPriority=['الرياض','جدة','المدينة المنورة','مكة المكرمة','الدمام','الطائف','تبوك','بريدة','خميس مشيط','أبها','أحد رفيدة','حائل','نجران','جازان','ينبع','الجبيل','الخبر','الأحساء','حفر الباطن','القطيف','الخرج','عرعر','سكاكا','الباحة','القريات'];
+function normalizeArabicKey(v){return String(v||'').trim().normalize('NFKC').replace(/[ًٌٍَُِّْـ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/‏|‎/g,'').replace(/[ـ]/g,'').replace(/\s+/g,' ').toLowerCase()}
+const cityAliases={
+  'احد رفيدة':'أحد رفيدة','أحد رفيدة':'أحد رفيدة','احد رفيده':'أحد رفيدة','أحد رفيده':'أحد رفيدة',
+  'ابها':'أبها','أبها':'أبها','خميس مشيط':'خميس مشيط','الرياض':'الرياض','جده':'جدة','جدة':'جدة',
+  'مكه':'مكة المكرمة','مكه المكرمه':'مكة المكرمة','مكة':'مكة المكرمة','مكة المكرمة':'مكة المكرمة',
+  'المدينه':'المدينة المنورة','المدينة':'المدينة المنورة','المدينه المنوره':'المدينة المنورة','المدينة المنورة':'المدينة المنورة',
+  'الدمام':'الدمام','الطائف':'الطائف','تبوك':'تبوك','بريده':'بريدة','بريدة':'بريدة','حايل':'حائل','حائل':'حائل',
+  'نجران':'نجران','جازان':'جازان','ينبع':'ينبع','الجبيل':'الجبيل','الخبر':'الخبر','الاحساء':'الأحساء','الأحساء':'الأحساء',
+  'حفر الباطن':'حفر الباطن','القطيف':'القطيف','الخرج':'الخرج','عرعر':'عرعر','سكاكا':'سكاكا','الباحه':'الباحة','الباحة':'الباحة','القريات':'القريات'
+};
+const riyadhNeighborhoods=['عرقة','عرقه','لبن','عرقة لبن','عرقه لبن','ظهرة لبن','ظهرة البديعة','البديعة','السويدي','السويدي الغربي','السويدي الشرقي','نمار','طويق','ديراب','الشفا','عكاظ','العزيزية','الدار البيضاء','المروة','المنصورة','الفيصلية','الملز','الربوة','الروضة','النسيم','النسيم الشرقي','النسيم الغربي','الريان','الخليج','النهضة','اليرموك','قرطبة','الجنادرية','الرمال','المونسية','اليرموك','النرجس','الياسمين','الصحافة','الملقا','حطين','العقيق','النخيل','الرحمانية','الرائد','الورود','الملك فهد','المحمدية','السليمانية','العليا','الملك فيصل','غرناطة','اشبيلية','إشبيلية','الشهداء','العارض','القيروان','العارضية','العارضية القديمة','الشميسي','أم الحمام','ام الحمام','المعذر','المعذر الشمالي','المعذر الجنوبي','الدرعية الشمالية','السويدي'];
+function canonicalCity(v){const raw=String(v||'').trim().replace(/^(مدينة|محافظة|منطقة|بلدية)\s*/,'').trim();if(!raw)return '';const k=normalizeArabicKey(raw);for(const n of riyadhNeighborhoods){const nk=normalizeArabicKey(n);if(k===nk||k.includes(nk)||nk.includes(k))return 'الرياض'}for(const [alias,label] of Object.entries(cityAliases)){if(normalizeArabicKey(alias)===k)return label}const compact=k.replace(/^ال/,'');for(const [alias,label] of Object.entries(cityAliases)){const ak=normalizeArabicKey(alias).replace(/^ال/,'');if(ak===compact)return label}return raw}
+function orderedCities(){const fromOffers=[...new Set(offers.map(o=>canonicalCity(o.city)).filter(Boolean))];const base=fromOffers.length?fromOffers:[...new Set(saudiCities.map(canonicalCity))];return [...cityPriority.filter(x=>base.includes(x)),...base.filter(x=>!cityPriority.includes(x)).sort((a,b)=>a.localeCompare(b,'ar'))]}
+function renderCityMenu(){const el=$('cityMenu');if(!el)return;const cities=orderedCities();el.innerHTML='<button type="button" class="menu-item" data-city="">كل المدن</button>'+cities.map(v=>'<button type="button" class="menu-item" data-city="'+escapeHtml(v)+'">'+escapeHtml(v)+'</button>').join('');el.querySelectorAll('[data-city]').forEach(btn=>btn.addEventListener('click',()=>selectCity(btn.getAttribute('data-city')||'')))}
+function renderAllCities(){const row=$('allCitiesRow');if(!row)return;row.innerHTML=orderedCities().map(v=>'<button class="city-chip '+(canonicalCity(quickCityFilter)===v?'active':'')+'" onclick="selectCity(\''+escapeHtml(v)+'\')">'+escapeHtml(v)+'</button>').join('')}
+function cityForOffer(o){return canonicalCity(o?.city||'')}
+function districtValuesForCity(city){const c=canonicalCity(city);return [...new Set(offers.filter(o=>!c||cityForOffer(o)===c).map(o=>String(o.district||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ar'))}
+function renderDistrictMenu(){const el=$('districtMenu');if(!el)return;const ds=districtValuesForCity(quickCityFilter);el.innerHTML=ds.length?'<button type="button" class="menu-item" data-district="">كل الأحياء</button>'+ds.map(v=>'<button type="button" class="menu-item" data-district="'+escapeHtml(v)+'">'+escapeHtml(v)+'</button>').join(''):'<div class="menu-empty">لا توجد أحياء محفوظة لهذه المدينة حتى الآن</div>';el.querySelectorAll('[data-district]').forEach(btn=>btn.addEventListener('click',()=>selectDistrict(btn.getAttribute('data-district')||'')))}
+function positionMenu(menu,anchor){if(!menu||!anchor)return;menu.style.position='';menu.style.left='';menu.style.right='';menu.style.top='';menu.style.bottom='';menu.style.width='';menu.style.maxHeight=''}
+function moveMenuToBody(id){return $(id)}
+function toggleCityMenu(){const el=$('cityMenu');if(!el)return;renderCityMenu();$('quickTypeMenu')?.classList.add('hidden');$('quickSourceMenu')?.classList.add('hidden');$('districtMenu')?.classList.add('hidden');if(el.classList.contains('hidden')){el.classList.remove('hidden');el.style.display=''}else{el.classList.add('hidden');el.style.display='none'}}
+function toggleDistrictMenu(){const el=$('districtMenu');if(!el)return;renderDistrictMenu();$('cityMenu')?.classList.add('hidden');$('cityMenu')?.style.setProperty('display','none');if(el.classList.contains('hidden')){el.classList.remove('hidden');el.style.display=''}else{el.classList.add('hidden');el.style.display='none'}}
+function selectCity(city){favoritesOnly=false;$('favoritesFilterBtn')?.classList.remove('active');$('allFilterBtn')?.classList.remove('active');updateFavoritesUI();quickCityFilter=canonicalCity(city);quickDistrictFilter='';$('cityPickerBtn').textContent=(quickCityFilter||'المدينة')+' ▾';$('cityMenu')?.classList.add('hidden');$('allCitiesRow')?.classList.add('hidden');if(quickCityFilter){$('districtWrap')?.classList.remove('hidden');$('districtPickerBtn').textContent='الحي ▾';renderDistrictMenu()}else{$('districtWrap')?.classList.remove('hidden');$('districtPickerBtn').textContent='الحي ▾';$('districtMenu')?.classList.add('hidden')}render()}
+function selectDistrict(district){quickDistrictFilter=String(district||'').trim();$('districtPickerBtn').textContent=(quickDistrictFilter||'الحي')+' ▾';$('districtMenu')?.classList.add('hidden');render()}
+window.addEventListener('resize',()=>{renderCityMenu();if(!quickCityFilter)renderDistrictMenu()});
+document.addEventListener('pointerdown',e=>{const b=e.target.closest?.('.share-offer');if(!b)return;const id=b.getAttribute('data-share-id');const o=offers.find(x=>String(x.id)===String(id));if(o&&!o._shareFile)void getShareFile(o);},{passive:true});
+document.addEventListener('click',e=>{
+  const b=e.target.closest?.('.share-offer');
+  if(!b)return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  const id=b.getAttribute('data-share-id');
+  if(id)shareOffer(id);
+},{capture:true});
+document.addEventListener('click',e=>{if(!e.target.closest('#cityMenu')&&!e.target.closest('#cityPickerBtn'))$('cityMenu')?.classList.add('hidden');if(!e.target.closest('#districtMenu')&&!e.target.closest('#districtPickerBtn'))$('districtMenu')?.classList.add('hidden')});
+function normalizeDeal(v){const s=String(v||'').trim();if(s.includes('إيجار')||s.includes('للايجار'))return 'إيجار';if(s.includes('بيع')||s.includes('للبيع'))return 'بيع';return s} function normalizePropertyType(v){return String(v||'').trim().replace(/\s*(?:للبيع|للإيجار|للايجار)\s*$/,'').trim()} function offerCategory(o){const type=normalizePropertyType(o?.property_type||o?.type);const deal=normalizeDeal(o?.deal);return type+' '+(deal==='إيجار'?'للإيجار':deal==='بيع'?'للبيع':deal)} function filtered(){const q=($('fSearch')?.value||'').trim().toLowerCase(),deal=$('fDeal')?.value||'',source=$('fSource')?.value||'',min=num($('fMin')?.value||''),max=num($('fMax')?.value||'');return offers.filter(o=>{const hay=[o.type,o.property_type,o.deal,o.city,o.district,o.owner,o.phone,o.location,o.notes].join(' ').toLowerCase();const typeLabel=offerCategory(o);return(!favoritesOnly||favorites.has(o.id))&&(!q||hay.includes(q))&&(!deal||normalizeDeal(o.deal)===deal)&&(!source||o.source===source)&&(!quickTypeFilter||typeLabel===quickTypeFilter)&&(!quickCityFilter||cityForOffer(o)===canonicalCity(quickCityFilter))&&(!quickDistrictFilter||o.district===quickDistrictFilter)&&(min===null||num(o.price)>=min)&&(max===null||num(o.price)<=max)})}
+
+function applyFilters(){render()}
+function closeAdvancedFilters(){
+  ['fSearch','fDeal','fSource','fMin','fMax'].forEach(id=>{const el=$(id);if(el)el.value=''});
+  favoritesOnly=false;quickTypeFilter='';quickCityFilter='';quickDistrictFilter='';
+  $('cityPickerBtn').textContent='المدينة ▾';$('districtWrap')?.classList.add('hidden');
+  $('cityMenu')?.classList.add('hidden');$('districtMenu')?.classList.add('hidden');
+  document.querySelectorAll('.quick-type').forEach(b=>b.classList.remove('active'));
+  $('allFilterBtn')?.classList.add('active');$('favoritesFilterBtn')?.classList.remove('active');
+  updateFavoritesUI();$('advancedFilters')?.classList.add('hidden');render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function quickType(btn,val){favoritesOnly=false;quickTypeFilter=val;document.querySelectorAll('.quick-type').forEach(b=>b.classList.remove('active'));btn.classList.add('active');$('allFilterBtn')?.classList.remove('active');$('favoritesFilterBtn')?.classList.remove('active');updateFavoritesUI();render()}
+function quickCity(btn,val){selectCity(val)}
+function quickAll(btn){
+  toggleRequestMode(false);
+  // «الكل» يلغي جميع الفلاتر ويرجع الصفحة لحالتها الأساسية: كل العروض + الخريطة.
+  favoritesOnly=false;
+  quickTypeFilter='';
+  quickCityFilter='';
+  quickDistrictFilter='';
+  ['fSearch','fDeal','fSource','fMin','fMax'].forEach(id=>{const el=$(id);if(el)el.value=''});
+  $('cityPickerBtn').textContent='المدينة ▾';
+  $('districtPickerBtn').textContent='الحي ▾';
+  $('districtWrap')?.classList.add('hidden');
+  $('allCitiesRow')?.classList.add('hidden');
+  $('cityMenu')?.classList.add('hidden');
+  $('districtMenu')?.classList.add('hidden');
+  document.querySelectorAll('.quick-type').forEach(b=>b.classList.remove('active'));
+  $('allFilterBtn')?.classList.add('active');
+  $('favoritesFilterBtn')?.classList.remove('active');
+  updateFavoritesUI();
+  render();
+  setTimeout(()=>{if(map)map.invalidateSize(true);updateMap(offers)},50);
+}
+function toggleAdvancedFilters(){ $('advancedFilters').classList.toggle('hidden') }
+function useNearby(){alert('ميزة القريب تحتاج السماح بالموقع من جهازك.')}
+
+function fillSelect(id,values,label){const el=$(id),old=el.value;el.innerHTML='<option value="">'+label+'</option>'+values.filter(Boolean).sort((a,b)=>a.localeCompare(b,'ar')).map(v=>'<option>'+escapeHtml(v)+'</option>').join('');el.value=values.includes(old)?old:''}
+function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function displayPrice(v){const s=String(v??'').trim();if(!s)return 'غير محدد';if(/ريال|ر\.س|SAR/i.test(s))return s;const normalized=s.replace(/,/g,'').replace(/\s+/g,'');if(/^[-+]?\d+(?:\.\d+)?$/.test(normalized))return s+' ريال';return s}
+function displayArea(v){const s=String(v||'').trim();if(!s)return '—';if(/م²|م2|م\s*²/i.test(s))return s;return s+' م²'}
+function normalizeOfferSource(v){
+  const s=String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(!s)return "";
+  if(s==='مباشر'||s.includes('مباشر مع المالك')||s.includes('مع المالك')||s==='direct')return "مع المالك";
+  if(s==='غير مباشر'||s.includes('مع المباشر')||s.includes('غير مباشر')||s==='indirect'||s.includes('وسيط'))return "مع المباشر";
+  return String(v||'').trim();
+}
+function buildOfferTitle(o){
+  const property=String(o?.property_type||o?.type||'عقار').trim();
+  const deal=o?.deal==='إيجار'?'للإيجار':o?.deal==='بيع'?'للبيع':String(o?.deal||'').trim();
+  let title=[property,deal].filter(Boolean).join(' ');
+  const city=String(o?.city||'').trim();
+  const district=String(o?.district||'').trim();
+  if(city) title += ` في مدينة ${city}`;
+  if(district) title += ` ${/^حي\s/.test(district)?district:'حي '+district}`;
+  const source=normalizeOfferSource(o?.source);
+  if(source) title += ` · ${source}`;
+  return title||'عرض عقاري';
+}
+
+async function deleteOffer(id){
+  const o=offers.find(x=>x.id===id);
+  if(!o||!currentUser)return;
+  const title=buildOfferTitle(o);
+  if(!confirm(`هل أنت متأكد من حذف «${title}»؟\n\nسيتم حذف العرض وصوره نهائيًا من حسابك.`))return;
+  try{
+    const oldImages=Array.isArray(o.images)?o.images.filter(Boolean):[];
+    // احذف ملفات الصور من التخزين أولًا، لكن لا تمنع حذف العرض إذا تعذر حذف ملف صورة واحد.
+    if(oldImages.length){try{await supabaseClient.storage.from('offer-images').remove(oldImages)}catch(e){console.warn('image cleanup',e)}}
+    // تنظيف جدول الصور المساند إن كان موجودًا في المشروع.
+    try{await supabaseClient.from('offer_images').delete().eq('offer_id',id).eq('user_id',currentUser.id)}catch(e){console.warn('offer_images cleanup',e)}
+    const {error}=await supabaseClient.from('offers').delete().eq('id',id).eq('user_id',currentUser.id);
+    if(error)throw error;
+    offers=offers.filter(x=>x.id!==id);
+    render();
+    showToast('تم حذف العرض نهائيًا ✓','success');
+  }catch(e){
+    console.error('deleteOffer',e);
+    showToast('تعذر حذف العرض: '+(e.message||'تحقق من صلاحية الحذف في Supabase'),'error');
+  }
+}
+function showToast(message,type='info'){
+  let el=document.getElementById('appToast');
+  if(!el){el=document.createElement('div');el.id='appToast';document.body.appendChild(el)}
+  el.className='app-toast '+type;el.textContent=message;el.classList.add('show');
+  clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove('show'),3200);
+}
+
+function updateFavoritesUI(){const valid=new Set(offers.map(o=>String(o.id)));const count=[...favorites].filter(id=>valid.has(String(id))).length;const c=$('favoritesCount');if(c)c.textContent=String(count);const all=$('allCount');if(all)all.textContent=String(offers.length);$('favoritesFilterBtn')?.classList.toggle('active',favoritesOnly);}
+function saveFavorites(){localStorage.setItem('uroodi_favorites',JSON.stringify([...favorites]));}
+async function syncFavoritesToCloud(){if(!currentUser||!supabaseClient)return false;try{favoritesSyncBusy=true;const {data,error}=await supabaseClient.auth.updateUser({data:{uroodi_favorites:[...favorites]}});if(error)throw error;if(data?.user)currentUser=data.user;return true}catch(e){console.error('favorites sync',e);return false}finally{favoritesSyncBusy=false}}
+async function toggleFavorite(id){const had=favorites.has(id);if(had)favorites.delete(id);else favorites.add(id);saveFavorites();updateFavoritesUI();render();const ok=await syncFavoritesToCloud();if(!ok){if(had)favorites.add(id);else favorites.delete(id);saveFavorites();updateFavoritesUI();render();showToast('تعذر مزامنة المفضلة سحابيًا','error');}else showToast(had?'تمت إزالة العرض من المفضلة':'تمت إضافة العرض للمفضلة','success');}
+function toggleFavoritesFilter(btn){favoritesOnly=!favoritesOnly;if(favoritesOnly){quickTypeFilter='';quickCityFilter='';quickDistrictFilter='';document.querySelectorAll('.quick-type').forEach(b=>b.classList.remove('active'));$('favoritesFilterBtn')?.classList.add('active');$('allFilterBtn')?.classList.remove('active')}else{$('allFilterBtn')?.classList.add('active');$('favoritesFilterBtn')?.classList.remove('active');}updateFavoritesUI();render();}
+function setNavActive(id){document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));$(id)?.classList.add('active')}
+function goSearch(){favoritesOnly=false;setNavActive('navSearch');$('advancedFilters')?.classList.remove('hidden');$('quickFilters')?.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{$('fSearch')?.focus()},350)}
+function goOffers(){favoritesOnly=false;updateFavoritesUI();setNavActive('navOffers');render();$('offersSection')?.scrollIntoView({behavior:'smooth',block:'start'})}
+function goFavorites(){favoritesOnly=true;quickTypeFilter='';quickCityFilter='';quickDistrictFilter='';document.querySelectorAll('.quick-type').forEach(b=>b.classList.remove('active'));$('favoritesFilterBtn')?.classList.add('active');$('allFilterBtn')?.classList.remove('active');updateFavoritesUI();render();showToast(favorites.size?'تم عرض المفضلة':'لا توجد عروض في المفضلة بعد','info')}
+function goAdd(){favoritesOnly=false;openAddModal()}
+
+function render(){const arr=filtered();$('count').textContent=arr.length;const statTotal=$('statTotal');if(statTotal)statTotal.textContent=offers.length;const statMapped=$('statMapped');if(statMapped)statMapped.textContent=offers.filter(o=>o.latitude!=null&&o.longitude!=null).length;const statFav=$('statFav');if(statFav)statFav.textContent=[...favorites].filter(id=>offers.some(o=>String(o.id)===String(id))).length;const allCount=$('allCount');if(allCount)allCount.textContent=String(offers.length);const favoritesCount=$('favoritesCount');if(favoritesCount)favoritesCount.textContent=String([...favorites].filter(id=>offers.some(o=>String(o.id)===String(id))).length);$('offers').innerHTML=arr.map(o=>{const title=buildOfferTitle(o);const raw=o.notes||'';return `<article class="offer" id="offer-${o.id}"><span class="badge">${escapeHtml(title)}</span>${o.phone?`<div class="line">📱 ${escapeHtml(o.phone)}</div>`:''}<div class="raw-offer"><b>نص العرض</b><div>${escapeHtml(cleanOfferNotes(o)).replace(/\n/g,'<br>')}</div></div>${pricingShareLines(o).length?`<div class="price-summary">${pricingShareLines(o).map(x=>`<div>${escapeHtml(x)}</div>`).join('')}</div>`:''}${o.images?.length?`<div class="offer-photos">${(o._signed||[]).map((src,i)=>`<img src="${src}" loading="${i===0?'eager':'lazy'}" fetchpriority="${i===0?'high':'low'}" decoding="async" crossorigin="anonymous" alt="صورة العرض ${i+1}">`).join('')}</div>`:''}<div class="offer-actions">${o.phone?`<button class="primary wa-btn" onclick="wa('${escapeHtml(o.phone)}')">💬 واتساب المالك</button>`:''}<button class="secondary share-offer" type="button" data-share-id="${escapeHtml(String(o.id))}">📤 مشاركة العرض</button>${o.mapUrl?`<button class="secondary" onclick="window.open('${escapeHtml(o.mapUrl)}','_blank')">📍 فتح الموقع</button>`:''}<button class="secondary favorite-btn ${favorites.has(o.id)?'is-favorite':''}" onclick="toggleFavorite('${o.id}')">${favorites.has(o.id)?'♥':'♡'} المفضلة</button><button class="secondary" onclick="editOffer('${o.id}')">✏️ تعديل</button><button class="danger" type="button" onclick="deleteOffer('${o.id}')">🗑️ حذف</button></div></article>`}).join('')||'<div class="empty">لا توجد عروض محفوظة.</div>';updateMap(arr)}
+function openAddModal(){
+  editingId=null; pendingImages=[]; selectedDeal=''; selectedSource='';
+  $('addDeal').value=''; $('addPropertyType').value=''; $('addArea').value=''; $('addSource').value=''; $('raw').value=''; $('addPhone').value='';
+  $('addCity').value=''; $('addDistrict').value=''; $('addMapUrl').value=''; $('addLat').value=''; $('addLng').value=''; $('addLocation').value=''; $('detectedLocation')?.classList.add('hidden');
+  $('photos').value=''; renderPhotoStrip('photoPreview',[]); renderAddCityOptions(); renderAddDistrictOptions('');
+  $('analyzeBtn').textContent='📍 تحديد الموقع'; $('analyzeBtn').onclick=analyze;
+  setMsg(''); updateSelectedSummary();
+  $('addModalTitle').textContent='إضافة عرض جديد';
+  $('addModal').classList.remove('hidden'); $('addModal').setAttribute('aria-hidden','false'); document.body.classList.add('modal-open');
+  setTimeout(()=>{$('raw')?.focus()},120);
+}
+function closeAddModal(){
+  $('addModal')?.classList.add('hidden'); $('addModal')?.setAttribute('aria-hidden','true'); document.body.classList.remove('modal-open');
+}
+function showEditModal(){
+  $('addModalTitle').textContent='تعديل العرض';
+  $('addModal').classList.remove('hidden'); $('addModal').setAttribute('aria-hidden','false'); document.body.classList.add('modal-open');
+}
+
+function editOffer(id){
+  const o=offers.find(x=>x.id===id); if(!o) return;
+  editingId=id;
+  $('addDeal').value=o.deal||'';
+  $('addPropertyType').value=o.property_type||o.type||'';
+  $('addArea').value=o.area||'';
+  const ep=parsePricing(o)||{}; $('salePrice').value=ep.sale||''; $('rentAnnual').value=ep.annual||'';
+  $('addSource').value=o.source||'';
+  $('raw').value=cleanOfferNotes(o);
+  $('addPhone').value=o.phone||'';
+  $('addCity').value=canonicalCity(o.city||''); $('addDistrict').value=o.district||''; $('addMapUrl').value=o.mapUrl||o.map_url||''; $('addLat').value=o.latitude??''; $('addLng').value=o.longitude??''; $('addLocation').value=o.location||'';
+  selectedSource=o.source||'';
+  syncOfferType(); renderAddCityOptions(); renderAddDistrictOptions($('addCity').value);
+  $('analyzeBtn').textContent='💾 حفظ تعديلات العرض'; $('analyzeBtn').onclick=saveAnalyzedOffer;
+  const loc=$('detectedLocation');if(loc){loc.classList.remove('hidden');loc.textContent='📍 عدّل المدينة أو الحي إذا احتجت ثم اضغط حفظ تعديلات العرض.';}
+  setMsg('وضع التعديل: عدّل المدينة أو الحي وباقي البيانات ثم اضغط حفظ تعديلات العرض.');
+  renderPhotoStrip('photoPreview',o._signed||[]);
+  showEditModal();
+}
+
+
+function openOfferFromMap(id){
+  const run=()=>{
+    const card=document.getElementById('offer-'+String(id));
+    if(!card)return false;
+    const top=card.getBoundingClientRect().top+window.pageYOffset-90;
+    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+    document.querySelectorAll('.offer.map-selected').forEach(el=>el.classList.remove('map-selected'));
+    card.classList.add('map-selected');
+    setTimeout(()=>card.classList.remove('map-selected'),2200);
+    return true;
+  };
+  if(run())return;
+  requestAnimationFrame(()=>setTimeout(run,120));
+  setTimeout(run,450);
+}
+function mapPopup(o){
+  const title=buildOfferTitle(o), city=o.city||'', district=o.district||'', mapLink=o.mapUrl||o.map_url||'', photo=(o._signed||[])[0]||'';
+  const meta=[city,district,normalizeOfferSource(o?.source)?'👤 '+normalizeOfferSource(o.source):'',o.price?displayPrice(o.price):'',o.area?displayArea(o.area):''].filter(Boolean).slice(0,5);
+  return `<div class="map-popup map-compact-popup"><div class="map-popup-head"><div class="map-popup-pin">📍</div><h3>${escapeHtml(title)}</h3></div>${photo?`<div class="map-popup-photo-row"><img class="map-popup-mini-photo" src="${escapeHtml(photo)}" alt="صورة العرض" loading="lazy"><div class="map-popup-meta">${meta.map(v=>`<div>${escapeHtml(String(v))}</div>`).join('')}</div></div>`:`<div class="map-popup-meta map-popup-meta-full">${meta.map(v=>`<div>${escapeHtml(String(v))}</div>`).join('')}</div>`}${mapLink?`<a class="map-location-link" href="${escapeHtml(mapLink)}" target="_blank" rel="noopener">📍 فتح الموقع</a>`:''}<button class="map-open-offer" type="button" data-map-offer-id="${escapeHtml(String(o.id))}" onclick="openOfferFromMap('${escapeHtml(String(o.id))}')">↓ الانتقال للعرض</button></div>`;
+}
+function mapGroupPopup(group){
+  const arr=group||[];
+  const cards=arr.map((o,i)=>{
+    const photo=(o._signed||[])[0]||'';
+    const meta=[o.area?`📐 ${o.area}`:'',o.city?`📍 ${o.city}`:'',o.district?`حي ${String(o.district).replace(/^حي\s*/,'')}`:'',o.price?`💰 ${displayPrice(o.price)}`:''].filter(Boolean).join(' · ');
+    return `<div class="map-group-card">${photo?`<img class="map-group-photo" src="${escapeHtml(photo)}" alt="صورة العرض" loading="lazy">`:''}<div class="map-group-title-text">${i+1}. ${escapeHtml(buildOfferTitle(o))}</div>${meta?`<div class="map-group-meta">${escapeHtml(meta)}</div>`:''}<div class="map-group-actions">${mapLinkForOffer(o)?`<a href="${escapeHtml(mapLinkForOffer(o))}" target="_blank" rel="noopener">📍 الموقع</a>`:''}<button type="button" data-map-offer-id="${escapeHtml(String(o.id))}" onclick="openOfferFromMap('${escapeHtml(String(o.id))}')">↓ العرض</button></div></div>`;
+  }).join('');
+  return `<div class="map-popup map-group-popup"><div class="map-group-count">📍 ${arr.length} عروض في نفس الموقع</div>${cards}</div>`;
+}
+function mapLinkForOffer(o){return o?.mapUrl||o?.map_url||''}
+
+async function getPartnerBannerFile(){
+  try{
+    const src='/share-banner.jpg';
+    const r=await fetch(src,{cache:'force-cache'});
+    if(!r.ok)return null;
+    const blob=await r.blob();
+    if(!blob.type.startsWith('image/'))return null;
+    return new File([blob],'عروض-عقارية.jpg',{type:blob.type||'image/jpeg'});
+  }catch(e){console.warn('partner banner',e);return null}
+}
+
+let partnerShareLinkCache='';
+let partnerBannerFileCache=null;
+let partnerSharePreparing=null;
+async function preparePartnerShare(){
+  if(partnerSharePreparing)return partnerSharePreparing;
+  partnerSharePreparing=(async()=>{
+    try{
+      if(!currentUser||!supabaseClient)return;
+      const key='uroodi_partner_share_link_v3_'+String(currentUser.id);
+      const cached=localStorage.getItem(key)||'';
+      if(cached)partnerShareLinkCache=cached;
+      if(!partnerShareLinkCache){
+        let session=(await supabaseClient.auth.getSession())?.data?.session||null;
+        if(!session){const refreshed=await supabaseClient.auth.refreshSession();session=refreshed?.data?.session||null}
+        if(!session?.access_token)return;
+        const r=await fetch('/api/public-share',{method:'POST',headers:{'Authorization':'Bearer '+session.access_token,'Content-Type':'application/json'},body:'{}'});
+        const d=await r.json().catch(()=>({}));
+        if(r.ok&&d.url){partnerShareLinkCache=d.url;try{localStorage.setItem(key,d.url)}catch(_){} }
+      }
+      if(!partnerBannerFileCache){
+        const r=await fetch('/share-banner.jpg',{cache:'force-cache'});
+        if(r.ok){const blob=await r.blob();if(blob.type.startsWith('image/'))partnerBannerFileCache=new File([blob],'عروض-عقارية.jpg',{type:blob.type||'image/jpeg'})}
+      }
+    }catch(e){console.warn('prepare partner share',e)}
+  })();
+  try{await partnerSharePreparing}finally{partnerSharePreparing=null}
+}
+function buildPartnerBroadcastMessage(link){
+  const closed=['مغلق','مغلقه','مغلقة','مغلقه نهائيًا','مباع','مؤجر','منتهي'];
+  const items=offers.filter(o=>!closed.includes(String(o.status||'').trim()));
+  const reqs=typeof requests!=='undefined'?requests.filter(r=>!closed.includes(String(r.status||'').trim())):[];
+  const stateKey='uroodi_partner_broadcast_v2';
+  const last=localStorage.getItem(stateKey)||'';
+  const lastMs=last?Date.parse(last):0;
+  const changedOffers=items.filter(o=>{const t=Date.parse(o.updated_at||o.created_at||'');return Number.isFinite(t)&&(!lastMs||t>lastMs)});
+  const changedRequests=reqs.filter(r=>{const t=Date.parse(r.updated_at||r.created_at||'');return Number.isFinite(t)&&(!lastMs||t>lastMs)});
+  if(!changedOffers.length&&!changedRequests.length&&lastMs)return null;
+  const word=(n,one,two,many)=>n===1?one:n===2?two:n<=10?many:`${n} ${many}`;
+  let msg='🔔 *تحديث العروض العقارية*\n\n';
+  if(!lastMs)msg+='تم إضافة العروض والطلبات في رابط العقاريين، وهذه آخر المستجدات:\n\n';
+  else msg+='تم تحديث قائمة العروض والطلبات، وهذه آخر المستجدات:\n\n';
+  if(changedOffers.length){
+    const added=changedOffers.filter(o=>{const c=Date.parse(o.created_at||'');const u=Date.parse(o.updated_at||'');return !lastMs||(Number.isFinite(c)&&c>lastMs&&(!Number.isFinite(u)||u<=lastMs))}).length;
+    const edited=changedOffers.length-added;
+    if(added)msg+=`🆕 تم إضافة ${word(added,'عرض واحد','عرضين','عروض')}.\n`;
+    if(edited)msg+=`🔄 تم تعديل ${word(edited,'عرض واحد','عرضين','عروض')}.\n`;
+  }
+  if(changedRequests.length){
+    const added=changedRequests.filter(r=>{const c=Date.parse(r.created_at||'');const u=Date.parse(r.updated_at||'');return !lastMs||(Number.isFinite(c)&&c>lastMs&&(!Number.isFinite(u)||u<=lastMs))}).length;
+    const edited=changedRequests.length-added;
+    if(added)msg+=`🆕 تم إضافة ${word(added,'طلب واحد','طلبين','طلبات')}.\n`;
+    if(edited)msg+=`🔄 تم تعديل ${word(edited,'طلب واحد','طلبين','طلبات')}.\n`;
+  }
+  const publicPlatformLink='https://www.aqaryeen.com/platform';
+  msg+=`\n🔗 *رابط العقاريين:*\n${publicPlatformLink}\n\n*يمكنكم فتح الرابط للاطلاع على آخر العروض والتحديثات.*\n\n*فهد الدوسري | مسوّق عقاري*`;
+  return {msg,stateKey};
+}
+async function createPartnerLink(){
+  const btn=document.querySelector('.partner-link-btn');
+  const old=btn?.textContent||'🔗 رابط العقاريين';
+  if(!currentUser||!supabaseClient)return alert('سجّل الدخول أولاً.');
+  // iPhone/Safari requires the native share call to happen directly from the tap.
+  // The link and banner are prepared in the background after login.
+  if(partnerShareLinkCache && partnerBannerFileCache){
+    const built=buildPartnerBroadcastMessage(partnerShareLinkCache);
+    if(!built)return alert('لا توجد تحديثات جديدة منذ آخر إرسال.');
+    const payload={title:'العروض العقارية المحدثة',text:built.msg};
+    try{
+      if(navigator.share){
+        if(navigator.canShare?.({files:[partnerBannerFileCache]}))payload.files=[partnerBannerFileCache];
+        navigator.share(payload).then(()=>localStorage.setItem(built.stateKey,new Date().toISOString())).catch(e=>{if(e?.name!=='AbortError')console.warn('partner share',e)});
+        return;
+      }
+    }catch(e){console.warn('partner share',e)}
+    try{await navigator.clipboard.writeText(built.msg);alert('تم تجهيز رسالة العقاريين ونسخها.');localStorage.setItem(built.stateKey,new Date().toISOString());return}catch(_){}
+    prompt('انسخ رسالة العقاريين:',built.msg);return;
+  }
+  if(btn){btn.disabled=true;btn.textContent='⏳ تجهيز الرسالة...'}
+  try{
+    await preparePartnerShare();
+    if(!partnerShareLinkCache)throw new Error('تعذر تجهيز رابط العقاريين.');
+    const built=buildPartnerBroadcastMessage(partnerShareLinkCache);
+    if(!built){alert('لا توجد تحديثات جديدة منذ آخر إرسال.');return;}
+    const payload={title:'العروض العقارية المحدثة',text:built.msg};
+    if(partnerBannerFileCache&&navigator.canShare?.({files:[partnerBannerFileCache]}))payload.files=[partnerBannerFileCache];
+    if(navigator.share){await navigator.share(payload);localStorage.setItem(built.stateKey,new Date().toISOString());return;}
+    await navigator.clipboard.writeText(built.msg);alert('تم تجهيز رسالة العقاريين ونسخها.');localStorage.setItem(built.stateKey,new Date().toISOString());
+  }catch(e){if(e?.name==='AbortError')return;console.error('createPartnerLink',e);alert(e.message||'تعذر إنشاء رابط العقاريين.')}
+  finally{if(btn){btn.disabled=false;btn.textContent=old}}
+}
+
+
+function groupMapOffers(arr){
+  const groups=new Map();(arr||[]).forEach(o=>{const pairs=[[o?.latitude,o?.longitude],[o?.lat,o?.lng],[o?.lat,o?.lon],[o?.coordinates?.lat,o?.coordinates?.lng]];let c=null;for(const p of pairs){const a=Number(p[0]),b=Number(p[1]);if(Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a)<=90&&Math.abs(b)<=180){c=[a,b];break}}if(!c){const raw=o.mapUrl||o.map_url||o.map_link||o.google_maps_url||'';c=extractCoords(raw)}if(!c)return;const key=c[0].toFixed(5)+','+c[1].toFixed(5);if(!groups.has(key))groups.set(key,{lat:c[0],lng:c[1],offers:[]});groups.get(key).offers.push(o)});return [...groups.values()];
+}
+function updateMap(arr){
+  if(!map||!window.L)return;
+  const noActiveFilters=!favoritesOnly&&!quickTypeFilter&&!quickCityFilter&&!quickDistrictFilter&&!['fSearch','fDeal','fSource','fMin','fMax'].some(id=>String($(id)?.value||'').trim());
+  if(noActiveFilters&&(!Array.isArray(arr)||!arr.length)&&offers.length)arr=offers;
+  markers.forEach(m=>m.remove());markers=[];const groups=groupMapOffers(arr||[]),bounds=[];
+  groups.forEach(g=>{const primary=g.offers[0],m=L.marker([g.lat,g.lng],{pane:'markerPane',title:g.offers.length>1?`${g.offers.length} عروض في نفس الموقع`:buildOfferTitle(primary)}).addTo(map);m.bindPopup(g.offers.length>1?mapGroupPopup(g.offers):mapPopup(g.offers[0]),{maxWidth:g.offers.length>1?360:300,minWidth:0,closeButton:true,autoPan:true,autoPanPaddingTopLeft:[12,12],autoPanPaddingBottomRight:[12,12],keepInView:true,offset:[0,18]});m.on('click',()=>m.openPopup());markers.push(m);bounds.push([g.lat,g.lng])});
+  $('mapCount').textContent=groups.reduce((n,g)=>n+g.offers.length,0)+' على الخريطة';
+  if(bounds.length===1)map.setView(bounds[0],15);else if(bounds.length>1)map.fitBounds(bounds,{padding:[35,35],maxZoom:15});else map.setView([24.7,45],5.3);
+  setTimeout(()=>map.invalidateSize(true),150);
+}
+$('allCitiesRow')?.classList.add('hidden');setAppVisible(false);if(!supabaseClient){setAuthMsg('تعذر تحميل خدمة تسجيل الدخول. اضغط تحديث الصفحة ثم جرّب مرة أخرى.',true)}const savedLoginEmail=localStorage.getItem('uroodi_login_email');if(savedLoginEmail){$('authEmail').value=savedLoginEmail;$('rememberMe').checked=true}if(supabaseClient){supabaseClient.auth.getSession().then(({data})=>{if(data.session)onSignedIn(data.session.user);else render()});supabaseClient.auth.onAuthStateChange((_event,session)=>{if(session&&!currentUser)onSignedIn(session.user)})}else{render()}; syncPricingInputs();
+
+
+function clientShareData(arr){
+  return (arr||[]).map(o=>{
+    let lat=num(o.latitude),lng=num(o.longitude);
+    const mapUrl=o.mapUrl||o.map_url||o.map_link||o.google_maps_url||'';
+    if((lat===null||lng===null)&&mapUrl){
+      const c=extractCoords(mapUrl);
+      if(c){lat=c[0];lng=c[1]}
+    }
+
+    const propertyType=normalizePropertyType(
+      o?.property_type||o?.type||'عقار'
+    );
+
+    const deal=normalizeDeal(
+      [o?.deal,o?.title,o?.property_type,o?.type,o?.notes]
+        .filter(Boolean).join(' ')
+    );
+
+    const shareTitle =
+      [propertyType,
+       deal==='إيجار'?'للإيجار':
+       deal==='بيع'?'للبيع':
+       String(o?.deal||'').trim()]
+      .filter(Boolean).join(' ')
+      +(o.city?` في ${String(o.city).trim()}`:'')
+      +(o.district?
+        ` ${/^حي\s/.test(String(o.district).trim())
+          ?String(o.district).trim()
+          :'حي '+String(o.district).trim()}`:'') ;
+
+    return {
+      title:shareTitle||'عرض عقاري',
+      city:o.city||'',
+      district:o.district||'',
+      price:o.price?displayPrice(o.price):'',
+      area:o.area?displayArea(o.area):'',
+      location:o.location||'',
+      text:cleanOfferNotes(o),
+      source:String(o.source||'').trim(),
+      propertyType,
+      deal,
+      pricing:pricingShareLines(o),
+      mapUrl,
+      lat,
+      lng,
+      images:Array.isArray(o._signed)
+        ?o._signed.filter(Boolean).slice(0,8):[]
+    };
+  });
+}
+
+function shareCategoryKey(o){
+  const type=normalizePropertyType(
+    o?.propertyType||o?.property_type||o?.type||''
+  );
+  const deal=normalizeDeal(
+    [o?.deal,o?.title,o?.propertyType,o?.property_type,o?.type,o?.text]
+      .filter(Boolean).join(' ')
+  );
+
+  const family={
+    'أرض':'الأراضي','أرض تجارية':'الأراضي','أراضي':'الأراضي',
+    'أراضي تجارية':'الأراضي',
+    'فيلا':'الفلل والبيوت','فلل':'الفلل والبيوت',
+    'عمارة':'العمائر','عمائر':'العمائر',
+    'بيت':'الفلل والبيوت','بيوت':'الفلل والبيوت',
+    'شقة':'الشقق','شقق':'الشقق',
+    'دور':'الأدوار','أدوار':'الأدوار',
+    'مزرعة':'المزارع','مزارع':'المزارع',
+    'استراحة':'الاستراحات','استراحات':'الاستراحات',
+    'مكتب':'المكاتب','مكاتب':'المكاتب',
+    'محل':'المحلات','محلات':'المحلات',
+    'مستودع':'المستودعات','مستودعات':'المستودعات',
+    'غرفة':'الغرف','غرف':'الغرف'
+  };
+
+  return `${deal}|${family[type]||type||'أخرى'}`;
+}
+
+const sharePropertyOrder=[
+  'الأراضي','العمائر','الفلل والبيوت','الشقق','الأدوار',
+  'المزارع','الاستراحات','المكاتب','المحلات','المستودعات','الغرف','أخرى'
+];
+
+function sharePropertyRank(type){
+  const i=sharePropertyOrder.indexOf(String(type||''));
+  return i===-1 ? 999 : i;
+}
+
+function buildGroupedClientShare(items){
+  const arr=items||[];
+
+  const city=quickCityFilter
+    ? canonicalCity(quickCityFilter)
+    : ([...new Set(
+        arr.map(o=>canonicalCity(o.city)).filter(Boolean)
+      )].length===1
+        ? canonicalCity(arr[0]?.city)
+        : '');
+
+  const cityTitle=city||'العروض العقارية';
+  const sections=[`🏠 *عروضي في ${cityTitle}*`, ''];
+  let globalNumber=1;
+
+  const addDeal=(dealKey,label)=>{
+    const dealItems=arr.filter(
+      o=>normalizeDeal(o.deal)===dealKey
+    );
+    if(!dealItems.length)return;
+
+    sections.push(label,'');
+
+    const groups=new Map();
+
+    dealItems.forEach(o=>{
+      const key=shareCategoryKey(o);
+
+      if(!groups.has(key)){
+        groups.set(key,{
+          type:key.split('|')[1]||'أخرى',
+          items:[]
+        });
+      }
+
+      groups.get(key).items.push(o);
+    });
+
+    [...groups.values()]
+      .sort((a,b)=>sharePropertyRank(a.type)-sharePropertyRank(b.type))
+      .forEach(group=>{
+        sections.push(`🏷️ *${group.type}*`,'');
+
+        group.items.forEach(o=>{
+          sections.push(
+            `*${globalNumber++}. 🏠 ${o.title||'عرض عقاري'}*`
+          );
+
+          const place=[o.city,o.district]
+            .filter(Boolean).join(' ');
+
+          if(place)sections.push(`📍${place}`);
+
+          const propertyArea=[];
+
+          if(o.propertyType)
+            propertyArea.push(`🏷️ ${o.propertyType}`);
+
+          if(o.area)
+            propertyArea.push(`📐 ${o.area}`);
+
+          if(propertyArea.length)
+            sections.push(propertyArea.join('  |  '));
+
+          if(o.pricing?.length)
+            sections.push(...o.pricing);
+
+          const sourceLabel=shareSourceLabel(o);
+
+          if(sourceLabel)
+            sections.push(sourceLabel);
+
+          let googleLink='';
+
+          if(
+            o.lat!==null &&
+            o.lng!==null &&
+            Number.isFinite(Number(o.lat)) &&
+            Number.isFinite(Number(o.lng))
+          ){
+            googleLink=
+              `https://maps.google.com/?q=${Number(o.lat).toFixed(6)},${Number(o.lng).toFixed(6)}`;
+          }else if(o.mapUrl){
+            googleLink=o.mapUrl;
+          }
+
+          if(googleLink)
+            sections.push(`🗺️ ${googleLink}`);
+
+          sections.push('────────────');
+        });
+
+        sections.push('');
+      });
+  };
+
+  // البيع أولاً ثم الإيجار، كما في طريقة المشاركة القديمة.
+  addDeal('بيع','✅ *عروض البيع*');
+  addDeal('إيجار','🏠 *عروض الإيجار*');
+
+  const unknown=arr.filter(
+    o=>!['بيع','إيجار'].includes(normalizeDeal(o.deal))
+  );
+
+  if(unknown.length){
+    sections.push('📌 *عروض أخرى*','');
+
+    unknown.forEach(o=>{
+      sections.push(
+        `*${globalNumber++}. 🏠 ${o.title||'عرض عقاري'}*`
+      );
+
+      const place=[o.city,o.district]
+        .filter(Boolean).join(' ');
+
+      if(place)sections.push(`📍${place}`);
+      if(o.area)sections.push(`📐 ${o.area}`);
+      if(o.pricing?.length)sections.push(...o.pricing);
+
+      const sourceLabel=shareSourceLabel(o);
+
+      if(sourceLabel)
+        sections.push(sourceLabel);
+
+      if(o.mapUrl)
+        sections.push(`🗺️ ${o.mapUrl}`);
+
+      sections.push('────────────');
+    });
+
+    sections.push('');
+  }
+
+  // بيانات التواصل الثابتة في نهاية رسالة العميل.
+  sections.push('');
+  sections.push('🪪 الرخصة العقارية: 1100119323');
+  const contact=shareContactLine();
+  if(contact) sections.push(contact);
+  sections.push('📩 للتفاصيل: أرسل رقم العرض وسأرسل لك باقي التفاصيل');
+
+  return [
+    sections.join('\n')
+      .replace(/\n{4,}/g,'\n\n')
+      .trim()
+  ];
+}
+
+async function shareClientMap(){
+  const btn=document.querySelector('.client-map-btn');
+  const old=btn?.textContent||'📲 إرسال للعميل';
+  if(btn){btn.disabled=true;btn.textContent='⏳ تجهيز الرسالة...';}
+  try{
+    const sourceOffers=filtered();
+    if(!Array.isArray(sourceOffers)||!sourceOffers.length){alert('لا توجد عروض مطابقة للفلاتر لإرسالها.');return;}
+
+    const city=quickCityFilter?canonicalCity(quickCityFilter):(
+      [...new Set(sourceOffers.map(o=>canonicalCity(o?.city)).filter(Boolean))].length===1
+        ? canonicalCity(sourceOffers[0]?.city):'العروض العقارية'
+    );
+    const out=[`🏠 *عروضي في ${city||'العروض العقارية'}*`,''];
+    let n=1;
+    const groupsOrder=['الأراضي','العمائر','الفلل والبيوت','الشقق','الأدوار','المزارع','الاستراحات','المكاتب','المحلات','المستودعات','الغرف','أخرى'];
+    const family=t=>({
+      'أرض':'الأراضي','أرض تجارية':'الأراضي','أراضي':'الأراضي','أراضي تجارية':'الأراضي',
+      'عمارة':'العمائر','عمائر':'العمائر','فيلا':'الفلل والبيوت','فلل':'الفلل والبيوت','بيت':'الفلل والبيوت','بيوت':'الفلل والبيوت',
+      'شقة':'الشقق','شقق':'الشقق','دور':'الأدوار','أدوار':'الأدوار','مزرعة':'المزارع','مزارع':'المزارع',
+      'استراحة':'الاستراحات','استراحات':'الاستراحات','مكتب':'المكاتب','مكاتب':'المكاتب','محل':'المحلات','محلات':'المحلات',
+      'مستودع':'المستودعات','مستودعات':'المستودعات','غرفة':'الغرف','غرف':'الغرف'
+    })[t]||t||'أخرى';
+
+    const addDeal=(deal,label)=>{
+      const rows=sourceOffers.filter(o=>normalizeDeal(o?.deal)===deal);
+      if(!rows.length)return;
+      out.push(label,'');
+      const map=new Map();
+      rows.forEach(o=>{
+        const type=normalizePropertyType(o?.property_type||o?.type||'');
+        const key=family(type);
+        if(!map.has(key))map.set(key,[]);
+        map.get(key).push(o);
+      });
+      [...map.entries()].sort((a,b)=>groupsOrder.indexOf(a[0])-groupsOrder.indexOf(b[0])).forEach(([group,items])=>{
+        out.push(`🏷️ *${group}*`,'');
+        items.forEach(o=>{
+          const type=normalizePropertyType(o?.property_type||o?.type||'عقار');
+          const d=normalizeDeal(o?.deal);
+          const title=o?.title||`${type} ${d==='إيجار'?'للإيجار':d==='بيع'?'للبيع':''} ${o?.city||''} ${o?.district?'حي '+o.district:''}`.trim();
+          out.push(`*${n++}. 🏠 ${title}*`);
+          const place=[o?.city,o?.district].filter(Boolean).join(' '); if(place)out.push(`📍${place}`);
+          const ae=[]; if(type)ae.push(`🏷️ ${type}`); if(o?.area)ae.push(`📐 ${displayArea(o.area)}`); if(ae.length)out.push(ae.join('  |  '));
+          const priceLines=pricingShareLines(o); if(priceLines.length)out.push(...priceLines); else if(o?.price)out.push(`💰 القيمة: ${displayPrice(o.price)}`);
+          const src=shareSourceLabel(o); if(src)out.push(src);
+          let link=''; let lat=num(o?.latitude),lng=num(o?.longitude);
+          if((lat===null||lng===null)&&(o?.mapUrl||o?.map_url)){const c=extractCoords(o.mapUrl||o.map_url);if(c){lat=c[0];lng=c[1];}}
+          if(lat!==null&&lng!==null&&Number.isFinite(Number(lat))&&Number.isFinite(Number(lng)))link=`https://maps.google.com/?q=${Number(lat).toFixed(6)},${Number(lng).toFixed(6)}`;
+          else link=o?.mapUrl||o?.map_url||'';
+          if(link)out.push(`🗺️ ${link}`);
+          out.push('────────────');
+        });
+        out.push('');
+      });
+    };
+
+    addDeal('بيع','✅ *عروض البيع*');
+    addDeal('إيجار','🏠 *عروض الإيجار*');
+    out.push('📩 للتفاصيل: أرسل رقم العرض وسأرسل لك باقي التفاصيل');
+    out.push('🪪 الرخصة العقارية: 1100119323');
+    const phone=getClientContactPhone(); if(phone)out.push(`📞 للتواصل: ${phone}`);
+    out.push('🔗 لمشاهدة جميع عروضي عبر الرابط');
+    out.push('[ www.aqaryeen.com/partners.html ]');
+    const finalText=out.join('\n').replace(/\n{4,}/g,'\n\n').trim();
+
+    if(typeof navigator.share==='function'){
+      try{await navigator.share({title:`عروضي في ${city||'العروض العقارية'}`,text:finalText});return;}
+      catch(e){if(e?.name==='AbortError')return;}
+    }
+
+    // مشاركة واتساب مباشرة كحل احتياطي للآيفون.
+    window.location.href='https://wa.me/?text='+encodeURIComponent(finalText);
+  }catch(e){
+    console.error('shareClientMap',e);
+    alert('تعذر تجهيز الرسالة حالياً.');
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=old;}
+  }
+}
+
+</script>
+<div id="imageLightbox" class="image-lightbox hidden" aria-hidden="true"><button type="button" class="image-lightbox-close" aria-label="إغلاق">×</button><img id="imageLightboxImg" alt="صورة العرض"></div></body></html>
+
+<style id="v73-image-speed">.offer-photos{content-visibility:auto;contain-intrinsic-size:180px 120px}.offer-photos img{background:#eef1f5;object-position:center;image-rendering:auto}</style>

@@ -1,0 +1,14 @@
+{
+  "name":"عروضي العقارية",
+  "short_name":"عروضي العقارية",
+  "description":"منصة العروض العقارية",
+  "lang":"ar",
+  "dir":"rtl",
+  "id":"/",
+  "start_url":"/",
+  "scope":"/",
+  "display":"standalone",
+  "background_color":"#f5f7fa",
+  "theme_color":"#0d1f36",
+  "icons":[{"src":"/icons/icon-192.svg","sizes":"192x192","type":"image/svg+xml","purpose":"any maskable"},{"src":"/icons/icon-512.svg","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/platform",
+      "destination": "/partners.html"
+    },
+    {
+      "source": "/",
+      "destination": "/partners.html"
+    },
+    {
+      "source": "/b/:token",
+      "destination": "/partners.html?token=:token"
+    }
+  ]
+}

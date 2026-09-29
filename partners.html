@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10243b">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="منصة العقاريين">
+<link id="appManifest" rel="manifest" href="/manifest-partners.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png">
+<title>عروضي العقارية | منصة العقاريين</title>
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+:root{--navy:#10243b;--gold:#b88943;--cream:#f7f3eb;--line:#e5ddd0;--text:#18263a;--blue:#2f7fbe;--green:#9be7b1;--muted:#7d8899}
+html,body{margin:0;padding:0;width:100%;min-width:0;background:#f5f6f8;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+*{box-sizing:border-box}button,input,select{font:inherit}button{cursor:pointer}.page{width:100%;max-width:1180px;margin:auto;padding:14px 16px 42px}
+.dashboard-compact{background:var(--navy);border-radius:24px;padding:18px;margin:0 0 12px;box-shadow:0 15px 36px rgba(16,36,59,.14);border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden;color:#fff}.dashboard-compact:before{content:"";position:absolute;width:330px;height:330px;border:1px solid rgba(201,163,94,.14);border-radius:50%;left:-170px;top:-190px}.compact-title{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.compact-title h1{margin:2px 0 0;color:#fff;font-size:30px;line-height:1.2;letter-spacing:-.7px}.compact-kicker{color:#cbb07f;font-size:13px;font-weight:900}.compact-stats{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.compact-stat{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);border-radius:16px;padding:11px 7px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}.compact-stat strong{font-size:26px;line-height:1;color:#fff}.compact-stat small{font-size:11px;color:#cbd3dd;font-weight:800}.compact-icon{width:31px;height:31px;border-radius:10px;background:rgba(255,255,255,.1);display:grid;place-items:center;color:#d6b27a;font-size:14px}.contact-row{position:relative;z-index:1;display:flex;gap:8px;align-items:center;margin-top:11px}.contact-row a,.install-top{border-radius:13px;min-height:44px}.wa-top{flex:1;background:var(--green);color:#103b25;text-decoration:none;display:flex;align-items:center;justify-content:center;font-weight:950;gap:5px;border:1px solid #79d89a}.install-top{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);padding:8px 13px;font-weight:900}
+.quick-filters{background:#fff!important;border:1px solid var(--line)!important;border-radius:22px!important;padding:13px!important;margin:0 0 13px!important;box-shadow:0 9px 27px rgba(16,36,59,.07)!important;overflow:visible!important;position:relative;z-index:50}.quick-types{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;padding:1px 1px 11px!important;border-bottom:1px solid #eef0f3}.quick-types::-webkit-scrollbar{display:none}.quick-type{flex:0 0 auto;border:1px solid #e5eaf0;background:#f8fafc;color:#697387;border-radius:13px;padding:11px 16px;font-size:14px;font-weight:900;white-space:nowrap}.quick-type.active{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 7px 18px rgba(16,27,51,.15)}.quick-type.new.active{background:#fff8e9;color:#795a2f;border-color:#e0c27e}.quick-actions{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;overflow:visible!important;padding-top:11px!important}.quick-actions>*{min-width:0;width:100%}.city-filter-wrap{position:relative;min-width:0}.quick-city,.quick-action{width:100%;min-height:45px;border:1px solid var(--line);background:var(--cream);color:#6f665b;border-radius:13px;padding:10px 7px;font-size:14px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}.quick-city.active{background:var(--blue);border-color:var(--blue);color:#fff}.quick-action{background:#fff8eb;color:#765a31}.quick-action.active{background:var(--navy);color:#fff;border-color:var(--navy)}.filter-count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:#ebe8e1;color:#6c6458;font-size:11px;font-weight:950;margin-inline-start:3px}.quick-type.active .filter-count,.quick-action.active .filter-count{background:rgba(255,255,255,.18);color:#fff}
+.filter-menu{position:absolute;top:calc(100% + 8px);right:0;width:min(330px,calc(100vw - 44px));max-height:340px;overflow:auto;background:#fff;border:1px solid #e3e8ef;border-radius:17px;box-shadow:0 18px 45px rgba(15,28,52,.18);padding:8px;z-index:9999}.filter-menu.hidden{display:none}.filter-menu button{display:block;width:100%;border:0;background:#fff;color:#27354a;text-align:right;border-radius:11px;padding:10px 11px;font-weight:850}.filter-menu button:hover,.filter-menu button.active{background:#f1f5fb;color:var(--navy)}.filter-menu .menu-title{padding:6px 9px 8px;color:#8993a2;font-size:11px;font-weight:900}.filter-menu .menu-empty{padding:18px;text-align:center;color:#8993a2;font-weight:800}
+.advanced-filters{margin-top:10px;border-top:1px solid #edf0f4;padding-top:11px}.advanced-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}.advanced-head b{font-size:15px;color:var(--navy)}.advanced-close,.filter-clear{border:1px solid #e3ddd2;background:#fffaf0;color:#795a2f;border-radius:10px;padding:7px 10px;font-weight:900}.advanced-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.advanced-grid label{font-size:11px;color:#7c8797;font-weight:900}.advanced-grid select,.advanced-grid input{width:100%;margin-top:5px;min-height:44px;border:1px solid #dfe5ed;border-radius:11px;background:#fff;padding:9px 10px;color:var(--text)}.filter-chips{display:flex;gap:7px;overflow-x:auto;padding-top:9px;scrollbar-width:none}.filter-chips::-webkit-scrollbar{display:none}.filter-chip{flex:0 0 auto;border:1px solid #e1e6ed;background:#f7f9fb;color:#6e7785;border-radius:999px;padding:8px 13px;font-size:13px;font-weight:900}.filter-chip.active{background:var(--navy);color:#fff;border-color:var(--navy)}.filter-chip.gold-active.active{background:#fff7e8;color:#765a31;border-color:#dfc37e}.filter-summary{margin-top:9px;padding:9px 11px;border-radius:11px;background:#f8f5ef;color:#776d60;font-size:12px;font-weight:850}.status-line{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px}.status{font-size:11px;color:var(--muted);font-weight:800;min-width:0}.refresh{border:0;background:#f0f2f8;color:var(--navy);border-radius:11px;padding:8px 11px;font-weight:900;white-space:nowrap}
+.view-tabs{display:flex;gap:8px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:7px;margin:0 0 12px;box-shadow:0 8px 24px rgba(16,36,59,.06)}.view-tab{flex:1;border:0;background:#f5f6f8;color:#7a8492;border-radius:13px;padding:11px;font-weight:950}.view-tab.active{background:var(--navy);color:#fff;box-shadow:0 7px 16px rgba(16,27,51,.13)}
+.map-card,.offers-card,.request-panel{background:#fff!important;border:1px solid var(--line)!important;border-radius:24px!important;box-shadow:0 11px 32px rgba(16,36,59,.07)!important;padding:15px!important;margin:0 0 12px!important}.map-card .section-kicker,.request-panel .section-kicker,.offers-card .section-kicker{font-size:12px;color:#8a93a0;font-weight:900}.toolbar{display:flex;align-items:end;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:3px 2px 10px}.toolbar h2{font-size:30px;color:var(--navy);margin:0;line-height:1.1}.map-toolbar-actions{display:flex;gap:7px;align-items:center}.count,.request-count{padding:8px 11px;border-radius:999px;background:#f5ead7;color:#795a2f;font-size:13px;font-weight:950}.map{height:430px;border-radius:18px;overflow:hidden;background:#e9edf2}.map-note{display:none}.map-location-link{display:block;margin-top:7px;text-align:center;color:#246ca9;font-weight:900;text-decoration:underline}.map-popup{direction:rtl;text-align:right;width:290px;max-width:290px;font-family:inherit;padding:2px;max-height:330px;overflow:auto}.map-popup-head{display:flex;gap:7px;align-items:flex-start;margin-bottom:7px}.map-popup-pin{font-size:18px}.map-popup h3{margin:0;font-size:16px;line-height:1.45;color:var(--navy);font-weight:950}.map-popup-photo-row{display:flex;gap:8px;align-items:center}.map-popup-mini-photo{width:86px;height:64px;object-fit:cover;border-radius:9px;background:#eef1f5;flex:0 0 auto}.map-popup-meta{font-size:12px;line-height:1.75;color:#647084;min-width:0}.map-popup-meta-full{padding:3px 0}.map-open-offer{display:block;width:100%;margin-top:9px;padding:9px 10px;border:0;border-radius:10px;background:var(--navy);color:#fff;cursor:pointer;font-weight:900;font-size:12px}.map-open-offer span{margin-inline-end:3px}.map-popup .map-location-link{font-size:12px}.map-selected{outline:3px solid #111;outline-offset:3px;scroll-margin-top:90px}
+.offers-card .offers-intro{display:none}.offer{border:1px solid #e5eaf0!important;border-radius:20px!important;background:#fff!important;box-shadow:0 8px 25px rgba(17,30,55,.045)!important;padding:15px!important;margin:0 0 11px!important;overflow:hidden}.offer-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.title{font-weight:1000;font-size:18px;line-height:1.5;color:var(--navy)}.meta{color:#7d8899;font-size:12px;line-height:1.8;margin-top:4px}.new,.updated{display:inline-block;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:950;margin-left:5px;vertical-align:2px}.new{background:#eaf8ef;color:#14734a}.updated{background:#fff3db;color:#805d1f}.raw-offer{font-size:13px;background:#fafbfd;border:1px solid #edf1f5;border-radius:13px;max-height:190px;overflow:auto;padding:11px 12px;line-height:1.9;color:#364154;margin-top:10px}.raw-offer>b{color:#2b70ad;font-size:12px;display:block;margin-bottom:4px}.price{margin-top:9px;background:#f8f5ef;border:1px solid #ece3d6;border-radius:13px;padding:9px 10px;color:#8d6735;font-weight:950;font-size:13px}.photos{display:flex;gap:8px;overflow:auto;padding:10px 0 1px;scrollbar-width:none}.photos::-webkit-scrollbar{display:none}.photos img{width:115px;height:82px;object-fit:cover;border-radius:12px;flex:0 0 auto;border:1px solid #e7ebf0}.offer-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.offer-actions a{min-height:42px;display:flex;align-items:center;justify-content:center;border-radius:11px;text-decoration:none;font-size:12px;font-weight:950}.maplink{background:#f3f6fa;color:#275f8e;border:1px solid #dce5ee}.wa{background:var(--green);color:#103b25;border:1px solid #79d89a}.empty,.error{padding:35px 18px;text-align:center;color:#738093;font-weight:850}.footer{text-align:center;color:#8b94a2;font-size:11px;padding:4px 0 10px}.hidden{display:none!important}
+.request-panel{display:none}.request-panel.open{display:block}.request-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.request-head h2{margin:0;color:var(--navy);font-size:25px}.request-view-filters{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:8px;padding-bottom:11px;border-bottom:1px solid #edf0f4}.request-view-filters label{font-size:11px;color:#7c8797;font-weight:900}.request-view-filters select{width:100%;margin-top:5px;min-height:44px;border:1px solid #dfe5ed;border-radius:11px;background:#fff;padding:8px 9px}.request-filter-summary{margin:10px 0;padding:10px 12px;background:#f8f5ef;border-radius:12px;color:#776d60;font-size:12px;font-weight:900}.request-item{background:#fbfcfe;border:1px solid #e7ebf1;border-radius:18px;padding:13px;margin-top:9px;box-shadow:0 5px 16px rgba(16,36,59,.035)}.request-item-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.request-title{font-size:17px;font-weight:1000;color:var(--navy);line-height:1.5}.request-badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}.request-badge{background:#eef3f8;color:#53647a;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:900}.request-badge.gold{background:#fff7e8;color:#795a2f}.request-text{margin-top:10px;max-height:170px;overflow:auto;line-height:1.9;text-align:right;white-space:pre-wrap;padding:11px;border:1px solid #ece3d6;border-radius:13px;background:#f8f5ef;color:#364154;font-weight:750}.request-text-label{display:block;color:#8d6735;font-size:11px;font-weight:950;margin-bottom:5px}.request-actions{display:grid;grid-template-columns:1fr;gap:7px;margin-top:9px}.request-actions a{min-height:42px;display:flex;align-items:center;justify-content:center;border-radius:11px;text-decoration:none;font-size:12px;font-weight:950}.request-wa{background:var(--green);color:#103b25;border:1px solid #79d89a}
+.detail-overlay{position:fixed;inset:0;background:rgba(15,28,47,.48);z-index:10000;display:none;align-items:center;justify-content:center;padding:16px}.detail-overlay.open{display:flex}.detail-modal{width:min(620px,100%);max-height:86vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 25px 70px rgba(0,0,0,.3);padding:15px}.detail-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;color:var(--navy);font-weight:950}.detail-close{width:38px;height:38px;border:0;border-radius:50%;background:#f0f2f5;color:#26344a;font-size:25px}.detail-content .offer{box-shadow:none!important;border:0!important;padding:0!important;margin:0!important}
+.new-tab-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#eaf8ef;color:#14734a;font-size:11px;font-weight:950;margin-inline-start:4px}.view-tab.active .new-tab-count{background:#fff;color:var(--navy)}.request-head-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.request-new-btn{min-height:40px;border:1px solid #dfc37e;background:#fff8eb;color:#765a31;border-radius:11px;padding:8px 10px;font-size:12px;font-weight:950}.request-new-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}.request-new-btn.active .filter-count{background:#fff;color:var(--navy)}
+@media(max-width:700px){.page{padding:10px 8px 32px}.dashboard-compact{border-radius:21px;padding:15px 12px}.compact-title h1{font-size:25px}.compact-kicker{font-size:11px}.compact-stat{padding:9px 4px;border-radius:14px}.compact-stat strong{font-size:23px}.compact-stat small{font-size:9px}.quick-actions{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}.quick-city,.quick-action{font-size:12.5px!important;padding:10px 3px!important}.quick-type{font-size:14px!important;padding:10px 14px!important}.map-card,.offers-card,.request-panel{border-radius:21px!important;padding:12px!important}.map{height:390px}.toolbar h2{font-size:28px}.request-view-filters{grid-template-columns:1fr}.offer-actions{grid-template-columns:1fr 1fr}.map-popup{width:290px;max-width:290px}.map-popup-mini-photo{width:80px;height:60px}}
+@media(max-width:390px){.quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}.quick-city,.quick-action{font-size:11.5px!important}.compact-title h1{font-size:23px}.compact-stat strong{font-size:21px}}
+.phone-number{direction:ltr;unicode-bidi:isolate;display:inline-block;letter-spacing:.2px}
+
+/* v23 premium polish */
+.contact-row{margin-top:12px;align-items:stretch}.wa-top{direction:ltr;gap:10px;justify-content:center}.wa-symbol{font-size:18px;line-height:1}.phone-number{direction:ltr;unicode-bidi:isolate;letter-spacing:.4px}.update-meta{position:relative;z-index:1;text-align:center;color:#f5f7fa;font-size:11px;font-weight:850;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.12)} .contact-row{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto!important;gap:7px!important}.license-top{min-height:44px;border-radius:13px;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 8px;font-size:11px;font-weight:900;direction:ltr;white-space:nowrap}.license-top bdi{letter-spacing:.35px}.contact-row .install-top{min-width:78px;padding:8px 10px;font-size:12px}@media(max-width:420px){.contact-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto!important}.license-top{font-size:10px;padding-inline:6px}.contact-row .install-top{min-width:72px;font-size:11px;padding-inline:7px}.wa-top{gap:6px}.phone-number{font-size:12px}}
+.quick-filters{padding:14px!important}.quick-types{padding-bottom:12px!important}.quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important}.quick-city,.quick-action{min-height:48px}.quick-city.active{background:var(--blue)!important;border-color:var(--blue)!important;color:#fff!important;box-shadow:0 7px 18px rgba(47,127,190,.18)}
+.offer{border:1px solid #e2e7ee!important;background:linear-gradient(180deg,#fff 0%,#fcfdff 100%)!important;padding:16px!important}.offer-head{display:block}.offer-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px}.offer-badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:950}.offer-badge.new{background:#eaf8ef;color:#14734a}.offer-badge.updated{background:#fff3db;color:#805d1f}.offer .title{font-size:20px;line-height:1.55;letter-spacing:-.25px}.price{margin-top:11px;background:#f8f5ef;border:1px solid #eadfce;border-radius:15px;padding:11px 13px;color:#735a35;font-weight:900;font-size:14px;text-align:center}.price b{display:block;color:var(--navy);font-size:21px;margin-top:2px}.offer-actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.offer-actions a,.offer-actions button{min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;text-decoration:none;font-size:11px;font-weight:950;padding:6px}.share-offer{background:#f4f1ea;color:#6e5838;border:1px solid #dfd3c0;position:relative;z-index:5;pointer-events:auto;cursor:pointer}.maplink{background:#f3f6fa!important;color:#275f8e!important}.wa{background:var(--green)!important;color:#103b25!important}.request-panel{background:linear-gradient(180deg,#fff,#fbfcfe)!important}.request-view-filters select{font-weight:850;color:var(--navy)}.request-item{border:1px solid #e2e7ee;background:#fff;box-shadow:0 8px 24px rgba(16,36,59,.06)}.request-title{font-size:18px}.request-actions{grid-template-columns:1fr}.request-wa{background:var(--green)!important}
+@media(max-width:700px){.quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important}.quick-city,.quick-action{font-size:12.5px!important}.offer .title{font-size:18px}.offer-actions a,.offer-actions button{font-size:10.5px}.map{height:390px}}
+
+/* v24 compact professional request controls */
+.request-view-filters{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;padding-bottom:9px!important}
+.request-view-filters label{min-width:0!important;font-size:10px!important}
+.request-view-filters select{min-width:0!important;width:100%!important;height:42px!important;min-height:42px!important;padding:7px 6px!important;border-radius:12px!important;font-size:12px!important;font-weight:900!important;color:var(--navy)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.request-panel{padding:12px!important}
+.request-head{margin-bottom:8px!important}
+.request-filter-summary{margin:7px 0!important;padding:8px 10px!important;font-size:11px!important}
+.request-item{padding:12px!important;border-radius:18px!important}
+.request-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+.request-actions a,.request-actions button{min-height:42px!important;font-size:11px!important;padding:7px 6px!important}
+.request-share{border:1px solid #dfd3c0!important;background:#f4f1ea!important;color:#6e5838!important;border-radius:11px!important}
+.request-wa{background:var(--green)!important;color:#103b25!important;border:1px solid #79d89a!important}
+.map-card{padding:11px!important}
+.map-card .toolbar{margin:2px 1px 7px!important}
+.map{height:360px!important}
+@media(max-width:700px){.request-view-filters{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}.request-view-filters label{font-size:9.5px!important}.request-view-filters select{font-size:11px!important;padding:6px 5px!important}.request-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}.map{height:350px!important}.map-card,.offers-card,.request-panel{margin-bottom:9px!important}}
+
+/* v26: match personal-page advanced filtering exactly */
+.advanced-filters{display:block!important;background:#fbfcfe!important;border:1px solid #edf0f5!important;border-radius:18px!important;padding:14px!important;margin-top:10px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)!important}
+.advanced-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin-bottom:10px!important;padding-bottom:10px!important;border-bottom:1px solid #edf0f4!important}
+.advanced-head>div{display:flex!important;flex-direction:column!important;gap:2px!important}
+.advanced-head b{font-size:15px!important;color:var(--navy)!important}
+.advanced-head span{font-size:10px!important;color:#8a93a2!important}
+.advanced-close{border:1px solid #e3ddd2!important;background:#fffaf0!important;color:#795a2f!important;border-radius:10px!important;padding:7px 12px!important;font-weight:900!important}
+.advanced-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important}
+.advanced-grid label{font-size:11px!important;color:#7c8797!important;font-weight:900!important;min-width:0!important}
+.advanced-grid input,.advanced-grid select{width:100%!important;height:48px!important;min-height:48px!important;margin-top:5px!important;border:1px solid #dfe3ea!important;border-radius:14px!important;background:#fff!important;font-size:14px!important;font-weight:700!important;color:#252b34!important;padding:0 12px!important}
+.filter-group-label{display:block!important;margin-top:10px!important;color:#7c8797!important;font-size:11px!important;font-weight:900!important}
+.filter-chips{display:flex!important;flex-wrap:wrap!important;gap:7px!important;overflow:visible!important;padding-top:8px!important}
+.filter-chip{flex:0 0 auto!important;border:1px solid #e1e6ed!important;background:#f7f9fb!important;color:#6e7785!important;border-radius:999px!important;padding:8px 13px!important;font-size:13px!important;font-weight:900!important}
+.filter-chip.active{background:var(--navy)!important;color:#fff!important;border-color:var(--navy)!important;box-shadow:0 5px 12px rgba(16,36,59,.10)!important}
+.filter-chip.gold-active.active{background:#fff7e8!important;color:#765a31!important;border-color:#dfc37e!important;box-shadow:none!important}
+.filter-summary{margin-top:10px!important;padding:9px 11px!important;border-radius:11px!important;background:#f8f5ef!important;color:#776d60!important;font-size:12px!important;font-weight:850!important}
+@media(max-width:700px){.advanced-grid{grid-template-columns:1fr 1fr!important;gap:8px!important}.advanced-grid input,.advanced-grid select{height:46px!important;min-height:46px!important;font-size:13px!important}.filter-chip{font-size:12px!important;padding:7px 11px!important}}
+
+/* v31 broker polish */
+.price-summary{margin-top:10px;padding:10px 12px;border:1px solid #e7dfcf;border-radius:12px;background:#fffaf0;color:#6b522b;font-weight:800;font-size:14px;line-height:1.8;text-align:right}.price-summary div{display:block}.new-filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}.new-filter-btn .filter-count{background:#ebe8e1;color:#6c6458}.new-filter-btn.active .filter-count{background:rgba(255,255,255,.18);color:#fff}.offer-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important}.offer-actions a,.offer-actions button{min-width:0!important}.quick-actions{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;padding-top:8px!important}.quick-city,.quick-action{min-height:43px;padding:8px 4px!important}.quick-types{padding-bottom:8px!important}.advanced-filters{margin-top:7px;padding-top:9px}.map-card{margin-top:7px!important}.offers-card{margin-top:0!important}
+@media(max-width:700px){.quick-actions{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important}.quick-city,.quick-action{font-size:11px!important;padding:8px 2px!important}.filter-count{min-width:19px;height:19px;font-size:10px}.map{height:360px!important}.price-summary{font-size:13px!important}.offer-actions{gap:5px!important}.offer-actions a,.offer-actions button{font-size:10px!important}}
+@media(max-width:390px){.quick-city,.quick-action{font-size:10px!important}.map{height:345px!important}}
+</style>
+
+<style id="broker-final-polish">
+/* نفس إحساس صفحة المالك: فلاتر مضغوطة وواضحة */
+.quick-filters{padding:10px!important;margin-bottom:9px!important;border-radius:19px!important}
+.quick-types{gap:6px!important;padding:0 0 8px!important}
+.quick-type{padding:8px 12px!important;font-size:12px!important;border-radius:11px!important}
+.quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;padding-top:8px!important}
+.quick-city,.quick-action{min-height:42px!important;padding:7px 5px!important;font-size:11.5px!important;border-radius:11px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.quick-city.active{background:var(--navy)!important;color:#fff!important}
+.advanced-filters{margin-top:7px!important;padding:9px 9px 8px!important;border:1px solid #e5eaf0!important;border-radius:15px!important;background:#fbfcfe!important}
+.advanced-head{margin-bottom:7px!important;padding-bottom:7px!important}
+.advanced-head b{font-size:13px!important}.advanced-head span{font-size:9px!important}
+.advanced-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
+.advanced-grid label{font-size:10px!important}
+.advanced-grid input,.advanced-grid select{min-height:38px!important;margin-top:4px!important;padding:7px 8px!important;font-size:11px!important;border-radius:10px!important}
+.filter-group{margin-top:7px!important}.filter-group-label{font-size:10px!important}
+.filter-chips{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:5px!important;padding-top:5px!important}
+.filter-chip{padding:6px 9px!important;font-size:10.5px!important}
+.filter-summary{margin-top:6px!important;padding:7px 9px!important;font-size:10px!important}
+.map-card{margin-top:0!important;padding:11px!important}
+.map-card .toolbar{margin:1px 2px 7px!important}.map{height:365px!important}
+.offer .title{font-size:19px!important;line-height:1.5!important}.offer-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}.offer-actions a,.offer-actions button{min-width:0!important;min-height:42px!important;font-size:10.5px!important;padding:5px 3px!important}
+.request-actions{grid-template-columns:1fr 1fr!important;gap:6px!important}.request-actions a,.request-actions button{min-height:42px!important;font-size:10.5px!important}
+@media(max-width:390px){.quick-actions{gap:4px!important}.quick-city,.quick-action{font-size:10.5px!important}.quick-type{font-size:11.5px!important;padding:7px 10px!important}.map{height:350px!important}.offer-actions a,.offer-actions button{font-size:9.5px!important}}
+</style>
+
+<style id="new-filter-final">
+.quick-types{display:flex!important;align-items:center!important;gap:6px!important;overflow-x:auto!important;white-space:nowrap!important}
+.quick-type.new-filter-btn{flex:0 0 auto!important;background:#fff8eb!important;color:#765a31!important;border-color:#dfc37e!important}
+.quick-type.new-filter-btn.active{background:var(--navy)!important;color:#fff!important;border-color:var(--navy)!important}
+.quick-type.new-filter-btn .filter-count{background:#efe8da!important;color:#765a31!important}
+.quick-type.new-filter-btn.active .filter-count{background:#fff!important;color:var(--navy)!important}
+@media(max-width:700px){.quick-types{gap:5px!important}.quick-type.new-filter-btn{font-size:11px!important;padding:7px 10px!important}}
+.license-top{min-height:42px!important;padding:7px 10px!important;border-radius:13px!important;background:linear-gradient(180deg,#fffaf0,#f5ead4)!important;color:#765a31!important;border:1px solid #dfc37e!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;font-size:11px!important;font-weight:950!important;white-space:nowrap!important;box-shadow:0 4px 12px rgba(184,137,67,.08)!important}.license-top span{font-size:12px!important}.license-top bdi{font-variant-numeric:tabular-nums;letter-spacing:.2px!important;color:#765a31!important}@media(max-width:700px){.contact-row{gap:5px!important}.wa-top{min-width:0!important}.license-top{padding:7px 7px!important;font-size:9.5px!important}.license-top span{font-size:11px!important}.install-top{padding:7px 8px!important;font-size:10px!important}}
+
+<style id="v36-map-license-fix">
+.license-top{
+  pointer-events:none!important;
+  text-decoration:none!important;
+  cursor:default!important;
+  min-width:0!important;
+  background:linear-gradient(180deg,#fffaf0 0%,#f4ead8 100%)!important;
+  color:#765a31!important;
+  border:1px solid #d9bb79!important;
+  box-shadow:0 5px 16px rgba(184,137,67,.12)!important;
+  gap:6px!important;
+  font-variant-numeric:tabular-nums;
+}
+.license-top .license-icon{font-size:12px!important;filter:saturate(.8)}
+.license-top,.license-top *{cursor:default!important;-webkit-touch-callout:none!important;-webkit-user-select:text!important;user-select:text!important;text-decoration:none!important}
+.license-top .license-number{direction:ltr;unicode-bidi:isolate;display:inline-flex;gap:0;color:#765a31!important;font-size:12px!important;font-weight:950!important;letter-spacing:.45px!important;text-decoration:none!important}
+.license-top .license-number span{display:inline-block;color:#765a31!important;text-decoration:none!important}
+
+.license-top .license-label{font-size:9px!important;font-weight:950!important;opacity:.82!important}
+.license-top bdi{
+  color:#765a31!important;
+  font-size:12px!important;
+  font-weight:950!important;
+  text-decoration:none!important;
+  letter-spacing:.55px!important;
+}
+.map{
+  min-height:350px!important;
+  background:#e9edf2!important;
+  position:relative!important;
+}
+.map .leaflet-container{font-family:inherit}
+@media(max-width:700px){
+  .license-top{padding:7px 8px!important;border-radius:12px!important}
+  .license-top .license-label{font-size:8px!important}
+  .license-top bdi{font-size:11px!important}
+  .map{min-height:350px!important}
+}
+</style>
+
+</style>
+
+<style id="v40-license-share-fix">
+.license-top,.license-top *{cursor:default!important;pointer-events:none!important;text-decoration:none!important;-webkit-user-select:text!important;user-select:text!important}
+.license-top{direction:ltr!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;min-height:44px!important;padding:7px 12px!important;border-radius:13px!important;background:linear-gradient(180deg,#fffaf0,#f5ead4)!important;border:1px solid #dfc37e!important;color:#765a31!important;box-shadow:0 4px 12px rgba(184,137,67,.08)!important}
+.license-top .license-icon{font-size:17px!important;line-height:1!important;filter:none!important}
+.license-top .license-number{display:inline-block!important;color:#765a31!important;font-size:14px!important;font-weight:950!important;letter-spacing:.7px!important;font-variant-numeric:tabular-nums!important;direction:ltr!important;unicode-bidi:isolate!important}
+.license-top .license-label{display:none!important}
+.broker-contact-note{position:relative;z-index:1;text-align:center;margin:7px 0 0;color:#e7d2a5;font-size:11px;font-weight:900;line-height:1.5}
+@media(max-width:420px){.license-top{padding:7px 8px!important;gap:5px!important}.license-top .license-icon{font-size:15px!important}.license-top .license-number{font-size:12px!important}.broker-contact-note{font-size:10px!important}}
+</style>
+
+
+<style id="v41-license-safe">
+.license-top{pointer-events:none!important;overflow:visible!important;box-sizing:border-box!important;min-width:0!important;max-width:100%!important;direction:ltr!important}
+.license-top .license-icon{flex:0 0 auto!important}
+.license-top .license-number{flex:1 1 auto!important;min-width:0!important;white-space:nowrap!important;overflow:visible!important;text-overflow:clip!important;display:block!important;color:#765a31!important;text-decoration:none!important;font-family:inherit!important;font-variant-numeric:tabular-nums!important}
+@media(max-width:420px){.contact-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto!important}.license-top{padding-inline:6px!important;gap:4px!important}.license-top .license-icon{font-size:14px!important}.license-top .license-number{font-size:11.5px!important;letter-spacing:.35px!important}}
+</style>
+
+<style id="v45-map-status">
+.map-toolbar-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;justify-content:flex-start}.map-status-legend{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;white-space:nowrap}.map-status{appearance:none;border:1px solid #dfe5ed;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:950;line-height:1;white-space:nowrap;cursor:default;transition:none;background:#eef2f6;color:#617083}.map-status .dot{width:9px;height:9px;border-radius:50%;display:inline-block;box-shadow:0 1px 3px rgba(0,0,0,.16)}.map-status bdi{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:rgba(255,255,255,.82);font-size:10px;font-weight:950;font-variant-numeric:tabular-nums}.map-status-new{background:#eaf8ef;color:#14734a;border-color:#b9e6c9}.map-status-new .dot{background:#20a765}.map-status-updated{background:#fff3db;color:#805d1f;border-color:#ead39e}.map-status-updated .dot{background:#e5a928}.map-status-all{background:#10243b;color:#fff;border-color:#10243b}.map-status-all .dot{background:#fff}.map-status-all bdi{color:#10243b}.map-group-popup{width:340px;max-width:340px;overflow:visible!important}.map-group-title{text-align:center;color:var(--navy);font-weight:1000;font-size:15px;margin:1px 0 8px}.map-group-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.map-group-offer{min-width:0;border:1px solid #e3e7ed;border-radius:12px;background:#fff;padding:6px;overflow:hidden}.map-group-head{display:block}.map-group-photo{display:block;width:100%;height:86px;object-fit:cover;border-radius:9px;background:#eef1f5;margin-bottom:5px}.map-group-offer h3{margin:0;color:var(--navy);font-size:11px;line-height:1.45;font-weight:1000;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.map-group-meta{font-size:9px;line-height:1.45;color:#697688;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.map-group-offer .map-open-offer{font-size:10px;padding:7px 5px;margin-top:6px}@media(max-width:700px){.map-toolbar-actions{width:100%;justify-content:flex-start;flex-wrap:wrap}.map-status-legend{gap:5px;width:100%;justify-content:flex-start}.map-status{font-size:10px;padding:6px 8px}.map-group-popup{width:310px;max-width:310px}.map-group-photo{height:78px}}
+</style>
+
+<style id="v53-image-lightbox">
+.offer .photos img{cursor:zoom-in}.image-lightbox{position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:100000;display:flex;align-items:center;justify-content:center;padding:18px;direction:ltr}.image-lightbox.hidden{display:none}.image-lightbox img{max-width:96vw;max-height:92vh;width:auto;height:auto;object-fit:contain;border-radius:10px;box-shadow:0 18px 60px rgba(0,0,0,.45)}.image-lightbox-close{position:fixed;top:18px;right:18px;width:44px;height:44px;border:0;border-radius:50%;background:#fff;color:#10243b;font-size:26px;font-weight:900;z-index:2}
+</style>
+<style id="v54-final-fixes">
+/* V54: compact map status controls — never overflow the yellow/cream card */
+.map-card .toolbar{display:grid!important;grid-template-columns:auto 1fr;align-items:center;gap:8px;margin:2px 2px 8px!important;direction:rtl}
+.map-card .toolbar h2{min-width:0;white-space:nowrap}
+.map-toolbar-actions{min-width:0!important;width:auto!important;display:flex!important;justify-content:flex-start!important;align-items:center!important}
+.map-status-legend{display:flex!important;align-items:center!important;gap:4px!important;flex-wrap:nowrap!important;min-width:0!important;width:auto!important}
+.map-status{padding:5px 7px!important;gap:4px!important;font-size:9.5px!important;min-height:29px!important;box-sizing:border-box!important;transform:none!important}
+
+.map-status .dot{width:7px!important;height:7px!important;flex:0 0 7px!important}
+.map-status bdi{min-width:16px!important;height:16px!important;padding:0 4px!important;font-size:9px!important}
+.share-offer{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;pointer-events:auto!important;position:relative!important;z-index:20!important;cursor:pointer!important}
+.share-offer:disabled{opacity:.5;cursor:default;pointer-events:none!important}
+.offer-actions{position:relative!important;z-index:10!important}
+.map{background:#eef1f4!important}
+@media(max-width:700px){
+ .map-card .toolbar{grid-template-columns:auto minmax(0,1fr)!important;gap:6px!important}
+ .map-card .toolbar h2{font-size:25px!important}
+ .map-toolbar-actions{overflow:visible!important}
+ .map-status-legend{gap:3px!important}
+ .map-status{font-size:9px!important;padding:5px 6px!important}
+ .map-status bdi{min-width:15px!important;height:15px!important;font-size:8.5px!important;padding:0 3px!important}
+}
+@media(max-width:390px){
+ .map-card .toolbar h2{font-size:23px!important}
+ .map-status{font-size:8.5px!important;padding:4px 5px!important}
+}
+</style>
+<style id="v55-partner-map-fix">
+.map{background:#eef1f4!important}
+.map-popup-photo-row{display:flex!important;gap:8px!important;align-items:center!important}
+.map-popup-mini-photo{width:76px!important;height:58px!important;object-fit:cover!important;border-radius:8px!important;flex:0 0 76px!important}
+.map-group-row-main{display:flex!important;gap:7px!important;align-items:center!important;min-width:0!important}
+.map-group-thumb{width:48px!important;height:40px!important;object-fit:cover!important;border-radius:6px!important;flex:0 0 48px!important}
+.photos img{width:104px!important;height:74px!important;flex:0 0 104px!important;cursor:zoom-in!important;touch-action:manipulation!important}
+.map-open-offer{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important}
+</style>
+<style id="v57-share-sheet">.share-sheet{position:fixed;inset:0;z-index:100000;background:rgba(10,20,35,.45);display:flex;align-items:flex-end;justify-content:center;padding:16px}.share-sheet.hidden{display:none!important}.share-sheet-card{width:min(440px,100%);background:#fff;border-radius:22px;padding:18px;box-shadow:0 18px 60px rgba(0,0,0,.25);direction:rtl}.share-sheet-close{float:left;border:0;background:#f1f3f5;border-radius:50%;width:36px;height:36px;font-size:25px;cursor:pointer}.share-sheet-title{font-size:18px;font-weight:950;color:#10243b;padding:8px 0 16px;line-height:1.5}.share-sheet-actions{display:grid;gap:8px}.share-sheet-actions button,.share-sheet-actions a{display:flex;align-items:center;justify-content:center;min-height:48px;border:1px solid #ddd6c9;border-radius:12px;background:#faf7f0;color:#5f4c31;text-decoration:none;font:inherit;font-weight:900;cursor:pointer}</style>
+<style id="final-map-old-style">
+.map-old-popup{width:300px;max-width:300px;direction:rtl;font-family:inherit}.map-old-count{text-align:center;font-size:12px;font-weight:950;color:#10243b;margin:0 0 7px}.map-old-card{border:1px solid #e1e6ed;border-radius:13px;background:#fff;padding:7px;margin-bottom:7px;box-shadow:0 3px 12px rgba(16,36,59,.07);overflow:hidden}.map-old-card:last-child{margin-bottom:0}.map-old-photo{display:block;width:100%;height:108px;object-fit:cover;border-radius:10px;background:#eef1f5;margin-bottom:6px}.map-old-title{font-size:12px;line-height:1.55;font-weight:1000;color:#10243b}.map-old-meta{font-size:10px;line-height:1.55;color:#687587;margin-top:3px}.map-old-actions{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:7px}.map-old-actions a,.map-old-actions button{display:flex;align-items:center;justify-content:center;min-height:36px;border-radius:9px;padding:5px;font:inherit;font-size:10px;font-weight:950;text-decoration:none;cursor:pointer}.map-old-actions .map-location-link{background:#f3f6fa;color:#275f8e;border:1px solid #dce4ed}.map-old-actions .map-open-offer{background:#10243b;color:#fff;border:0}@media(max-width:700px){.map-old-popup{width:270px;max-width:270px}.map-old-photo{height:92px}}
+</style>
+
+<style id="v60-final-partner-fixes">
+.quick-actions{width:max-content!important;max-width:100%!important;margin:8px auto 0!important;display:grid!important;grid-template-columns:repeat(3,104px)!important;justify-content:center!important;gap:6px!important;padding-top:0!important}
+.quick-actions>*{width:104px!important;min-width:104px!important}
+.quick-city,.quick-action{width:104px!important;min-width:104px!important;height:38px!important;min-height:38px!important;padding:5px 4px!important;border-radius:11px!important;font-size:11px!important;font-weight:900!important}
+.quick-types{justify-content:flex-start!important;gap:5px!important;padding-bottom:7px!important}
+.quick-type{padding:7px 10px!important;font-size:11.5px!important;border-radius:10px!important}
+.map-pin-icon{background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+.map-pin{position:relative!important;display:block!important;width:25px!important;height:25px!important;background:#2f7fbe!important;border:3px solid #fff!important;border-radius:50% 50% 50% 0!important;transform:rotate(-45deg)!important;box-shadow:0 3px 9px rgba(16,36,59,.40)!important;z-index:1000!important}
+.map-pin:after{content:""!important;position:absolute!important;width:8px!important;height:8px!important;left:6px!important;top:6px!important;background:#fff!important;border-radius:50%!important}
+.map-pin-new{background:#20a765!important}.map-pin-updated{background:#e5a928!important}.map-pin-seen{background:#2f7fbe!important}
+.leaflet-marker-pane{z-index:600!important}.leaflet-marker-icon{z-index:700!important}
+.map .leaflet-popup-content-wrapper{border-radius:13px!important;box-shadow:0 10px 30px rgba(16,36,59,.18)!important}.map .leaflet-popup-content{margin:8px 9px!important}
+.map-old-popup{width:255px!important;max-width:255px!important;max-height:235px!important;overflow:auto!important}.map-old-count{font-size:11px!important;margin:0 0 5px!important}.map-old-card{padding:5px!important;margin-bottom:5px!important;border-radius:10px!important;box-shadow:0 2px 8px rgba(16,36,59,.06)!important}.map-old-photo{height:72px!important;border-radius:8px!important;margin-bottom:4px!important}.map-old-title{font-size:10.5px!important;line-height:1.4!important}.map-old-meta{font-size:9px!important;line-height:1.4!important;margin-top:2px!important}.map-old-actions{gap:4px!important;margin-top:4px!important}.map-old-actions a,.map-old-actions button{min-height:30px!important;border-radius:8px!important;font-size:9px!important;padding:4px!important}
+.map-popup{width:255px!important;max-width:255px!important;max-height:235px!important}.map-popup h3{font-size:13px!important}.map-popup-mini-photo{width:70px!important;height:52px!important}.map-popup-meta{font-size:10px!important;line-height:1.45!important}.map-open-offer{margin-top:6px!important;padding:7px 8px!important;font-size:10px!important}
+@media(max-width:700px){.quick-actions{grid-template-columns:repeat(3,96px)!important;gap:5px!important}.quick-actions>*{width:96px!important;min-width:96px!important}.quick-city,.quick-action{width:96px!important;min-width:96px!important;height:36px!important;min-height:36px!important;font-size:10.5px!important}.map{height:350px!important}.map-old-popup{width:238px!important;max-width:238px!important;max-height:220px!important}.map-old-photo{height:64px!important}.map-popup{width:238px!important;max-width:238px!important;max-height:220px!important}}
+@media(max-width:390px){.quick-actions{grid-template-columns:repeat(3,92px)!important;gap:4px!important}.quick-actions>*{width:92px!important;min-width:92px!important}.quick-city,.quick-action{width:92px!important;min-width:92px!important;font-size:10px!important}}
+</style>
+<style id="v61-map-compact-final">
+.quick-actions{width:max-content!important;max-width:100%!important;margin:8px auto 0!important;display:grid!important;grid-template-columns:repeat(3,116px)!important;justify-content:center!important;gap:7px!important;padding-top:0!important}.quick-actions>*{width:116px!important;min-width:116px!important}.quick-city,.quick-action{width:116px!important;min-width:116px!important;height:38px!important;min-height:38px!important;padding:5px!important;border-radius:11px!important;font-size:11px!important;font-weight:900!important}.quick-types{justify-content:flex-start!important;gap:5px!important;padding-bottom:7px!important}.quick-type{padding:7px 10px!important;font-size:11.5px!important;border-radius:10px!important}
+.map .leaflet-popup-content-wrapper{max-width:220px!important;min-width:0!important;border-radius:12px!important}.map .leaflet-popup-content{width:auto!important;max-width:202px!important;min-width:0!important;margin:6px 7px!important}.map-old-popup{width:202px!important;max-width:202px!important;max-height:205px!important;overflow:auto!important}.map-old-count{font-size:10px!important;margin:0 0 4px!important}.map-old-card{padding:4px!important;margin-bottom:4px!important;border-radius:9px!important}.map-old-photo{height:55px!important;border-radius:7px!important;margin-bottom:3px!important}.map-old-title{font-size:9.5px!important;line-height:1.35!important}.map-old-meta{font-size:8.5px!important;line-height:1.3!important;margin-top:1px!important}.map-old-actions{gap:3px!important;margin-top:3px!important}.map-old-actions a,.map-old-actions button{min-height:27px!important;border-radius:7px!important;font-size:8.5px!important;padding:3px!important}.map-popup{width:202px!important;max-width:202px!important;max-height:205px!important}.map-popup h3{font-size:11px!important}.map-popup-mini-photo{width:58px!important;height:44px!important}.map-popup-meta{font-size:8.5px!important;line-height:1.35!important}.map-open-offer{margin-top:4px!important;padding:6px 7px!important;font-size:9px!important}.leaflet-marker-pane{z-index:650!important}.leaflet-popup-pane{z-index:700!important}
+@media(max-width:700px){.quick-actions{grid-template-columns:repeat(3,108px)!important;gap:5px!important}.quick-actions>*{width:108px!important;min-width:108px!important}.quick-city,.quick-action{width:108px!important;min-width:108px!important;height:36px!important;min-height:36px!important;font-size:10px!important}.map{height:350px!important}.map-old-popup{width:198px!important;max-width:198px!important;max-height:205px!important}.map-old-photo{height:52px!important}.map-popup{width:198px!important;max-width:198px!important;max-height:205px!important}}
+@media(max-width:390px){.quick-actions{grid-template-columns:repeat(3,101px)!important;gap:4px!important}.quick-actions>*{width:101px!important;min-width:101px!important}.quick-city,.quick-action{width:101px!important;min-width:101px!important;font-size:9.5px!important}}
+</style>
+
+<style id="v74-partners-final-fixes">
+#list .offer{scroll-margin-top:24px!important}
+.map-open-offer{position:relative!important;z-index:1000!important;pointer-events:auto!important;touch-action:manipulation!important}
+.share-offer{position:relative!important;z-index:1000!important;pointer-events:auto!important;touch-action:manipulation!important}
+.offer .photos img{content-visibility:auto;contain-intrinsic-size:115px 82px}
+</style>
+<style id="site-visits-fix">
+.site-visits{position:relative;z-index:2;display:flex;align-items:center;gap:8px;min-width:152px;padding:7px 11px;border:1px solid #cbb07f;border-radius:16px;background:rgba(255,255,255,.06);color:#fff;box-sizing:border-box;direction:ltr}.site-visits-icon{width:38px;height:38px;border-radius:11px;background:rgba(203,176,127,.16);border:1px solid rgba(203,176,127,.18);display:grid;place-items:center;color:#d6b27a;font-size:24px;line-height:1}.site-visits div{display:flex;flex-direction:column;align-items:flex-start;gap:1px;direction:rtl}.site-visits small{font-size:10px;color:#d8c69f;font-weight:900;white-space:nowrap}.site-visits strong{font-size:20px;line-height:1;color:#fff;font-weight:950;letter-spacing:.2px;white-space:nowrap;font-variant-numeric:tabular-nums}@media(max-width:700px){.compact-title{align-items:flex-start}.site-visits{min-width:145px;padding:6px 8px;gap:7px;border-radius:15px}.site-visits-icon{width:34px;height:34px;font-size:21px}.site-visits small{font-size:9px}.site-visits strong{font-size:19px}}@media(max-width:390px){.site-visits{min-width:132px;padding:5px 7px;gap:6px}.site-visits-icon{width:31px;height:31px;font-size:19px}.site-visits strong{font-size:17px}}
+</style>
+
+<style id="share-button-final-fix">
+.share-offer{appearance:none;-webkit-appearance:none;font-family:inherit;cursor:pointer!important;user-select:none;-webkit-user-select:none;touch-action:manipulation!important;}
+.share-offer:active{transform:scale(.97);opacity:.82;}
+</style>
+
+<style id="exact-contact-filter-fix">
+/* Exact contact cards supplied by the user: keep them as images so iOS text scaling cannot distort the numbers. */
+.exact-contact-cards{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important;align-items:stretch!important;width:100%!important;box-sizing:border-box!important;}
+.contact-card-exact{display:block!important;width:100%!important;height:auto!important;min-width:0!important;max-width:100%!important;object-fit:contain!important;border:0!important;margin:0!important;padding:0!important;}
+.exact-contact-cards>a{display:flex!important;align-items:center!important;min-width:0!important;width:100%!important;text-decoration:none!important;}
+.exact-contact-cards>a .contact-card-exact{width:100%!important;}
+.exact-contact-cards>a.license-card-link .contact-card-exact{width:94%!important;margin-inline:auto!important;}
+.exact-contact-cards>a.whatsapp-card-link{cursor:pointer!important;}
+.exact-update-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:18px!important;padding-inline:5px!important;}
+.exact-update-btn{flex:0 0 auto!important;border:1px solid rgba(16,36,59,.16)!important;background:#eef2f6!important;color:var(--navy)!important;border-radius:10px!important;padding:4px 9px!important;font:900 10px/1.2 inherit!important;white-space:nowrap!important;min-height:28px!important;}
+.exact-update-row #lastUpdateTop{min-width:0!important;flex:1 1 auto!important;text-align:right!important;margin-inline-start:8px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+/* The three filters must remain one single row even when iOS text size is enlarged. */
+.quick-actions{display:flex!important;flex-wrap:nowrap!important;align-items:stretch!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;gap:6px!important;overflow:visible!important;margin:8px 0 0!important;padding-top:0!important;}
+.quick-actions>*{flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important;}
+.quick-city,.quick-action{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;padding-inline:4px!important;}
+@media(max-width:390px){.quick-actions{gap:4px!important}.quick-city,.quick-action{font-size:10px!important;padding-inline:3px!important;}}
+</style>
+</head>
+<body>
+<div class="page">
+<section class="dashboard-compact">
+  <div class="compact-title"><div><span class="compact-kicker">منصة العقاريين</span><h1>عروضي العقارية</h1></div><div class="site-visits" aria-label="زيارات الموقع"><span class="site-visits-icon">▥</span><div><small>زيارات الموقع</small><strong id="siteVisitCount">—</strong></div></div><button class="install-top" id="installBtn" onclick="installApp()" style="display:none">＋ تثبيت</button></div>
+  <div class="compact-stats">
+    <div class="compact-stat"><span class="compact-icon">▦</span><strong id="total">0</strong><small>إجمالي العروض</small></div>
+    <div class="compact-stat"><span class="compact-icon">⌖</span><strong id="mappedCount">0</strong><small>على الخريطة</small></div>
+    <div class="compact-stat"><span class="compact-icon">◷</span><strong id="requestCountTop">0</strong><small>الطلبات</small></div>
+  </div>
+  <div class="contact-row exact-contact-cards"><a class="license-card-link" href="javascript:void(0)" aria-label="رقم الرخصة العقارية"><img class="contact-card-exact" src="license-card-exact.png" alt="رقم الرخصة العقارية 1100119323"></a><a class="whatsapp-card-link" href="https://wa.me/966539004450" target="_blank" rel="noopener" aria-label="التواصل عبر الواتساب"><img class="contact-card-exact" src="whatsapp-card-exact.png" alt="التواصل عبر الواتساب 0539004450"></a></div><div class="broker-contact-note">تواصل معنا لإضافة العروض والطلبات</div><div class="update-meta exact-update-row"><button class="exact-update-btn" type="button" onclick="load()">↻ تحديث</button><span id="lastUpdateTop">آخر تحديث: جاري التحديث…</span></div>
+</section>
+
+<div class="view-tabs">
+  <button id="offersTab" class="view-tab active" type="button">🏠 العروض</button>
+  <button id="requestsTab" class="view-tab" type="button">📋 الطلبات <span id="requestNewTab" class="new-tab-count hidden">0</span></button>
+</div>
+
+<section class="quick-filters" id="offersControls">
+  <div class="quick-types" id="quickTypes"></div>
+  <div class="quick-actions">
+    <div class="city-filter-wrap"><button class="quick-city" id="cityPickerBtn" type="button" onclick="toggleMenu('cityMenu')">المدينة ▾</button><div id="cityMenu" class="filter-menu hidden"></div></div>
+    <div class="city-filter-wrap"><button class="quick-city" id="districtPickerBtn" type="button" onclick="toggleMenu('districtMenu')">الحي ▾</button><div id="districtMenu" class="filter-menu hidden"></div></div>
+    <button class="quick-action" id="advancedBtn" type="button" onclick="toggleAdvancedFilters()">⚑ التصفية</button>
+      </div>
+  <div class="advanced-filters hidden" id="advancedFilters">
+    <div class="advanced-head"><div><b>التصفية والبحث</b><span>حدّد النتائج التي تريدها بسرعة</span></div><button type="button" class="advanced-close" onclick="clearOfferFilters()">مسح</button></div>
+    <div class="advanced-grid">
+      <label>بحث<input id="search" type="search" placeholder="بحث في العروض..." oninput="renderOffers()"></label>
+      <label>المصدر<select id="sourceFilter" onchange="renderOffers()"><option value="">كل المصادر</option><option value="مع المالك">مع المالك</option><option value="مع المباشر">مع المباشر</option></select></label>
+      <label>أقل سعر<input id="fMin" inputmode="numeric" placeholder="أقل سعر" oninput="renderOffers()"></label>
+      <label>أعلى سعر<input id="fMax" inputmode="numeric" placeholder="أعلى سعر" oninput="renderOffers()"></label>
+    </div>
+    <div class="filter-group"><span class="filter-group-label">نوع العقار</span><div class="filter-chips" id="propertyTypes"></div></div>
+    <div class="filter-group"><span class="filter-group-label">نوع الصفقة</span><div class="filter-chips" id="dealTypes"></div></div>
+    <div class="filter-summary" id="filterSummary">كل العروض</div>
+  </div>
+  <div class="status-line"><span class="status" id="lastUpdate" style="display:none">جاري تحديث البيانات…</span></div>
+</section>
+
+<section class="request-panel" id="requestsPanel">
+  <div class="section-kicker">قائمة الطلبات</div>
+  <div class="request-head"><h2><span id="requestPanelTitle">الطلبات</span></h2><div class="request-head-actions"><button class="filter-clear" type="button" onclick="showOffersView()">← العودة للعروض</button></div></div>
+  <div class="request-view-filters">
+    <label>مدينة الطلب<select id="requestViewCity" onchange="renderRequests()"></select></label>
+    <label>نوع الطلب<select id="requestViewDeal" onchange="renderRequests()"><option value="">كل الأنواع</option><option value="شراء">شراء</option><option value="استئجار">استئجار</option></select></label>
+    <label>العقار<select id="requestViewProperty" onchange="renderRequests()"><option value="">كل العقارات</option></select></label>
+  </div>
+  <div id="requestFilterSummary" class="request-filter-summary">جميع الطلبات</div>
+  <div id="requestsList"></div>
+</section>
+
+<section class="card map-card" id="mapCard"><div class="section-kicker">استكشف على الخريطة</div><div class="toolbar"><h2>الخريطة</h2><div class="map-toolbar-actions"><div class="map-status-legend"><span id="mapNewBtn" class="map-status map-status-new" aria-label="عدد العروض الجديدة"><i class="dot"></i>جديد <bdi id="mapNewCount">0</bdi></span><span id="mapUpdatedBtn" class="map-status map-status-updated" aria-label="عدد العروض المحدثة"><i class="dot"></i>محدث <bdi id="mapUpdatedCount">0</bdi></span><span id="mapAllBtn" class="map-status map-status-all" aria-label="إجمالي العروض"><i class="dot"></i>الكل <bdi id="mapAllCount">0</bdi></span></div></div></div><div id="map" class="map"></div></section>
+
+<section class="card offers-card" id="offersSection"><div class="section-kicker">مكتبة العروض</div><div class="toolbar"><h2><span id="offerSectionTitle">العروض العقارية</span> <span id="offerSectionCount" class="count">0</span></h2></div><div id="list"></div></section>
+
+<div class="footer">© <span id="year"></span> <strong>عروضي العقارية</strong> · للتواصل <bdi class="phone-number">0539004450</bdi></div>
+<div id="imageLightbox" class="image-lightbox hidden" aria-hidden="true"><button type="button" class="image-lightbox-close" aria-label="إغلاق">×</button><img id="imageLightboxImg" alt="صورة العرض"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+
+let offers=[],requests=[],map=null,markers=[],selectedCity='',selectedDistrict='',selectedPropertyType='',selectedDeal='',offersView=true,citiesExpanded=false,advancedOpen=false,newOnly=false,requestNewOnly=false,mapStatusFilter='all',mapFocusCursor={new:0,updated:0};
+const pathMatch=location.pathname.match(/^\/b\/([A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)?)\/?$/);function readPartnerCookie(){try{const m=document.cookie.match(/(?:^|; )uroodi_partner_token=([^;]+)/);return m?decodeURIComponent(m[1]):''}catch(_){return ''}}function savePartnerToken(t){if(!t)return;try{localStorage.setItem('uroodi_partner_token',t)}catch(_){}try{document.cookie='uroodi_partner_token='+encodeURIComponent(t)+'; Max-Age=31536000; Path=/; SameSite=Lax'}catch(_){}}let token=pathMatch?.[1]||new URLSearchParams(location.search).get('token')||new URLSearchParams(String(location.hash||'').replace(/^#/,'')).get('token')||readPartnerCookie()||localStorage.getItem('uroodi_partner_token')||'';if(token)savePartnerToken(token);
+try{if(token){const mf=document.getElementById('appManifest');if(mf)mf.href='/api/partner-manifest?token='+encodeURIComponent(token)}}catch(_){}
+function $(id){return document.getElementById(id)}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function dateMs(v){const t=Date.parse(v||'');return Number.isFinite(t)?t:0}
+function normalizeCity(v){return String(v??'').replace(/[\u200f\u200e]/g,'').replace(/\s+/g,' ').trim().replace(/^مدينة\s+/,'')}
+function cityList(v){if(Array.isArray(v))return v.flatMap(cityList);const raw=String(v??'').trim();if(!raw)return [];try{const p=JSON.parse(raw);if(Array.isArray(p))return p.flatMap(cityList);if(typeof p==='string')return cityList(p)}catch{}return raw.split(/[،,\n|]+/).map(normalizeCity).filter(Boolean)}
+function cityMatches(value,selected){if(!selected)return true;return cityList(value).some(c=>normalizeCity(c)===normalizeCity(selected))}
+function allOfferCities(){return [...new Set(offers.flatMap(o=>cityList(o.city)).map(normalizeCity).filter(Boolean))]}
+function allRequestCities(){return [...new Set(requests.flatMap(r=>cityList(r.city)).map(normalizeCity).filter(Boolean))]}
+function allCities(){return allOfferCities().sort((a,b)=>a.localeCompare(b,'ar'))}
+function offerPropertyTypes(){return [...new Set(offers.map(o=>String(o.property_type||'').trim()).filter(Boolean))]}
+function requestPropertyTypes(){return [...new Set(requests.map(r=>String(r.property_type||'').trim()).filter(v=>v&&v!=='__REQUEST__'))]}
+function offerDeals(){return [...new Set(offers.map(o=>String(o.deal||'').trim()).filter(Boolean))]}
+function title(o){const type=o.property_type||'عقار';const deal=o.deal==='إيجار'?'للإيجار':o.deal==='بيع'?'للبيع':'';return [type,deal].filter(Boolean).join(' ')+(o.city?' في '+normalizeCity(o.city):'')+(o.district?' حي '+String(o.district).replace(/^حي\s*/,''):'')}
+function cleanNotes(v){return String(v||'').replace(/\s*\[\[PRICING:.*?\]\]/gs,'').replace(/\s*\[\[BROKER_UPDATED\]\]/gi,'').trim()}
+function pricing(o){if(!o.price)return "";const label=o.deal==="إيجار"?"💰 قيمة الإيجار:" :"💰 قيمة البيع:";return "<div class=\"price-summary\"><div>"+label+" "+esc(o.price)+(String(o.price).includes('ريال')?'':' ريال')+"</div></div>"}
+function extractCoords(url){if(!url)return null;const s=decodeURIComponent(String(url));let m=s.match(/@\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)/);if(m)return[+m[1],+m[2]];m=s.match(/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/);if(m)return[+m[1],+m[2]];m=s.match(/[?&](?:q|query|ll|center|destination|daddr)=(-?\d+(?:\.\d+)?)[, ]+(-?\d+(?:\.\d+)?)/);if(m)return[+m[1],+m[2]];m=s.match(/(-?\d{1,3}\.\d{4,})\s*,\s*(-?\d{1,3}\.\d{4,})/);return m?[+m[1],+m[2]]:null}
+function getCoords(o){const candidates=[[o?.latitude,o?.longitude],[o?.lat,o?.lng],[o?.lat,o?.lon],[o?.location_latitude,o?.location_longitude],[o?.coordinates?.lat,o?.coordinates?.lng],[o?.coordinates?.latitude,o?.coordinates?.longitude]];for(const pair of candidates){const lat=Number(pair[0]),lng=Number(pair[1]);if(Number.isFinite(lat)&&Number.isFinite(lng)&&Math.abs(lat)<=90&&Math.abs(lng)<=180)return[lat,lng]}const raw=o?.map_url||o?.mapUrl||o?.map_link||o?.google_maps_url||o?.location_url||'';const c=extractCoords(raw);return c&&Math.abs(c[0])<=90&&Math.abs(c[1])<=180?c:null}
+function mapLink(o){const c=getCoords(o);if(c)return 'https://maps.google.com/?q='+c[0].toFixed(6)+','+c[1].toFixed(6);return String(o?.map_url||o?.mapUrl||'').trim();}
+function normalizeOfferSource(v){
+  const s=String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(!s)return '';
+  if(s==='مباشر'||s.includes('مباشر مع المالك')||s.includes('مع المالك')||s==='direct')return 'مع المالك';
+  if(s==='غير مباشر'||s.includes('مع المباشر')||s.includes('غير مباشر')||s==='indirect'||s.includes('وسيط'))return 'مع المباشر';
+  return String(v||'').trim();
+}
+function normalizeShareSource(v){ return normalizeOfferSource(v); }
+function buildOfferTitle(o){
+  const property=String(o?.property_type||o?.type||'عقار').trim();
+  const deal=o?.deal==='إيجار'?'للإيجار':o?.deal==='بيع'?'للبيع':String(o?.deal||'').trim();
+  let t=[property,deal].filter(Boolean).join(' ');
+  const city=String(o?.city||'').trim();
+  const district=String(o?.district||'').trim();
+  if(city)t+=' في مدينة '+city;
+  if(district)t+=' '+(/^حي\s/.test(district)?district:'حي '+district);
+  const source=normalizeOfferSource(o?.source);
+  if(source)t+=' · '+source;
+  return t||'عرض عقاري';
+}
+function displayPrice(v){
+  const s=String(v??'').trim();
+  if(!s)return '';
+  if(/ريال|ر\.س|SAR/i.test(s))return s;
+  const n=s.replace(/,/g,'').replace(/\s+/g,'');
+  return /^[-+]?\d+(?:\.\d+)?$/.test(n)?s+' ريال':s;
+}
+function pricingShareLines(o){
+  if(!o?.price)return [];
+  return [o.deal==='إيجار'?`💰 قيمة الإيجار: ${displayPrice(o.price)}`:`💰 قيمة البيع: ${displayPrice(o.price)}`];
+}
+function offerShareText(o){
+  const lines=[];
+  const titleText=buildOfferTitle(o);
+  if(titleText) lines.push(`🏠 ${titleText}`);
+  const body=cleanNotes(o?.notes);
+  if(body){ lines.push(''); lines.push(body); lines.push(''); }
+  if(o?.area) lines.push(`📐 المساحة: ${String(o.area).trim()}`);
+  const prices=pricingShareLines(o);
+  if(prices.length) lines.push(...prices);
+  const source=normalizeShareSource(o?.source);
+  lines.push('🔗 لمشاهدة جميع عروضي عبر الرابط');
+  lines.push('[ www.aqaryeen.com/partners.html ]');
+  return lines.join('\n').trim();
+}
+function shareTextNative(title,text){
+  const payload={title:title||'مشاركة العرض',text:text||''};
+  try{
+    if(typeof navigator.share==='function'){
+      navigator.share(payload).catch(e=>{if(e?.name!=='AbortError')console.warn('share text',e)});
+      return true;
+    }
+  }catch(e){console.warn('share text',e)}
+  try{
+    if(navigator.clipboard?.writeText){navigator.clipboard.writeText(text||'').then(()=>alert('تم نسخ نص العرض للمشاركة.')).catch(()=>alert(text||''));return true;}
+  }catch(_){ }
+  alert(text||'لا يوجد نص للمشاركة.');return false;
+}
+async function getShareFile(o){
+  if(o?._shareFile)return o._shareFile;
+  try{
+    const src=String(o?.images?.[0]||'').trim(); if(!src)return null;
+    // Prefer the site's image proxy so iPhone Safari can obtain a real File without CORS/canvas issues.
+    try{const r=await fetch('/api/public-image?url='+encodeURIComponent(src),{cache:'no-store'});if(r.ok){const b=await r.blob();if(b.type.startsWith('image/'))return o._shareFile=new File([b],'صورة-العرض.jpg',{type:b.type||'image/jpeg'});}}catch(_){ }
+    try{const r=await fetch(src,{cache:'no-store',mode:'cors'});if(r.ok){const b=await r.blob();if(b.type.startsWith('image/'))return o._shareFile=new File([b],'صورة-العرض.jpg',{type:b.type||'image/jpeg'});}}catch(_){ }
+  }catch(e){console.warn('partner share image',e)}
+  return shareImageFileFromCard(o);
+}
+function shareImageFileFromCard(o){try{if(o?._shareFile)return o._shareFile;const el=document.querySelector('#offer-'+CSS.escape(String(o.id))+' .photos img');if(!el||!el.complete||!el.naturalWidth)return null;const max=1600,scale=Math.min(1,max/Math.max(el.naturalWidth,el.naturalHeight)),w=Math.max(1,Math.round(el.naturalWidth*scale)),h=Math.max(1,Math.round(el.naturalHeight*scale)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(el,0,0,w,h);const data=c.toDataURL('image/jpeg',.86),bin=atob(data.split(',')[1]),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return o._shareFile=new File([bytes],'صورة-العرض.jpg',{type:'image/jpeg'})}catch(e){return null}}
+let __shareTapLock=0;
+function showOfferShareSheet(title,text){
+  let box=document.getElementById('offerShareFallback');
+  if(!box){
+    box=document.createElement('div'); box.id='offerShareFallback'; box.className='share-fallback';
+    box.innerHTML='<div class="share-fallback-card"><button type="button" class="share-fallback-close" aria-label="إغلاق">×</button><div class="share-fallback-title">مشاركة العرض</div><div class="share-fallback-text"></div><div class="share-fallback-actions"><button type="button" data-share-action="wa">واتساب</button><button type="button" data-share-action="copy">نسخ العرض</button></div></div>';
+    document.body.appendChild(box);
+    box.addEventListener('click',e=>{if(e.target===box||e.target.closest('.share-fallback-close'))box.classList.remove('open');});
+    box.querySelector('[data-share-action=wa]').addEventListener('click',()=>{const t=box.dataset.text||'';window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank','noopener');});
+    box.querySelector('[data-share-action=copy]').addEventListener('click',async()=>{const t=box.dataset.text||'';try{await navigator.clipboard.writeText(t);alert('تم نسخ العرض.');}catch(_){prompt('انسخ نص العرض:',t);}});
+  }
+  box.dataset.text=text||'';
+  box.querySelector('.share-fallback-title').textContent=title||'مشاركة العرض';
+  box.querySelector('.share-fallback-text').textContent=text||'';
+  box.classList.add('open');
+}
+function shareOffer(id){
+  const o=offers.find(x=>String(x.id)===String(id));
+  if(!o)return false;
+  const title=buildOfferTitle(o)||'مشاركة العرض';
+  const text=offerShareText(o)||title;
+  const file=shareImageFileFromCard(o);
+  try{
+    if(typeof navigator.share==='function'){
+      const payload={title,text};
+      if(file){
+        try{ if(!navigator.canShare || navigator.canShare({files:[file]})) payload.files=[file]; }catch(_){ }
+      }
+      navigator.share(payload).catch(e=>{
+        if(e?.name!=='AbortError'){
+          try{showOfferShareSheet(title,text)}catch(_){ }
+        }
+      });
+      // If the image was not ready yet, prepare it in the background for the next share.
+      if(!file && o?.images?.[0]) void getShareFile(o);
+      return false;
+    }
+  }catch(e){
+    try{showOfferShareSheet(title,text)}catch(_){ }
+    return false;
+  }
+  try{showOfferShareSheet(title,text)}catch(_){
+    try{navigator.clipboard?.writeText(text)}catch(__){ }
+  }
+  if(!file && o?.images?.[0]) void getShareFile(o);
+  return false;
+}
+
+function requestBody(r){return String(r?.text??r?.notes??'').replace(/^\[\[REQUEST\]\]\s*/i,'').trim()}
+
+function districtText(v){return String(v??'').replace(/^حي\s*/,'').trim()}
+function districtsPhrase(v){
+  const raw=String(v??'').trim();
+  if(!raw)return '';
+  const parts=raw.split(/[،,\n|]+/).map(districtText).filter(Boolean);
+  if(!parts.length)return '';
+  return parts.length===1?'في حي '+parts[0]:'في الأحياء '+parts.join('، ');
+}
+function citiesPhrase(v){
+  const vals=cityList(v);
+  if(!vals.length)return '';
+  if(vals.length===1)return 'في '+vals[0];
+  return 'في '+vals.join('، ');
+}
+async function ensureLeaflet(){
+  if(typeof L!=='undefined')return true;
+  return await new Promise(resolve=>{
+    const existing=document.querySelector('script[data-leaflet-loader]');
+    if(existing){existing.addEventListener('load',()=>resolve(typeof L!=='undefined'),{once:true});existing.addEventListener('error',()=>resolve(false),{once:true});return;}
+    const sc=document.createElement('script');
+    sc.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    sc.crossOrigin='';
+    sc.dataset.leafletLoader='1';
+    sc.onload=()=>resolve(typeof L!=='undefined');
+    sc.onerror=()=>resolve(false);
+    document.head.appendChild(sc);
+  });
+}
+async function initMap(){
+  if(map)return true;
+  const el=$('map');
+  if(!el)return false;
+  const ready=await ensureLeaflet();
+  if(!ready)return false;
+  try{
+    map=L.map(el,{zoomControl:true,preferCanvas:true,fadeAnimation:false,markerZoomAnimation:false}).setView([24.7,45],5.3);
+    let tileLayer=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,minZoom:3,attribution:'© OpenStreetMap contributors'});
+    let tileErrors=0, switched=false;
+    tileLayer.on('tileerror',()=>{
+      tileErrors++;
+      if(tileErrors>=3 && !switched){
+        switched=true;
+        try{map.removeLayer(tileLayer)}catch(_){ }
+        tileLayer=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,minZoom:3,attribution:'© Esri'}).addTo(map);
+      }
+    });
+    tileLayer.addTo(map);
+    setTimeout(()=>{try{map.invalidateSize(true)}catch(_){ }},50);
+    return true;
+  }catch(e){console.warn('map init',e);map=null;return false}
+}
+function waLink(){return 'https://wa.me/966539004450'}
+function isChanged(o){return markerKind(o)==='updated'}
+function isNew(o){return markerKind(o)==='new'}
+function toggleMenu(id){const el=$(id);if(!el)return;document.querySelectorAll('.filter-menu').forEach(x=>{if(x.id!==id)x.classList.add('hidden')});el.classList.toggle('hidden');if(!el.classList.contains('hidden'))positionMenu(el)}
+function positionMenu(el){const b=el.parentElement?.getBoundingClientRect();if(!b)return;el.style.top=(b.height+8)+'px';el.style.right='0'}
+document.addEventListener('click',e=>{if(!e.target.closest('.city-filter-wrap'))document.querySelectorAll('.filter-menu').forEach(x=>x.classList.add('hidden'))})
+function renderQuickTypes(){const el=$('quickTypes');const oldScroll=el.scrollLeft;const vals=offerPropertyTypes();const deals=offerDeals();const combos=[];vals.forEach(t=>deals.forEach(d=>{if(offers.some(o=>String(o.property_type||'').trim()===t&&String(o.deal||'').trim()===d))combos.push({t,d})}));const allActive=!selectedPropertyType&&!selectedDeal;let html='<button type="button" class="quick-type '+(allActive?'active':'')+'" data-qtype="" data-qdeal="">الكل</button>';combos.slice(0,24).forEach(x=>{const active=selectedPropertyType===x.t&&selectedDeal===x.d;html+='<button type="button" class="quick-type '+(active?'active':'')+'" data-qtype="'+esc(x.t)+'" data-qdeal="'+esc(x.d)+'">'+esc(x.t)+' '+(x.d==='إيجار'?'للإيجار':'للبيع')+'</button>'});el.innerHTML=html;requestAnimationFrame(()=>{try{if(allActive){el.scrollLeft=0;const first=el.querySelector('[data-qtype=""][data-qdeal=""]');if(first)first.scrollIntoView({behavior:'auto',block:'nearest',inline:'start'})}else{el.scrollLeft=oldScroll}}catch(_) {}})}
+function renderCityMenu(){const el=$('cityMenu');const vals=allCities();let html='<div class="menu-title">المدن</div><button type="button" class="'+(!selectedCity?'active':'')+'" data-city="">الكل</button>';vals.forEach(c=>{html+='<button type="button" class="'+(selectedCity===c?'active':'')+'" data-city="'+esc(c)+'">'+esc(c)+'</button>'});el.innerHTML=html}
+function renderDistrictMenu(){const el=$('districtMenu');let vals=offers.filter(o=>cityMatches(o.city,selectedCity)).map(o=>String(o.district||'').replace(/^حي\s*/,'').trim()).filter(Boolean);vals=[...new Set(vals)].sort((a,b)=>a.localeCompare(b,'ar'));let html='<div class="menu-title">الأحياء'+(selectedCity?' في '+esc(selectedCity):'')+'</div><button type="button" class="'+(!selectedDistrict?'active':'')+'" data-district="">كل الأحياء</button>';if(vals.length)vals.forEach(c=>{html+='<button type="button" class="'+(selectedDistrict===c?'active':'')+'" data-district="'+esc(c)+'">حي '+esc(c)+'</button>'});else html+='<div class="menu-empty">لا توجد أحياء مسجلة لهذه التصفية.</div>';el.innerHTML=html}
+function renderFilterChips(){const p=$('propertyTypes'),d=$('dealTypes');const pv=offerPropertyTypes(),dv=offerDeals();p.innerHTML='<button class="filter-chip '+(!selectedPropertyType?'active':'')+'" type="button" data-property="">الكل</button>'+pv.map(v=>'<button class="filter-chip '+(selectedPropertyType===v?'active':'')+'" type="button" data-property="'+esc(v)+'">'+esc(v)+'</button>').join('');d.innerHTML='<button class="filter-chip gold-active '+(!selectedDeal?'active':'')+'" type="button" data-deal="">الكل</button>'+dv.map(v=>'<button class="filter-chip gold-active '+(selectedDeal===v?'active':'')+'" type="button" data-deal="'+esc(v)+'">'+esc(v)+'</button>').join('')}
+function bindFilterEvents(){document.querySelectorAll('#quickTypes [data-qtype]').forEach(b=>b.onclick=()=>{if(!b.dataset.qtype&&!b.dataset.qdeal){clearOfferFilters();return}setOfferFilters(b.dataset.qtype||'',b.dataset.qdeal||'')});document.querySelectorAll('#cityMenu [data-city]').forEach(b=>b.onclick=()=>setCity(b.dataset.city||''));document.querySelectorAll('#districtMenu [data-district]').forEach(b=>b.onclick=()=>setDistrict(b.dataset.district||''));document.querySelectorAll('#propertyTypes [data-property]').forEach(b=>b.onclick=()=>setProperty(b.dataset.property||''));document.querySelectorAll('#dealTypes [data-deal]').forEach(b=>b.onclick=()=>setDeal(b.dataset.deal||''))}
+function renderFilters(){renderQuickTypes();renderCityMenu();renderDistrictMenu();renderFilterChips();bindFilterEvents();$('cityPickerBtn').classList.toggle('active',!!selectedCity);$('districtPickerBtn').classList.toggle('active',!!selectedDistrict);$('cityPickerBtn').textContent=selectedCity?selectedCity:'المدينة ▾';$('districtPickerBtn').textContent=selectedDistrict?'📍 حي '+selectedDistrict:'الحي ▾';$('advancedBtn').classList.toggle('active',advancedOpen);const parts=[];if(selectedCity)parts.push('📍 '+selectedCity);if(selectedDistrict)parts.push('حي '+selectedDistrict);if(selectedPropertyType)parts.push('🏠 '+selectedPropertyType);if(selectedDeal)parts.push('💰 '+selectedDeal);$('filterSummary').textContent=parts.length?parts.join(' · '):'كل العروض';updateNewIndicators();}
+function setOfferFilters(type,deal){selectedPropertyType=type||'';selectedDeal=deal||'';renderFilters();renderOffers()}
+function setCity(v){selectedCity=normalizeCity(v);selectedDistrict='';document.querySelectorAll('.filter-menu').forEach(x=>x.classList.add('hidden'));renderFilters();renderOffers()}
+function setDistrict(v){selectedDistrict=String(v||'').replace(/^حي\s*/,'').trim();document.querySelectorAll('.filter-menu').forEach(x=>x.classList.add('hidden'));renderFilters();renderOffers()}
+function setProperty(v){selectedPropertyType=v||'';renderFilters();renderOffers()}
+function setDeal(v){selectedDeal=v||'';renderFilters();renderOffers()}
+function toggleAdvancedFilters(){advancedOpen=!advancedOpen;$('advancedFilters').classList.toggle('hidden',!advancedOpen);$('advancedBtn').classList.toggle('active',advancedOpen)}
+function clearOfferFilters(){selectedCity='';selectedDistrict='';selectedPropertyType='';selectedDeal='';newOnly=false;$('search').value='';$('sourceFilter').value='';$('fMin').value='';$('fMax').value='';advancedOpen=false;$('advancedFilters').classList.add('hidden');$('advancedBtn').classList.remove('active');renderFilters();renderOffers()}
+function newSeenKey(){return 'uroodi_broker_new_seen_v13_'+token;}
+function offerFingerprint(o){
+  return JSON.stringify({id:String(o?.id||''),created:o?.created_at||'',updated:o?.updated_at||''});
+}
+function requestFingerprint(r){
+  return JSON.stringify({id:String(r?.id||''),created:r?.created_at||'',updated:r?.updated_at||''});
+}
+function readSeenState(){try{return JSON.parse(localStorage.getItem(newSeenKey())||'null')||null}catch(_){return null}}
+function saveSeenState(state){try{localStorage.setItem(newSeenKey(),JSON.stringify(state));}catch(_){} }
+function readSeenOffers(){const s=readSeenState();return s?.offers||{}}
+function readSeenRequests(){const s=readSeenState();return s?.requests||{}}
+function unseenOffers(){const seen=readSeenOffers();return offers.filter(o=>seen[String(o.id)]!==offerFingerprint(o));}
+function unseenRequests(){const seen=readSeenRequests();return requests.filter(r=>seen[String(r.id)]!==requestFingerprint(r));}
+function unseenNewCount(){return unseenOffers().length}
+function unseenRequestCount(){return unseenRequests().length}
+function markOffersSeen(arr){const s=readSeenState()||{offers:{},requests:{}};s.offers=s.offers||{};(arr||[]).forEach(o=>{s.offers[String(o.id)]=offerFingerprint(o)});saveSeenState(s);updateNewIndicators()}
+function markRequestsSeen(arr){const s=readSeenState()||{offers:{},requests:{}};s.requests=s.requests||{};(arr||[]).forEach(r=>{s.requests[String(r.id)]=requestFingerprint(r)});saveSeenState(s);updateNewIndicators()}
+function toggleNewOnly(){newOnly=false;renderFilters();renderOffers();}
+function toggleRequestNewOnly(){
+  requestNewOnly=!requestNewOnly;
+  renderRequestControls();renderRequests();
+  if(requestNewOnly){const arr=unseenRequests();if(arr.length)setTimeout(()=>markRequestsSeen(arr),1200)}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function establishNewBaseline(){
+  // First visit: nothing is marked as seen. A broker marks an item seen only by opening it.
+  if(readSeenState())return;
+  saveSeenState({offers:{},requests:{}});
+}
+function updateNewIndicators(){
+  const oc=unseenOffers().length,rc=unseenRequests().length;
+  const rb=$('requestNewTab'),rn=$('requestNewCount'),nb=$('newBtn');
+  if(rb){rb.textContent=rc;rb.classList.toggle('hidden',rc===0)}
+  if(rn){rn.textContent=rc}
+  if(nb){const c=nb.querySelector('.filter-count');if(c)c.textContent=oc}
+}
+function filteredRequests(){
+  const city=String($('requestViewCity')?.value||'').trim();
+  const deal=String($('requestViewDeal')?.value||'').trim();
+  const prop=String($('requestViewProperty')?.value||'').trim();
+  const newSet=requestNewOnly?new Set(unseenRequests().map(r=>String(r.id))):null;
+  return requests.filter(r=>{
+    if(newSet&&!newSet.has(String(r.id)))return false;
+    const rCities=cityList(r.city);
+    const cityOk=!city||city==='كل المدن'||city==='جميع المدن'||rCities.length===0||cityMatches(r.city,city);
+    const rDeal=String(r.deal||'').trim();
+    const dealOk=!deal||deal==='كل الأنواع'||rDeal===deal;
+    const rawProp=String(r.property_type||'').trim();
+    const rProp=rawProp==='__REQUEST__'?'':rawProp;
+    const propOk=!prop||prop==='كل العقارات'||!rProp||rProp===prop;
+    return cityOk&&dealOk&&propOk;
+  });
+}
+function renderRequestControls(){
+  updateNewIndicators();
+}
+
+function filteredOffers(){const q=String($('search')?.value||'').trim().toLowerCase(),src=String($('sourceFilter')?.value||'').trim(),min=Number(String($('fMin')?.value||'').replace(/[^0-9.]/g,'')),max=Number(String($('fMax')?.value||'').replace(/[^0-9.]/g,''));const hasMin=Number.isFinite(min)&&String($('fMin')?.value||'').trim()!=='';const hasMax=Number.isFinite(max)&&String($('fMax')?.value||'').trim()!=='';return offers.filter(o=>{const cityOk=cityMatches(o.city,selectedCity);const districtOk=!selectedDistrict||String(o.district||'').replace(/^حي\s*/,'').trim()===selectedDistrict;const typeOk=!selectedPropertyType||String(o.property_type||'').trim()===selectedPropertyType;const dealOk=!selectedDeal||String(o.deal||'').trim()===selectedDeal;const srcOk=!src||String(o.source||'').trim()===src;const price=Number(String(o.price||'').replace(/[^0-9.]/g,''));const minOk=!hasMin||(Number.isFinite(price)&&price>=min);const maxOk=!hasMax||(Number.isFinite(price)&&price<=max);const hay=[title(o),o.city,o.district,o.area,o.location,o.property_type,o.deal,cleanNotes(o.notes)].join(' ').toLowerCase();return cityOk&&districtOk&&typeOk&&dealOk&&srcOk&&minOk&&maxOk&&(!q||hay.includes(q))})}
+function cacheLoadedImageShare(id,el){
+  try{
+    const o=offers.find(x=>String(x.id)===String(id));
+    if(!o||o._shareFile||!el||!el.complete||!el.naturalWidth)return;
+    // First try a synchronous canvas conversion from the already-loaded image.
+    const f=shareImageFileFromCard(o);
+    if(f)return;
+    // If CORS blocks canvas, fetch through our same-origin image proxy in the background.
+    if(o.images?.[0]) void getShareFile(o);
+  }catch(_){ }
+}
+function offerHtml(o){const n=isNew(o),u=isChanged(o),map=mapLink(o),id=String(o.id);const badges=(n||u)?'<div class="offer-badges">'+(n?'<span class="offer-badge new">جديد</span>':'')+(u?'<span class="offer-badge updated">محدث</span>':'')+'</div>':'';const share='<button class="share-offer" type="button" data-share-id="'+esc(id)+'" aria-label="مشاركة العرض" onclick="return shareOffer(this.dataset.shareId)">↗ مشاركة</button>';return '<article class="offer" id="offer-'+esc(id)+'"><div class="offer-head">'+badges+'<span class="badge">'+esc(buildOfferTitle(o))+'</span><div class="meta">'+(o.area?'📐 '+esc(o.area)+' · ':'')+(o.city?'📍 '+esc(normalizeCity(o.city))+(o.district?' - '+esc(String(o.district).replace(/^حي\s*/,'')):''):'')+(normalizeOfferSource(o.source)?' · 👤 '+esc(normalizeOfferSource(o.source)):'')+'</div></div>'+(cleanNotes(o.notes)?'<div class="raw-offer"><b>نص العرض</b><div>'+esc(cleanNotes(o.notes)).replace(/\n/g,'<br>')+'</div></div>':'')+pricing(o)+((o.images||[]).length?'<div class="photos">'+o.images.map((x,i)=>'<img src="'+esc(x)+'" loading="lazy" fetchpriority="'+(i===0?'high':'low')+'" decoding="async" crossorigin="anonymous" onload="cacheLoadedImageShare(this.closest(\".offer\").id.replace(\"offer-\",\"\"),this)" alt="صورة العرض">').join('')+'</div>':'')+'<div class="offer-actions">'+(map?'<a class="maplink" href="'+esc(map)+'" target="_blank" rel="noopener">📍 الموقع</a>':'<span></span>')+'<a class="wa" href="'+offerWhatsAppLink(o)+'" target="_blank" rel="noopener">💬 WhatsApp</a>'+share+'</div></article>'}
+
+
+
+function renderOffers(){
+  if(!offersView)return;
+  const arr=filteredOffers();
+  $('total').textContent=arr.length;
+  $('mappedCount').textContent=arr.filter(o=>!!getCoords(o)).length;
+  $('offerSectionCount').textContent=arr.length;
+  $('offerSectionTitle').textContent=newOnly?'العروض الجديدة':'العروض العقارية';
+  const renderKey=JSON.stringify({ids:arr.map(o=>[String(o.id),o.area||'',o.price||'',o.city||'',o.district||'',o.property_type||'',o.deal||'',o.source||'',o.images||[],o.notes||'']),newOnly,city:selectedCity,district:selectedDistrict,type:selectedPropertyType,deal:selectedDeal,search:$('search')?.value||'',src:$('sourceFilter')?.value||'',min:$('fMin')?.value||'',max:$('fMax')?.value||''});
+  if(renderKey!==window.__offersRenderKey){
+    window.__offersRenderKey=renderKey;
+    $('list').innerHTML=arr.length?arr.map(offerHtml).join(''):'<div class="empty">'+(newOnly?'لا توجد عروض جديدة لم تشاهدها بعد.':'لا توجد عروض مطابقة للتصفية الحالية.')+'</div>';
+  }
+  updateMap(arr);
+}
+function mapPopup(o){const photo=(o.images||[])[0]||'';const meta=[o.city?normalizeCity(o.city):'',o.district?'حي '+String(o.district).replace(/^حي\s*/,''):'',o.price?String(o.price):''].filter(Boolean).slice(0,3);return '<div class="map-popup"><div class="map-popup-head"><div class="map-popup-pin">📍</div><h3>'+esc(buildOfferTitle(o))+'</h3></div>'+(photo?'<div class="map-popup-photo-row"><img class="map-popup-mini-photo" src="'+esc(photo)+'" alt="صورة العرض" loading="lazy"><div class="map-popup-meta">'+meta.map(v=>'<div>'+esc(v)+'</div>').join('')+'</div></div>':'<div class="map-popup-meta map-popup-meta-full">'+meta.map(v=>'<div>'+esc(v)+'</div>').join('')+'</div>')+(mapLink(o)?'<a class="map-location-link" href="'+esc(mapLink(o))+'" target="_blank" rel="noopener">فتح الموقع</a>':'')+'<button class="map-open-offer" type="button" data-map-offer-id="'+esc(String(o.id))+'" ><span>↓</span> الانتقال إلى العرض أسفل الخريطة</button></div>'}
+function scrollToOffer(id){
+  const targetId='offer-'+String(id);
+  const go=()=>{
+    const el=document.getElementById(targetId);
+    if(!el)return false;
+    try{el.scrollIntoView({behavior:'smooth',block:'center',inline:'nearest'});}catch(_){window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+window.scrollY-80),behavior:'smooth'});}
+    el.classList.add('map-selected');setTimeout(()=>el.classList.remove('map-selected'),2200);return true;
+  };
+  if(go())return true;
+  showOffersView();
+  requestAnimationFrame(()=>{if(!go())setTimeout(()=>go(),120)});
+  setTimeout(()=>go(),350);setTimeout(()=>go(),800);setTimeout(()=>go(),1400);return true;
+}
+function markerKind(o){
+  const seen=readSeenOffers()[String(o?.id||'')];
+  if(!seen)return 'new';
+  if(seen===offerFingerprint(o))return 'seen';
+  return /\[\[BROKER_UPDATED\]\]/i.test(String(o?.notes||''))?'updated':'seen';
+}
+function markerIcon(kind){return L.divIcon({className:'map-pin-icon',html:'<span class=\"map-pin map-pin-'+kind+'\"></span>',iconSize:[28,36],iconAnchor:[14,34],popupAnchor:[0,-32]})}
+function markOfferSeen(o){if(!o)return;const s=readSeenState()||{offers:{},requests:{}};s.offers=s.offers||{};s.offers[String(o.id)]=offerFingerprint(o);saveSeenState(s);updateNewIndicators()}
+function setMapStatusFilter(v){ mapStatusFilter='all'; }
+
+function focusMapStatus(kind){ return false; }
+
+function updateMapStatusCounts(){let nc=0,uc=0;const seen=readSeenOffers();(filteredOffers()||[]).forEach(o=>{const unseen=seen[String(o.id)]!==offerFingerprint(o);if(!unseen)return;const k=markerKind(o);if(k==='new')nc++;else if(k==='updated')uc++;});if($('mapNewCount'))$('mapNewCount').textContent=String(nc);if($('mapUpdatedCount'))$('mapUpdatedCount').textContent=String(uc)}
+function resetMapFocusState(){window._mapConsumed={new:new Set(),updated:new Set()};['mapNewBtn','mapUpdatedBtn'].forEach(id=>{const b=$(id);if(b){b.disabled=false;b.classList.remove('disabled');b.setAttribute('aria-disabled','false')}})}
+function groupMapCoords(items){
+  const groups=new Map();
+  (items||[]).forEach(item=>{
+    const c=getCoords(item.o); if(!c)return;
+    const key=c[0].toFixed(5)+','+c[1].toFixed(5);
+    if(!groups.has(key))groups.set(key,[]);
+    groups.get(key).push(item.o);
+  });
+  return [...groups.values()].map(group=>({offers:group,coords:getCoords(group[0])}));
+}
+function groupMapPopup(group){
+  const arr=group.offers||[];
+  const cards=arr.map(o=>{
+    const photo=(o.images||[])[0]||'';
+    const meta=[o.area?`📐 ${o.area}`:'',o.city?`📍 ${normalizeCity(o.city)}`:'',o.district?`حي ${String(o.district).replace(/^حي\s*/, '')}`:'',normalizeOfferSource(o.source)?`👤 ${normalizeOfferSource(o.source)}`:'',o.price?`💰 ${displayPrice(o.price)}`:''].filter(Boolean).join(' · ');
+    return `<div class="map-old-card">${photo?`<img class="map-old-photo" src="${esc(photo)}" alt="صورة العرض" loading="lazy" decoding="async">`:''}<div class="map-old-title">${esc(buildOfferTitle(o))}</div>${meta?`<div class="map-old-meta">${esc(meta)}</div>`:''}<div class="map-old-actions">${mapLink(o)?`<a class="map-location-link" href="${esc(mapLink(o))}" target="_blank" rel="noopener">📍 الموقع</a>`:''}<button class="map-open-offer" type="button" data-map-offer-id="${esc(String(o.id))}" >↓ الانتقال للعرض</button></div></div>`;
+  }).join('');
+  return `<div class="map-old-popup">${arr.length>1?`<div class="map-old-count">📍 ${arr.length} عروض في نفس الموقع</div>`:''}${cards}</div>`;
+}
+
+function openMapGroupOffer(id){
+  const o=offers.find(x=>String(x.id)===String(id));
+  if(o){markOfferSeen(o); updateMapStatusCounts(); updateMap(filteredOffers());}
+  scrollToOffer(id);
+}
+function mapFilteredOffers(arr){return Array.isArray(arr)?arr.slice():[];}
+function updateMap(arr){
+  if(!map)return;
+  mapStatusFilter='all';
+  try{map.invalidateSize(true)}catch(_){ }
+  markers.forEach(m=>m.remove());markers=[];
+  const source=mapFilteredOffers(arr||[]);
+  const groups=groupMapCoords(source.map(o=>({o})).filter(x=>!!getCoords(x.o)));
+  const bounds=[];
+  let newCount=0,updatedCount=0,allCount=0;
+  const seen=readSeenOffers();
+  (arr||[]).forEach(o=>{const unseen=seen[String(o.id)]!==offerFingerprint(o);const k=markerKind(o);if(unseen&&k==='new')newCount++;else if(unseen&&k==='updated')updatedCount++;if(getCoords(o))allCount++;});
+  groups.forEach(group=>{
+    const c=group.coords;
+    const primary=group.offers.find(o=>markerKind(o)==='new')||group.offers.find(o=>markerKind(o)==='updated')||group.offers[0];
+    const kind=markerKind(primary);
+    const m=L.marker(c,{title:group.offers.length>1?`${group.offers.length} عروض في نفس الموقع`:title(primary),icon:markerIcon(kind)}).addTo(map);
+    m.on('click',()=>{updateMapStatusCounts();updateNewIndicators();});
+    m.on('popupopen',()=>{
+      // Opening the pin counts as opening its offer(s). Persist the seen state
+      // and recolor this marker immediately, but NEVER rebuild the map here:
+      // rebuilding during popupopen closes the popup and makes blue pins appear
+      // to be non-clickable.
+      group.offers.forEach(markOfferSeen);
+      const nextPrimary=group.offers.find(o=>markerKind(o)==='new')||group.offers.find(o=>markerKind(o)==='updated')||group.offers[0];
+      try{m.setIcon(markerIcon(markerKind(nextPrimary)))}catch(_){ }
+      updateMapStatusCounts();
+      updateNewIndicators();
+    });
+    m.bindPopup(groupMapPopup(group),{maxWidth:220,minWidth:0,closeButton:true,autoPan:true,autoPanPadding:[12,12],keepInView:true,offset:[0,12]});
+    markers.push(m);bounds.push(c);
+  });
+  if($('mapAllCount'))$('mapAllCount').textContent=String(allCount);
+  if($('mapNewCount'))$('mapNewCount').textContent=String(newCount);
+  if($('mapUpdatedCount'))$('mapUpdatedCount').textContent=String(updatedCount);
+  if($('mapCount'))$('mapCount').textContent=String(source.filter(o=>!!getCoords(o)).length)+' على الخريطة';
+  if(bounds.length===1)map.setView(bounds[0],14);else if(bounds.length>1)map.fitBounds(bounds,{padding:[30,30],maxZoom:15});else map.setView([24.7,45],5.3);
+  setTimeout(()=>map.invalidateSize(),100);
+}
+
+function renderRequestCityMenu(){const s=$('requestViewCity');const vals=allRequestCities();s.innerHTML='<option value="">كل المدن</option>'+vals.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join('');}
+function renderRequestPropertyMenu(){const s=$('requestViewProperty'),cur=s.value;const vals=requestPropertyTypes();s.innerHTML='<option value="">كل العقارات</option>'+vals.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');if(vals.includes(cur))s.value=cur}
+function requestSelectedCityLabel(r){
+  const selected=String($('requestViewCity')?.value||'').trim();
+  if(selected)return normalizeCity(selected);
+  const vals=cityList(r?.city).map(normalizeCity).filter(Boolean);
+  return vals.length===1?vals[0]:'كل المدن';
+}
+function requestWhatsAppText(r){
+  const deal=r?.deal==='شراء'?'شراء':r?.deal==='استئجار'?'استئجار':(r?.deal||'');
+  const prop=r?.property_type&&r.property_type!=='__REQUEST__'?String(r.property_type).trim():'عقار';
+  const city=requestSelectedCityLabel(r);
+  const location=city==='كل المدن'?'في كل المدن':'في '+city;
+  const district=districtsPhrase(r?.district);
+  const source=r?.source?` · ${String(r.source).trim()}`:'';
+  return `السلام عليكم، أتواصل معك بخصوص طلب ${deal} ${prop} ${location}${district?' '+district:''}${source}. هل ما زال الطلب موجود؟`;
+}
+function requestWhatsAppLink(r){return 'https://wa.me/966539004450?text='+encodeURIComponent(requestWhatsAppText(r));}
+function offerWhatsAppText(o){
+  const type=String(o?.property_type||'عقار').trim();
+  const deal=o?.deal==='إيجار'?'للإيجار':o?.deal==='بيع'?'للبيع':'';
+  const location=[citiesPhrase(o?.city),districtsPhrase(o?.district)].filter(Boolean).join(' ');
+  const area=o?.area?`، مساحتها ${String(o.area).trim()}`:'';
+  const price=o?.price?(o?.deal==='إيجار'?`، قيمة الإيجار السنوي ${String(o.price).trim()}`:`، سعرها ${String(o.price).trim()}`):'';
+  return `السلام عليكم، أتواصل معك بخصوص عرض ${type} ${deal}${location?' '+location:''}${area}${price}. هل ما زال العرض موجودًا؟`;
+}
+function offerWhatsAppLink(o){return 'https://wa.me/966539004450?text='+encodeURIComponent(offerWhatsAppText(o));}
+function requestShareText(r){
+  const deal=r.deal==='شراء'?'شراء':r.deal==='استئجار'?'استئجار':(r.deal||'');
+  const prop=r.property_type&&r.property_type!=='__REQUEST__'?String(r.property_type):'عقار';
+  const cityLabel=requestSelectedCityLabel(r);
+  const district=r.district?(' · حي '+String(r.district).replace(/^حي\s*/,'')):'';
+  const body=String(r.text??r.notes??'').replace(/^\[\[REQUEST\]\]\s*/i,'').trim();
+  return [`طلب ${deal} · ${prop} ${cityLabel==='كل المدن'?'في كل المدن':'في '+cityLabel}`,`📍 ${cityLabel}${district}`,r.source?`🔹 ${r.source}`:'',body?`📝 ${body}`:''].filter(Boolean).join('\n');
+}
+async function shareRequest(id){const r=requests.find(x=>String(x.id)===String(id));if(!r)return;await shareTextNative('طلب عقاري',requestShareText(r))}
+function renderRequests(){
+  let arr=filteredRequests();
+  if(!arr.length && requests.length && !requestNewOnly){if($('requestViewCity'))$('requestViewCity').value='';if($('requestViewDeal'))$('requestViewDeal').value='';if($('requestViewProperty'))$('requestViewProperty').value='';arr=filteredRequests();}
+  const requestCountEl=$('requestCount'); if(requestCountEl) requestCountEl.textContent=arr.length;
+  $('requestCountTop').textContent=requests.length;
+  $('requestPanelTitle').textContent='الطلبات';
+  const city=String($('requestViewCity')?.value||'').trim(),deal=String($('requestViewDeal')?.value||'').trim(),prop=String($('requestViewProperty')?.value||'').trim();
+  $('requestFilterSummary').textContent=(city?'📍 '+city:'كل المدن')+' · '+(deal||'كل أنواع الطلب')+' · '+(prop||'كل العقارات');
+  $('requestsList').innerHTML=arr.length?arr.map(r=>{
+    const cityVals=cityList(r.city); const cities=cityVals.length>=6?'كل المدن':(cityVals.length?cityVals.join('، '):'غير محدد');
+    const dealText=r.deal||'طلب';
+    const propText=r.property_type&&r.property_type!=='__REQUEST__'?r.property_type:'عقار';
+    const body=String(r.text??r.notes??'').replace(/^\[\[REQUEST\]\]\s*/i,'').trim();
+    return `<article class="request-item"><div class="request-item-head"><div><div class="request-title">طلب ${esc(dealText)} · ${esc(propText)}</div><div class="request-badges"><span class="request-badge">📍 ${esc(cities||'غير محدد')}</span>${r.district?`<span class="request-badge">حي ${esc(String(r.district).replace(/^حي\s*/,''))}</span>`:''}${r.source?`<span class="request-badge gold">${esc(r.source)}</span>`:''}</div></div></div>${body?`<div class="request-text"><span class="request-text-label">تفاصيل الطلب</span>${esc(body).replace(/\n/g,'<br>')}</div>`:''}<div class="request-actions"><a class="request-wa" href="${requestWhatsAppLink(r)}" target="_blank" rel="noopener">💬 WhatsApp</a><button class="request-share" type="button" data-id="${esc(String(r.id))}" onclick="shareRequest(this.dataset.id)">↗ مشاركة الطلب</button></div></article>`;
+  }).join(''):`<div class="empty">${requestNewOnly?'لا توجد طلبات جديدة لم تشاهدها بعد.':'لا توجد طلبات مطابقة للتصفية الحالية.'}</div>`;
+  renderRequestControls();
+  if(offersView===false && arr.length && !requestNewOnly){
+    const unseen=unseenRequests();
+    const unseenVisible=arr.filter(r=>unseen.some(x=>String(x.id)===String(r.id)));
+    if(unseenVisible.length)setTimeout(()=>markRequestsSeen(unseenVisible),1200);
+  }
+}
+
+function showRequestsView(){offersView=false;requestNewOnly=false;$('offersTab').classList.remove('active');$('requestsTab').classList.add('active');$('offersControls').classList.add('hidden');$('mapCard').classList.add('hidden');$('offersSection').classList.add('hidden');$('requestsPanel').classList.add('open');renderRequestCityMenu();renderRequestPropertyMenu();renderRequestControls();renderRequests();const unseen=unseenRequests();if(unseen.length)setTimeout(()=>markRequestsSeen(unseen),1200)}
+function showOffersView(){offersView=true;$('requestsTab').classList.remove('active');$('offersTab').classList.add('active');$('requestsPanel').classList.remove('open');$('offersControls').classList.remove('hidden');$('mapCard').classList.remove('hidden');$('offersSection').classList.remove('hidden');renderFilters();renderOffers();setTimeout(()=>map?.invalidateSize(),250)}
+
+function openImageLightbox(src){const box=$('imageLightbox'),img=$('imageLightboxImg');if(!box||!img)return;img.src=src;box.classList.remove('hidden');box.setAttribute('aria-hidden','false');}
+function closeImageLightbox(){const box=$('imageLightbox');if(!box)return;box.classList.add('hidden');box.setAttribute('aria-hidden','true');$('imageLightboxImg').src='';}
+document.addEventListener('click',e=>{const img=e.target.closest?.('.offer .photos img');if(img){e.preventDefault();e.stopPropagation();openImageLightbox(img.currentSrc||img.src);return;}if(e.target.closest?.('.image-lightbox-close')||e.target.id==='imageLightbox')closeImageLightbox();},{capture:true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeImageLightbox();});
+document.addEventListener('click',e=>{
+  const img=e.target.closest?.('.map-popup-mini-photo,.map-group-thumb');
+  if(img){e.preventDefault();e.stopPropagation();openImageLightbox(img.currentSrc||img.src);}
+},{capture:true});
+
+
+
+
+
+document.addEventListener('click',e=>{
+  const mapOpen=e.target.closest?.('.map-open-offer');
+  if(mapOpen){e.preventDefault();e.stopImmediatePropagation();const id=mapOpen.dataset.mapOfferId;if(id)openMapGroupOffer(id);return;}
+  const r=e.target.closest?.('.request-share');
+  if(r){e.preventDefault();e.stopImmediatePropagation();const id=r.dataset.id;if(id)void shareRequest(id);return;}
+},{capture:true});document.addEventListener('click',e=>{const b=e.target.closest?.('.share-offer');if(!b)return;e.preventDefault();e.stopImmediatePropagation();const id=b.dataset.shareId;if(id)shareOffer(id);},{capture:true});document.getElementById('offersTab')?.addEventListener('click',showOffersView);document.getElementById('requestsTab')?.addEventListener('click',showRequestsView);
+async function load(){
+  const listEl=$('list');
+  if(!token){
+    try{
+      const r=await fetch('/api/default-partner-token',{cache:'no-store'});
+      const d=await r.json();
+      if(r.ok&&d?.token){ token=String(d.token); savePartnerToken(token); try{const mf=document.getElementById('appManifest');if(mf)mf.href='/api/partner-manifest?token='+encodeURIComponent(token)}catch(_){} }
+    }catch(_){}
+  }
+  if(!token){listEl.innerHTML='<div class="error">تعذر فتح منصة العقاريين. تأكد من إعداد PUBLIC_PARTNER_TOKEN في Vercel.</div>';return}
+  const cacheKey='uroodi_partner_public_cache_v3_'+token;
+  try{const raw=localStorage.getItem(cacheKey);if(raw){const cd=JSON.parse(raw);if(Array.isArray(cd.offers)){offers=cd.offers;requests=Array.isArray(cd.requests)?cd.requests:[];resetMapFocusState();$('total').textContent=String(offers.length);$('mappedCount').textContent=String(offers.filter(o=>!!getCoords(o)).length);$('requestCountTop').textContent=String(requests.length);establishNewBaseline();renderFilters();renderRequestCityMenu();renderRequestPropertyMenu();renderRequests();renderOffers();}}}catch(_){}
+  // Build the map independently of the data request so a slow/failed API never leaves a blank page.
+  try{
+    const ready=await initMap();
+    if(!ready){
+      $('map').innerHTML='<div style="height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#7d8899;font-weight:800">تعذر تحميل الخريطة الآن… جرّب تحديث الصفحة.</div>';
+    }
+  }catch(e){console.warn('map init',e)}
+  try{
+    async function fetchPublicData(){
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort(),9000);
+      try{
+        const r=await fetch('/api/public-offers?token='+encodeURIComponent(token)+'&_='+Date.now(),{cache:'no-store',signal:controller.signal});
+        let d={};
+        try{d=await r.json()}catch{throw new Error('رد الخادم غير صالح')}
+        if(!r.ok)throw new Error(d.error||('تعذر تحميل البيانات ('+r.status+')'));
+        return d;
+      }finally{clearTimeout(timer)}
+    }
+    // On a cold Vercel wake-up the first request can occasionally return before the data path is warm.
+    // Retry once so the broker page opens populated without requiring the user to press «الكل».
+    let d=await fetchPublicData();
+    for(const wait of [350,700,1200]){
+      if((Array.isArray(d.offers)&&d.offers.length)||(Array.isArray(d.requests)&&d.requests.length))break;
+      await new Promise(r=>setTimeout(r,wait));
+      d=await fetchPublicData();
+    }
+    const freshOffers=Array.isArray(d.offers)?d.offers:[];
+    const freshRequests=Array.isArray(d.requests)?d.requests:[];
+    // A transient/incorrect empty response must never wipe a working cached broker page.
+    // Keep the last known data when the server briefly answers with zero records.
+    if(freshOffers.length || freshRequests.length || !(offers.length || requests.length)){
+      offers=freshOffers;
+      requests=freshRequests;
+      try{localStorage.setItem(cacheKey,JSON.stringify({offers,requests,updatedAt:d.updatedAt||Date.now()}))}catch(_){}
+    }
+    resetMapFocusState();
+    // Keep image downloads off the critical path; only the displayed/nearby cards are warmed for sharing.
+    setTimeout(()=>{void preloadShareFiles()},350);
+    // Keep the header counters independent from the active view/filter.
+    $('total').textContent=String(offers.length);
+    $('mappedCount').textContent=String(offers.filter(o=>!!getCoords(o)).length);
+    $('requestCountTop').textContent=String(requests.length);
+    establishNewBaseline();
+    const updateText='آخر تحديث: '+new Date().toLocaleString('ar-SA',{dateStyle:'medium',timeStyle:'short'});
+    $('lastUpdate').textContent=updateText;$('lastUpdateTop').textContent=updateText;
+    renderFilters();renderRequestCityMenu();renderRequestPropertyMenu();renderRequests();renderOffers();
+    if(map){setTimeout(()=>{try{map.invalidateSize(true);updateMap(filteredOffers())}catch(e){console.warn('map render',e)}},80)}
+  }catch(e){
+    console.error(e);
+    // Never replace an already-loaded broker dataset with a blank screen on a transient API/network error.
+    if(offers.length || requests.length){
+      renderFilters();renderRequestCityMenu();renderRequestPropertyMenu();renderRequests();renderOffers();
+      showToast('تم عرض آخر نسخة محفوظة من العروض — جاري إعادة المحاولة.','success');
+    }else{
+      listEl.innerHTML='<div class="error">'+esc(e?.name==='AbortError'?'تأخر تحميل البيانات. حاول تحديث الصفحة.':(e?.message||'تعذر تحميل البيانات.'))+'</div>';
+    }
+    if(map){try{map.invalidateSize(true);updateMap(filteredOffers())}catch(_){} }
+  }
+}
+let deferredInstallPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;const b=$('installBtn');if(b)b.style.display='block'});async function installApp(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;return}alert('على الآيفون: اضغط مشاركة في Safari ثم «إضافة إلى الشاشة الرئيسية».')}window.addEventListener('appinstalled',()=>{$('installBtn').style.display='none'});$('year').textContent=new Date().getFullYear();
+function updateSiteVisits(){
+  const el=$('siteVisitCount'); if(!el)return;
+  const key='uroodi_site_visits_last_server_v1';
+  let cached=0;
+  try{cached=Number(localStorage.getItem(key)||0)}catch(_){ }
+  if(Number.isFinite(cached)&&cached>0)el.textContent=cached.toLocaleString('en-US');
+  const url='https://counterapi.com/api/uroodi-realestate/view/site-visits?startNumber=1500&noFormatting=true';
+  fetch(url,{cache:'no-store',credentials:'omit'}).then(r=>{if(!r.ok)throw new Error('counter '+r.status);return r.json()}).then(d=>{
+    const n=Number(d?.value);
+    if(!Number.isFinite(n)||n<1)return;
+    try{localStorage.setItem(key,String(n))}catch(_){ }
+    el.textContent=n.toLocaleString('en-US');
+  }).catch(()=>{
+    // If the counter service is temporarily unreachable, keep the last real server value.
+    // Never fall back to 1500, so the public counter does not visibly reset.
+    if(Number.isFinite(cached)&&cached>0)el.textContent=cached.toLocaleString('en-US');
+  });
+}
+updateSiteVisits();
+window.addEventListener('pageshow',()=>{if(token){setTimeout(()=>load(),250)}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&token){setTimeout(()=>load(),150)}});
+setInterval(()=>{if(document.visibilityState==='visible'&&token)load()},60000);
+load();
+</script>
+</body>
+</html>
+
+<style id="v65-final-layout">.contact-row{display:grid!important;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr) auto!important;align-items:stretch!important;gap:6px!important}.license-top{box-sizing:border-box!important;min-width:0!important;max-width:100%!important;overflow:hidden!important}.license-top .license-number{font-size:12px!important;letter-spacing:.35px!important;white-space:nowrap!important;overflow:hidden!important}.quick-types{direction:rtl!important}</style>
+<style id="v72-click-fix">.share-offer{position:relative!important;z-index:100!important;pointer-events:auto!important;touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important}.offer-actions{position:relative!important;z-index:20!important}.map-open-offer{position:relative!important;z-index:100!important;pointer-events:auto!important;touch-action:manipulation!important}.partner-link-btn{position:relative!important;z-index:100!important;pointer-events:auto!important;touch-action:manipulation!important}</style>
+<style id="v75-share-fallback-disabled">
+.offer-share-fallback{position:fixed;inset:0;z-index:100000;background:rgba(10,20,35,.45);display:flex;align-items:flex-end;justify-content:center;padding:14px}.offer-share-fallback-card{width:min(440px,100%);background:#fff;border-radius:22px;padding:18px;box-shadow:0 18px 60px rgba(0,0,0,.25);direction:rtl}.offer-share-fallback-close{float:left;border:0;background:#f1f3f5;border-radius:50%;width:36px;height:36px;font-size:25px;line-height:1;cursor:pointer}.offer-share-fallback-title{font-size:18px;font-weight:950;color:#10243b;padding:8px 0 16px;line-height:1.5}.offer-share-fallback-actions{display:grid;gap:8px}.offer-share-fallback-actions button,.offer-share-fallback-actions a{display:flex;align-items:center;justify-content:center;min-height:48px;border:1px solid #ddd6c9;border-radius:12px;background:#faf7f0;color:#5f4c31;text-decoration:none;font:inherit;font-weight:900;cursor:pointer}</style>
+<style id="v73-request-map-fix">.offer .photos img{content-visibility:auto;contain-intrinsic-size:180px 120px}.map-old-photo,.map-popup-mini-photo,.map-group-photo{background:#eef1f5;object-position:center;image-rendering:auto}.map-open-offer{pointer-events:auto!important;touch-action:manipulation!important}.share-offer{pointer-events:auto!important;touch-action:manipulation!important}</style>
